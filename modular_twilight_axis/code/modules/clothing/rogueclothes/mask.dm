@@ -72,6 +72,11 @@
 	armor = ARMOR_PLATE
 	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_CHOP, BCLASS_BLUNT)
 
+/obj/item/clothing/mask/rogue/eyepatch
+	icon = 'modular_twilight_axis/icons/roguetown/clothing/masks.dmi'
+	mob_overlay_icon = 'modular_twilight_axis/icons/roguetown/clothing/onmob/masks.dmi'
+	color = COLOR_BLACK
+
 /obj/item/clothing/mask/rogue/eyepatch/fake
 	desc = "An eyepatch, fitted for the right eye. It has an almost imperceptible gap so that you can see something."
 	block2add = null
