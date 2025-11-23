@@ -20,7 +20,7 @@
 	)
 	subclass_skills = list(
 		/datum/skill/combat/twilight_firearms = SKILL_LEVEL_MASTER,
-		/datum/skill/combat/axes = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/axes = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/polearms = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/labor/butchering = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/craft/traps = SKILL_LEVEL_APPRENTICE,
@@ -44,7 +44,7 @@
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	belt = /obj/item/storage/belt/rogue/leather
 	beltl = /obj/item/quiver/twilight_bullet/lead
-	beltr = /obj/item/rogueweapon/stoneaxe/woodcut/steel
+	beltr = /obj/item/rogueweapon/stoneaxe/woodcut
 	backl = /obj/item/storage/backpack/rogue/backpack
 	neck = /obj/item/clothing/neck/roguetown/gorget
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/grenzelhoft

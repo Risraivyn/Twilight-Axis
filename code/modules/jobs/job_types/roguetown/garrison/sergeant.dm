@@ -81,6 +81,7 @@
 		/datum/skill/combat/whipsflails = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/maces = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/shields = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/crossbows = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/bows = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/wrestling = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
@@ -111,7 +112,7 @@
 		)
 	H.adjust_blindness(-3)
 	if(H.mind)
-		var/weapons = list("Rhomphaia","Flail & Shield","Halberd","Sabre & Crossbow", "Sabre & Pistol")	//Bit more unique than footsman, you are a jack-of-all-trades + slightly more 'elite'.
+		var/weapons = list("Rhomphaia","Flail & Shield","Halberd","Sabre & Crossbow")	//Bit more unique than footsman, you are a jack-of-all-trades + slightly more 'elite'.
 		var/weapon_choice = input(H, "Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 		H.set_blindness(0)
 		switch(weapon_choice)
@@ -119,29 +120,18 @@
 				backl = /obj/item/rogueweapon/scabbard/sword
 				l_hand = /obj/item/rogueweapon/sword/long/rhomphaia
 				beltr = /obj/item/rogueweapon/mace/cudgel
-				H.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 3, TRUE)
 			if("Flail & Shield")	//Tower-shield, higher durability wood shield w/ more coverage. Plus a steel flail; maybe.. less broken that a steel mace?
 				beltr = /obj/item/rogueweapon/flail/sflail
 				backl = /obj/item/rogueweapon/shield/tower
-				H.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 3, TRUE)
 			if("Halberd")			//Halberd - basically exact same as MAA. It's a really valid build. Spear thrust + sword chop + bash.
 				r_hand = /obj/item/rogueweapon/halberd
 				backl = /obj/item/rogueweapon/scabbard/gwstrap
 				beltr = /obj/item/rogueweapon/mace/cudgel
-				H.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 3, TRUE)
 			if("Sabre & Crossbow")	//Versetile skirmisher class. Considered other swords but sabre felt best without being too strong. (This one gets no cudgel, no space.)
 				beltr = /obj/item/quiver/bolts
 				backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
 				r_hand = /obj/item/rogueweapon/sword/sabre
 				l_hand = /obj/item/rogueweapon/scabbard/sword
-				H.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 3, TRUE)
-			if("Sabre & Pistol")	//Versetile skirmisher class. Considered other swords but sabre felt best without being too strong. (This one gets no cudgel, no space.)
-				beltr = /obj/item/quiver/twilight_bullet/lead
-				backl = /obj/item/rogueweapon/sword/sabre
-				r_hand = /obj/item/gun/ballistic/twilight_firearm/arquebus_pistol
-				l_hand = /obj/item/rogueweapon/scabbard/sword
-				backpack_contents += list(/obj/item/twilight_powderflask)
-				H.adjust_skillrank_up_to(/datum/skill/combat/twilight_firearms, 3, TRUE)
 		var/armors = list(
 			"Brigandine"		= /obj/item/clothing/suit/roguetown/armor/brigandine/retinue,
 			"Steel Cuirass"		= /obj/item/clothing/suit/roguetown/armor/plate/cuirass,
