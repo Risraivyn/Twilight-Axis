@@ -114,7 +114,6 @@
 	cloak = /obj/item/clothing/cloak/apron/waist/maid
 	shoes = /obj/item/clothing/shoes/roguetown/simpleshoes
 	saiga_shoes = /obj/item/clothing/shoes/roguetown/horseshoes
-	cloak = /obj/item/clothing/cloak/apron/waist
 	backl = /obj/item/storage/backpack/rogue/satchel
 	belt = /obj/item/storage/belt/rogue/leather/sash/maid
 	beltr = /obj/item/storage/keyring/servant
