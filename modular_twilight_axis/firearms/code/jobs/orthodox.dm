@@ -11,6 +11,7 @@
 	subclass_languages = list(/datum/language/otavan)
 	cmode_music = 'modular_twilight_axis/firearms/sound/music/combat_blackpowder.ogg'
 	category_tags = list(CTAG_INQUISITION)
+	traits_applied = list(TRAIT_PSYDONITE)
 	subclass_stats = list(
 		STATKEY_PER = 3,
 		STATKEY_WIL = 2,
