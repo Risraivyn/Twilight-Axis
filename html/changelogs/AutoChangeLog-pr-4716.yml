@@ -1,0 +1,4 @@
+author: "Geevies"
+delete-after: True
+changes:
+  - rscadd: "Sounds coming from z-levels above or below you will now be a bit quieter and sound muffled."
