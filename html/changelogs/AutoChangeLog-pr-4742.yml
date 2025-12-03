@@ -1,5 +1,0 @@
-author: "Geevies"
-delete-after: True
-changes:
-  - bugfix: "Fixes fancy coats rendering over your hands when worn in the cloak layer."
-  - bugfix: "Fixes cloaks in general that have sleeves, ripping their sleeves off even when you don't have lost arms."

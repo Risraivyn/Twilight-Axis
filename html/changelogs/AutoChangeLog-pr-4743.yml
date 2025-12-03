@@ -1,4 +1,0 @@
-author: "Geevies"
-delete-after: True
-changes:
-  - bugfix: "Fixes examines on rings not including the 'I have' or 'He has' or 'She has' before it."
