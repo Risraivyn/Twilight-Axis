@@ -213,23 +213,23 @@
 	contains = list(/obj/item/rogueweapon/stoneaxe/battle)
 
 /datum/supply_pack/rogue/Afreet/flintgonne
-	name = "Flintgonne"
+	name = "Hakenbüchse"
 	cost = 100
 	contains = list(/obj/item/gun/ballistic/twilight_firearm/flintgonne)
 
 /datum/supply_pack/rogue/Afreet/culverin
 	name = "Culverin"
-	cost = 150
+	cost = 250
 	contains = list(/obj/item/gun/ballistic/twilight_firearm/handgonne)
 
 /datum/supply_pack/rogue/Afreet/arquebuspistol
 	name = "Arquebus Pistol"
-	cost = 200
+	cost = 500
 	contains = list(/obj/item/gun/ballistic/twilight_firearm/arquebus_pistol)
 
 /datum/supply_pack/rogue/Afreet/arquebus
 	name = "Arquebus"
-	cost = 200
+	cost = 500
 	contains = list(/obj/item/gun/ballistic/twilight_firearm/arquebus)
 
 /datum/supply_pack/rogue/Afreet/bulletbag
