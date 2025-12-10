@@ -224,12 +224,12 @@
 
 /datum/supply_pack/rogue/Afreet/arquebuspistol
 	name = "Arquebus Pistol"
-	cost = 500
+	cost = 400
 	contains = list(/obj/item/gun/ballistic/twilight_firearm/arquebus_pistol)
 
 /datum/supply_pack/rogue/Afreet/arquebus
 	name = "Arquebus"
-	cost = 500
+	cost = 400
 	contains = list(/obj/item/gun/ballistic/twilight_firearm/arquebus)
 
 /datum/supply_pack/rogue/Afreet/bulletbag
