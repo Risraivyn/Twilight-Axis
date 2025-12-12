@@ -81,6 +81,11 @@
 		else
 			. += span_notice("Both its sleeves have been torn!")
 
+	if(cold_protection)
+		. += span_info("It looks like it will protect me from the <b>cold</b>.")
+	if(heat_protection)
+		. += span_info("It looks like it will protect me from the <b>heat</b>.")
+
 /obj/item/proc/get_detail_tag() //this is for extra layers on clothes
 	return detail_tag
 
