@@ -643,23 +643,6 @@
 	static_price = TRUE
 	max_integrity = 9999
 
-
-/obj/item/rogueweapon/sword/long/judgement/vlord
-	name = "\"Ichor Fang\""
-	desc = "An unholy longsword made of odd steel. A green crystalline mass covers the blade and pommel, its edges and serrations tougher and sharper than anything forged by a master swordsmith."
-	force = 40
-	force_wielded = 55
-	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/peel)
-	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/chop)
-	icon_state = "vlord"
-	item_state = "vlord"
-	wbalance = WBALANCE_NORMAL
-	max_integrity = 9999
-	sellprice = 363
-	static_price = TRUE
-	equip_delay_self = 0
-	unequip_delay_self = 0
-
 /obj/item/rogueweapon/sword/long/judgement/vlord
 	name = "\"Ichor Fang\""
 	desc = "An unholy longsword made of odd steel. A green crystalline mass covers the blade and pommel, its edges and serrations tougher and sharper than anything forged by a master swordsmith."

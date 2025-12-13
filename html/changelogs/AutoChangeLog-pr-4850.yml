@@ -1,0 +1,5 @@
+author: "SayonaraEcho"
+delete-after: True
+changes:
+  - bugfix: "Church bell is now working across Z-level as intented."
+  - sound: "Sound church bell is now global and everyone hear it."

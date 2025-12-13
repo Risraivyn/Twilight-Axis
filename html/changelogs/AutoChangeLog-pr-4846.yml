@@ -1,0 +1,6 @@
+author: "hubertjones"
+delete-after: True
+changes:
+  - balance: "shovels can be worn on the belt"
+  - balance: "necran acolytes spawn with silver shovels"
+  - bugfix: "skeletons that spawn with hip items have belts"
