@@ -1,5 +1,0 @@
-author: "SayonaraEcho"
-delete-after: True
-changes:
-  - balance: "Increases martyr sword's durability as like Ichor Fang or Ascendant weapon and cannot be smelted."
-  - code_imp: "Deleted duplicated Ichor Fang's code."

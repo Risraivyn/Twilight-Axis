@@ -220,3 +220,16 @@
   - rscadd: Remapped the Warden's Outpost north of the town.
   - bugfix: Pillories can now be locked by any member of the garrison, church, or
       inquisition.
+2025-12-14:
+  Hollyhock:
+  - rscadd: Gave sextons cool amulets
+  SayonaraEcho:
+  - bugfix: Church bell is now working across Z-level as intented.
+  - sound: Sound church bell is now global and everyone hear it.
+  - balance: Increases martyr sword's durability as like Ichor Fang or Ascendant weapon
+      and cannot be smelted.
+  - code_imp: Deleted duplicated Ichor Fang's code.
+  hubertjones:
+  - balance: shovels can be worn on the belt
+  - balance: necran acolytes spawn with silver shovels
+  - bugfix: skeletons that spawn with hip items have belts
