@@ -572,6 +572,8 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 
 /datum/loadout_item/eorahood
 	name = "Opera Mask - Eoran Hood"
+	category = "Аксессуары"
+	donatitem = TRUE
 	path = /obj/item/clothing/head/roguetown/roguehood/eorahood
 
 /datum/loadout_item/exoticsilkmask
