@@ -274,3 +274,36 @@
   - balance: many staff wielders now have actual staff skill
   - rscadd: the shillelagh, craftable wooden staff that still uses polearms. mostly
       for training with
+2025-12-17:
+  BurpleBineapple:
+  - bugfix: Sergeant-at-Arms now gets the weapon skill for the flail loadout they
+      have.
+  Gigigger:
+  - balance: decrease required strength of maul from 14 to 13
+  - bugfix: now heavy gronn mercenary can wield his maul without additional statpacks
+      or race bonuses, as intended
+  Ketrai:
+  - rscadd: Racelocked dwarf class - trollslayer!
+  - rscadd: Deprived adventurer class
+  Lamasmaster:
+  - balance: WW being able to use weapons
+  - bugfix: Hijab icon
+  SayonaraEcho:
+  - bugfix: Ravoxian's gorget FOV removed
+  - bugfix: Heartfelt magos old age bonus spellpoints
+  - bugfix: Looking down no longer creates a chat message if you are sneaking
+  - bugfix: Marque bug powergaming exploit
+  - bugfix: Being unconscious, dead, or paralyzed prevents you from learning of hidden
+      travel tile locations
+  SpadesNeil:
+  - bugfix: All cloaks now have inventory by default.
+  - refactor: Moved a fake blacksteel helmet to not be in the file for cloaks.
+  bearrrrrrrr:
+  - rscadd: Arcane Mark system; certain spells are now combo spells that apply a stack
+      of 'arcane mark' that can be detonated by 'combo finishers'. Certain spells
+      CD's reduced to be less spammable. You glow violently purplepink when you have
+      max stacks, as well as making a big noise and **'MARKED'** appearing in your
+      chat.
+  dopamiin0:
+  - bugfix: wither now goes where it's aimed instead of stopping a tile short
+  - bugfix: many spells no longer inexplicably stop working when the lights are out

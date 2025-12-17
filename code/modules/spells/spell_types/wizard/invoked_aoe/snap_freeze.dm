@@ -53,8 +53,8 @@
 	if(T.z < user.z)
 		source_turf = get_step_multiz(source_turf, DOWN)
 
-	for(var/turf/affected_turf in view(area_of_effect, T))
-		if(!(affected_turf in view(source_turf)))
+	for(var/turf/affected_turf in get_hear(area_of_effect, T))
+		if(!(affected_turf in get_hear(range, source_turf)))
 			continue
 		new /obj/effect/temp_visual/trapice(affected_turf)
 	playsound(T, 'sound/combat/wooshes/blunt/wooshhuge (2).ogg', 80, TRUE, soundping = TRUE) // it kinda sounds like cold wind idk
@@ -64,7 +64,7 @@
 
 	for(var/turf/affected_turf in get_hear(area_of_effect, T))
 		new /obj/effect/temp_visual/snap_freeze(affected_turf)
-		if(!(affected_turf in get_hear(area_of_effect, source_turf)))
+		if(!(affected_turf in get_hear(range, source_turf)))
 			continue
 		for(var/mob/living/L in affected_turf.contents)
 			if(L.anti_magic_check())
