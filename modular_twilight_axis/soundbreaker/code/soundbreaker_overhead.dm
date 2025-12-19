@@ -44,7 +44,7 @@
 	var/base_y = 18
 	var/step_x = 8
 	var/offset_idx = 0
-	var/start_x = 16
+	var/start_x = 8
 
 	for(var/i = user.sb_note_history.len, i >= 1, i--)
 		var/note_id = user.sb_note_history[i]
@@ -80,12 +80,4 @@
 		return
 
 	var/duration = 0.7 SECONDS
-	user.play_overhead_indicator_flick(
-		SOUNDBREAKER_COMBOS_ICON,
-		icon_state,
-		duration,
-		ABOVE_MOB_LAYER + 0.3,
-		null,
-		16,
-		0
-	)
+	user.play_overhead_indicator_flick(SOUNDBREAKER_COMBOS_ICON, icon_state, duration, ABOVE_MOB_LAYER + 0.3, null, 16, 0)
