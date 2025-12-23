@@ -911,7 +911,7 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 /datum/loadout_item/donator_zoe_shovel
 	name = "Donator Kit - Silence - Required: Shovel"
 	path = /obj/item/enchantingkit/zoe_shovel
-	category = list("Одежда", "Донат")
+	category = list("Разное", "Донат")
 	donatitem = TRUE
 
 /datum/loadout_item/donator_willmbrink
