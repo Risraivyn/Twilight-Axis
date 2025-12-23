@@ -70,18 +70,17 @@ GLOBAL_VAR_INIT(last_crown_announcement_time, -1000)
 			mode = 0
 			return
 	if(findtext(message, "summon crown")) //This must never fail, thus place it before all other modestuffs.
-		if(!SSroguemachine.crown)
-			new /obj/item/clothing/head/roguetown/crown/serpcrown(src.loc)
-			say("The crown is summoned!")
-			playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
-			playsound(src, 'sound/misc/hiss.ogg', 100, FALSE, -1)
 		if(SSroguemachine.crown)
 			var/obj/item/clothing/head/roguetown/crown/serpcrown/I = SSroguemachine.crown
 			if(!I)
 				I = new /obj/item/clothing/head/roguetown/crown/serpcrown(src.loc)
-			if(I && !ismob(I.loc))//You MUST MUST MUST keep the Crown on a person to prevent it from being summoned (magical interference)
+
+			var/mob/M = get_containing_mob(I)
+
+			// If it's NOT contained by a mob, it can be summoned
+			if(I && !M)
 				var/area/crown_area = get_area(I)
-				if(crown_area && istype(crown_area, /area/rogue/indoors/town/vault) && notlord) //Anti throat snipe from vault
+				if(crown_area && istype(crown_area, /area/rogue/indoors/town/vault) && notlord)
 					say("The crown is within the vault.")
 					playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
 					return
@@ -91,23 +90,28 @@ GLOBAL_VAR_INIT(last_crown_announcement_time, -1000)
 				playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
 				playsound(src, 'sound/misc/hiss.ogg', 100, FALSE, -1)
 				return
-			if(ishuman(I.loc))
-				var/mob/living/carbon/human/HC = I.loc
-				if(HC.stat != DEAD)
-					if(I in HC.held_items)
-						say("[HC.real_name] holds the crown!")
-						playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
-						return
-					if(HC.head == I)
-						say("[HC.real_name] wears the crown!")
+
+			// If it IS contained by a human, block summon even if it's in a container
+			if(ishuman(M))
+				var/mob/living/carbon/human/HC = M
+				if(SSticker.rulermob == HC || SSticker.regentmob == HC)
+					if(HC.stat != DEAD)
+						if(I in HC.held_items)
+							say("[HC.real_name] holds the crown!")
+						else if(HC.head == I)
+							say("[HC.real_name] wears the crown!")
+						else
+							say("[HC.real_name] has the crown stowed away!")
 						playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
 						return
 				else
-					HC.dropItemToGround(I, TRUE) //If you're dead, forcedrop it, then move it.
+					HC.dropItemToGround(I, TRUE)
+
 			I.forceMove(src.loc)
 			say("The crown is summoned!")
 			playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
 			playsound(src, 'sound/misc/hiss.ogg', 100, FALSE, -1)
+
 	if(findtext(message, "summon key"))
 		if(nocrown)
 			say("You need the crown.")
@@ -349,6 +353,15 @@ GLOBAL_VAR_INIT(last_crown_announcement_time, -1000)
 	else
 		return
 	return make_outlaw(raw_message)
+
+/proc/get_containing_mob(atom/A) // Returns the mob that ultimately contains A (A in bag in clothing in mob, etc.), or null.
+	var/atom/current = A
+	var/safety = 0
+	while(current && safety++ < 30)
+		if(ismob(current))
+			return current
+		current = current.loc
+	return null
 
 /proc/make_outlaw(raw_message)
 	if(raw_message in GLOB.outlawed_players)

@@ -49,7 +49,8 @@
 	var/mob_light = null // tracking mob_light
 	var/obj/effect/mob_charge_effect = null // The effect to be added (on top) of the mob while it is charging
 	var/custom_swingdelay = null	//Custom icon for its swingdelay.
-
+  var/charge_pointer = null // Simple unique charge icon
+	var/charged_pointer = null // Simple unique charged icon
 
 	var/list/static/bonk_animation_types = list(
 		BCLASS_BLUNT,

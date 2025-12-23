@@ -302,6 +302,10 @@
 	smeltresult = /obj/item/ingot/steel
 	special = /datum/special_intent/side_sweep
 
+/obj/item/rogueweapon/sword/long/Initialize()
+	. = ..()
+	AddComponent(/datum/component/skill_blessed, TRAIT_LONGSWORDSMAN, /datum/skill/combat/swords, SKILL_LEVEL_MASTER)
+
 /obj/item/rogueweapon/sword/long/training
 	name = "training sword"
 	desc = "Swords like these, with blunted tips and dull edges, are often used for practice without much risk of injury."
@@ -1011,6 +1015,10 @@
 	minstr = 6
 	icon_state = "shashka"
 	sheathe_icon = "shashka"
+
+/obj/item/rogueweapon/sword/sabre/steppesman/Initialize()
+	. = ..()
+	AddComponent(/datum/component/skill_blessed, TRAIT_SABRIST, /datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
 
 //Unique church sword - slightly better than regular sabre due to falx chop.
 /obj/item/rogueweapon/sword/sabre/nockhopesh
