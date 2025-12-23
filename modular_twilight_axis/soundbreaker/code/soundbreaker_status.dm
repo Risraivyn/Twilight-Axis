@@ -81,40 +81,61 @@
 
 /datum/status_effect/buff/soundbreaker_prepared
 	id = "soundbreaker_prepared"
-	name = "Prepared Soundbreaker Strike"
 	status_type = STATUS_EFFECT_REPLACE
 	duration = SB_PREP_WINDOW
+	alert_type = /atom/movable/screen/alert/status_effect/buff/soundbreaker_prepared
 
 	var/note_id = 0
 	var/damage_mult = 1
 	var/damage_type = BRUTE
+	var/note_name = "Prepared Note"
 
-/datum/status_effect/buff/soundbreaker_prepared/on_apply(note_to_prime, mult_to_prime, type_to_prime)
+/datum/status_effect/buff/soundbreaker_prepared/on_apply(note_to_prime, mult_to_prime, type_to_prime, note_name_to_prime)
 	. = ..()
 	note_id = note_to_prime
 	damage_mult = mult_to_prime
 	damage_type = type_to_prime
+	if(note_name_to_prime)
+		note_name = note_name_to_prime
+	update_alert()
 	return TRUE
 
-/datum/status_effect/buff/soundbreaker_prepared/refresh(note_to_prime, mult_to_prime, type_to_prime)
+/datum/status_effect/buff/soundbreaker_prepared/refresh(note_to_prime, mult_to_prime, type_to_prime, note_name_to_prime)
 	. = ..()
 	if(QDELETED(src))
 		return
 	note_id = note_to_prime
 	damage_mult = mult_to_prime
 	damage_type = type_to_prime
+	if(note_name_to_prime)
+		note_name = note_name_to_prime
+	update_alert()
 
-/datum/status_effect/buff/soundbreaker_prepared/proc/set_payload(new_note_id, new_damage_mult, new_damage_type, note_name)
+/datum/status_effect/buff/soundbreaker_prepared/proc/set_payload(new_note_id, new_damage_mult, new_damage_type, new_note_name)
 	note_id = new_note_id
 	damage_mult = new_damage_mult
 	damage_type = new_damage_type
-	name = note_name
+	if(new_note_name)
+		note_name = new_note_name
+	update_alert()
+
+/datum/status_effect/buff/soundbreaker_prepared/proc/update_alert()
+	if(!owner)
+		return
+	linked_alert.name = "Prepared: [note_name]"
+	linked_alert.desc = "Your next strike will play this note."
+	linked_alert.icon_state = soundbreaker_note_icon_state(note_id)
+	
+/atom/movable/screen/alert/status_effect/buff/soundbreaker_prepared
+	name = "Prepared Note"
+	desc = "A note is primed."
+	icon_state = "buff"
 
 /datum/status_effect/buff/soundbreaker_riff
 	id = "soundbreaker_riff"
 	status_type = STATUS_EFFECT_REFRESH
 	duration = 1 SECONDS
-	var/bonus = 20
+	alert_type = /atom/movable/screen/alert/status_effect/buff/soundbreaker_riff
 
 /datum/status_effect/buff/soundbreaker_riff/on_apply()
 	. = ..()
@@ -124,3 +145,8 @@
 /datum/status_effect/buff/soundbreaker_riff/on_remove()
 	REMOVE_TRAIT(owner, TRAIT_GUIDANCE, "soundbreaker_riff")
 	. = ..()
+
+/atom/movable/screen/alert/status_effect/buff/soundbreaker_riff
+	name = "Riff Guard"
+	desc = "A defensive riff is active. A successful defense may grant combo."
+	icon_state = "buff"

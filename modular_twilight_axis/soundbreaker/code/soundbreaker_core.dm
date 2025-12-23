@@ -657,30 +657,54 @@
 #define SB_PRIME_NEW  1
 #define SB_PRIME_REFRESHED 2
 
-/proc/soundbreaker_prime_note(mob/living/user, note_id, damage_mult, damage_type, note_name)
+/proc/soundbreaker_note_display_name(note_id)
+	switch(note_id)
+		if(SOUNDBREAKER_NOTE_BEND) return "Bend"
+		if(SOUNDBREAKER_NOTE_BARE) return "Barre"
+		if(SOUNDBREAKER_NOTE_SLAP) return "Slap"
+		if(SOUNDBREAKER_NOTE_SHED) return "Shred"
+		if(SOUNDBREAKER_NOTE_SOLO) return "Solo"
+		if(SOUNDBREAKER_NOTE_RIFF) return "Riff"
+	return "Unknown"
+
+/proc/soundbreaker_note_icon_state(note_id)
+	// если у тебя есть отдельные icon_state под ноты — вот тут маппь.
+	// иначе можно вернуть "buff" всегда.
+	switch(note_id)
+		if(SOUNDBREAKER_NOTE_BEND) return "sb_note_bend"
+		if(SOUNDBREAKER_NOTE_BARE) return "sb_note_bare"
+		if(SOUNDBREAKER_NOTE_SLAP) return "sb_note_slap"
+		if(SOUNDBREAKER_NOTE_SHED) return "sb_note_shed"
+		if(SOUNDBREAKER_NOTE_SOLO) return "sb_note_solo"
+		if(SOUNDBREAKER_NOTE_RIFF) return "sb_note_riff"
+	return "buff"
+
+/proc/soundbreaker_prime_note(mob/living/user, note_id, damage_mult, damage_type)
 	if(!user || !note_id)
 		return SB_PRIME_FAIL
+
+	var/nname = soundbreaker_note_display_name(note_id)
 
 	var/datum/status_effect/buff/soundbreaker_prepared/P = user.has_status_effect(/datum/status_effect/buff/soundbreaker_prepared)
 	if(P && P.note_id == note_id)
 		user.remove_status_effect(/datum/status_effect/buff/soundbreaker_prepared)
-		user.apply_status_effect(/datum/status_effect/buff/soundbreaker_prepared)
+		user.apply_status_effect(/datum/status_effect/buff/soundbreaker_prepared, note_id, damage_mult, damage_type, nname)
 
 		P = user.has_status_effect(/datum/status_effect/buff/soundbreaker_prepared)
 		if(!P)
 			return SB_PRIME_FAIL
 
-		P.set_payload(note_id, damage_mult, damage_type, note_name)
+		P.set_payload(note_id, damage_mult, damage_type, nname)
 		return SB_PRIME_REFRESHED
 
 	user.remove_status_effect(/datum/status_effect/buff/soundbreaker_prepared)
-	user.apply_status_effect(/datum/status_effect/buff/soundbreaker_prepared)
+	user.apply_status_effect(/datum/status_effect/buff/soundbreaker_prepared, note_id, damage_mult, damage_type, nname)
 
 	P = user.has_status_effect(/datum/status_effect/buff/soundbreaker_prepared)
 	if(!P)
 		return SB_PRIME_FAIL
 
-	P.set_payload(note_id, damage_mult, damage_type, note_name)
+	P.set_payload(note_id, damage_mult, damage_type, nname)
 	return SB_PRIME_NEW
 
 #undef SB_PRIME_FAIL
