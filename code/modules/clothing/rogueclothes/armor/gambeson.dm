@@ -20,6 +20,9 @@
 	armor_class = ARMOR_CLASS_LIGHT
 	chunkcolor = "#978151"
 
+/obj/item/clothing/suit/roguetown/armor/gambeson/ComponentInitialize()
+	AddComponent(/datum/component/armour_filtering/positive, TRAIT_FENCERDEXTERITY)
+
 /obj/item/clothing/suit/roguetown/armor/gambeson/councillor
 	color = "#646464"
 

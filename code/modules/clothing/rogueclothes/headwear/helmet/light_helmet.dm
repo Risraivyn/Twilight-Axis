@@ -16,6 +16,9 @@
 	salvage_result = /obj/item/natural/fibers
 	salvage_amount = 2 // Major materials loss
 
+/obj/item/clothing/head/roguetown/armingcap/padded/ComponentInitialize()
+	AddComponent(/datum/component/armour_filtering/positive, TRAIT_FENCERDEXTERITY)
+
 /obj/item/clothing/head/roguetown/armingcap/padded
 	name = "padded arming cap"
 	desc = "A padded up arming cap. It might even stop a mace!"

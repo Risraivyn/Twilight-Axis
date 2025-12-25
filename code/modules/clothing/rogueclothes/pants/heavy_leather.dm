@@ -17,6 +17,9 @@
 	armor_class = ARMOR_CLASS_LIGHT
 	salvage_result = /obj/item/natural/hide/cured
 
+/obj/item/clothing/under/roguetown/heavy_leather_pants/ComponentInitialize()
+	AddComponent(/datum/component/armour_filtering/positive, TRAIT_FENCERDEXTERITY)
+
 /obj/item/clothing/under/roguetown/heavy_leather_pants/shorts
 	name = "hardened leather shorts"
 	desc = "A thick hide pair of shorts, favored by some for their ease of motion in spite of \

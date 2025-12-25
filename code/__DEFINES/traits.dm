@@ -21,6 +21,9 @@
 #define TRAIT_EXPLOSIVE_SUPPLY "Explosive Supply"
 #define TRAIT_BOMBER_EXPERT "Explosive Specialist"
 #define TRAIT_BREADY "Battleready"
+#define TRAIT_ARMOUR_LIKED "Fitting Armour"
+#define TRAIT_ARMOUR_DISLIKED "Misfitting Armour"
+#define TRAIT_FENCERDEXTERITY "Fencer's Dexterity"
 #define TRAIT_SKILLBLESSED "Skill Blessed"
 #define TRAIT_LONGSWORDSMAN "Master Longswordsman"
 #define TRAIT_SABRIST "Renowned Sabrist"
@@ -299,6 +302,9 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_EMPATH = span_info("I can notice when people are in pain."),
 	TRAIT_EXPLOSIVE_SUPPLY = span_info("I have very good friends! I get explosives on my HERMES every day."),
 	TRAIT_BREADY = span_info("Defensive stance does not passively fatigue me. I regain energy slowly over time."),
+	TRAIT_ARMOUR_LIKED = span_greentext("I'm wearing something more suited to my style."),
+	TRAIT_ARMOUR_DISLIKED = span_warning("I'm wearing something that burdens me."),
+	TRAIT_FENCERDEXTERITY = span_info("I've trained my entire lyfe around the art of unarmoured fencing, affording myself unmatched speed when wearing very light armour. I'm very choosy otherwise."),
 	TRAIT_SKILLBLESSED = span_greentext("I've reunited with an old friend of mine. All is well."),
 	TRAIT_LONGSWORDSMAN = span_info("I am the sword, deadly against all weapons. When using any type of longsword, I fight at the level of a Master, and I can better defend against my opponents."),
 	TRAIT_SABRIST = span_info("I am the Aavnic sabre, shining arc of the Steppes. When using a shashka, I fight at the level of a Master, while swinging and thrusting faster with it."),
