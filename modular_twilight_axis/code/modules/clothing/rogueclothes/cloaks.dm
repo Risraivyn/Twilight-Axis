@@ -212,3 +212,17 @@
 		icon_state = hammerhold_final_icon
 		item_state = hammerhold_final_icon
 		update_icon()
+
+/obj/item/clothing/cloak/bishop
+	name = "bishop cape"
+	desc = ""
+	icon = 'modular_twilight_axis/icons/roguetown/clothing/cloaks.dmi'
+	mob_overlay_icon = 'modular_twilight_axis/icons/roguetown/clothing/onmob/cloaks.dmi'
+	icon_state = "bishop_cape"
+	item_state = "bishop_cape"
+	slot_flags = ITEM_SLOT_BACK_R|ITEM_SLOT_CLOAK
+	inhand_mod = TRUE
+
+/obj/item/clothing/cloak/bishop/ComponentInitialize()
+	. = ..()
+	AddComponent(/datum/component/storage/concrete/roguetown/cloak)

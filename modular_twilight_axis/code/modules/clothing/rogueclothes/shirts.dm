@@ -307,3 +307,96 @@
 				H.update_inv_armor()
 			return
 		picked = TRUE
+
+/obj/item/clothing/suit/roguetown/shirt/robe/bishop
+	name = "bishop robe"
+	desc = ""
+	icon_state = "bishop_robe"
+	item_state = "bishop_robe"
+	slot_flags = ITEM_SLOT_SHIRT|ITEM_SLOT_ARMOR
+	body_parts_covered = CHEST|GROIN|VITALS
+	flags_inv= HIDEBOOB|HIDECROTCH
+	resistance_flags = FIRE_PROOF // astratan
+	armor = ARMOR_PADDED	//Equal to gamby
+	color = null
+	icon = 'modular_twilight_axis/icons/roguetown/clothing/shirts.dmi'
+	mob_overlay_icon = 'modular_twilight_axis/icons/roguetown/clothing/onmob/shirts.dmi'
+	sleeved = 'modular_twilight_axis/icons/roguetown/clothing/onmob/shirts.dmi'
+
+/obj/item/clothing/suit/roguetown/shirt/robe/bishop/Initialize()
+	. = ..()
+	AddComponent(/datum/component/cursed_item, TRAIT_CHOSEN, "VESTMENTS")
+
+/obj/item/clothing/suit/roguetown/shirt/robe/nun
+	name = "nun dress"
+	desc = ""
+	icon_state = "nun_dress"
+	item_state = "nun_dress"
+	slot_flags = ITEM_SLOT_SHIRT|ITEM_SLOT_ARMOR
+	body_parts_covered = CHEST|GROIN|VITALS
+	flags_inv= HIDEBOOB|HIDECROTCH
+	allowed_race = NON_DWARVEN_RACE_TYPES
+	allowed_sex = list(FEMALE)
+	icon = 'modular_twilight_axis/icons/roguetown/clothing/shirts.dmi'
+	mob_overlay_icon = 'modular_twilight_axis/icons/roguetown/clothing/onmob/shirts.dmi'
+	sleeved = 'modular_twilight_axis/icons/roguetown/clothing/onmob/shirts.dmi'
+
+/obj/item/clothing/suit/roguetown/shirt/kimono
+	name = "kimono"
+	desc = ""
+	icon_state = "white_kimono"
+	item_state = "white_kimono"
+	slot_flags = ITEM_SLOT_SHIRT|ITEM_SLOT_ARMOR
+	body_parts_covered = CHEST|GROIN|VITALS
+	flags_inv= HIDEBOOB|HIDECROTCH
+	allowed_race = NON_DWARVEN_RACE_TYPES
+	allowed_sex = list(FEMALE)
+	icon = 'modular_twilight_axis/icons/roguetown/clothing/shirts.dmi'
+	mob_overlay_icon = 'modular_twilight_axis/icons/roguetown/clothing/onmob/shirts.dmi'
+	sleeved = 'modular_twilight_axis/icons/roguetown/clothing/onmob/shirts.dmi'
+	var/kimono_colors = list("white", "blue", "black")
+	var/picked = FALSE
+	var/kimono_final_icon = null // eto pizdec blyat ia ebal
+
+/obj/item/clothing/suit/roguetown/shirt/kimono/attack_right(mob/user)
+	..()
+	if(!picked)
+		var/iconH = icon_state
+		var/choiceC = input(user, "Choose a color.", "Hammerhold colors") as anything in kimono_colors
+		if(choiceC == "white")
+			iconH = "white_kimono"
+		if(choiceC == "black")
+			iconH = "black_kimono"
+
+		if(choiceC == "red")
+			iconH = "red_kimono"
+		icon_state = iconH
+		item_state = iconH
+		base_icon_state = iconH
+		kimono_final_icon = iconH
+		update_icon()
+		if(alert("Are you pleased with your kimono?", "Kimono", "Yes", "No") != "Yes")
+			icon_state = "white_kimono"
+			item_state = "white_kimono"
+			base_icon_state = "white_kimono"
+			kimono_final_icon = "white_kimono"
+			update_icon()
+			return
+		picked = TRUE
+		if(loc == user && ishuman(user))
+			var/mob/living/carbon/H = user
+			H.update_inv_shirt()
+
+/obj/item/clothing/suit/roguetown/shirt/kimono/equipped(mob/user, slot)
+	. = ..()
+	if(kimono_final_icon)
+		icon_state = kimono_final_icon
+		item_state = kimono_final_icon
+		update_icon()
+
+/obj/item/clothing/suit/roguetown/shirt/kimono/dropped(mob/user, slot)
+	. = ..()
+	if(kimono_final_icon)
+		icon_state = kimono_final_icon
+		item_state = kimono_final_icon
+		update_icon()

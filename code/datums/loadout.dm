@@ -1072,6 +1072,18 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	path = /obj/item/clothing/suit/roguetown/shirt/dress/maid
 	donatitem = TRUE
 
+/datum/loadout_item/donat/nun_dress
+	name = "Роба монашки (только для женщин)"
+	category = list("Одежда", "Донат")
+	path = /obj/item/clothing/suit/roguetown/shirt/robe/nun
+	donatitem = TRUE
+
+/datum/loadout_item/donat/kimono
+	name = "Кимоно (только для женщин)"
+	category = list("Одежда", "Донат")
+	path = /obj/item/clothing/suit/roguetown/shirt/kimono
+	donatitem = TRUE
+
 // Табарды и плащи
 
 /datum/loadout_item/donat/matron
@@ -1303,6 +1315,12 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	name = "Хаммерхолдская шляпа"
 	category = list("Головные уборы", "Донат")
 	path = /obj/item/clothing/head/roguetown/twilight_hammerhold_hat/peasant
+	donatitem = TRUE
+
+/datum/loadout_item/donat/nun_hood
+	name = "Капюшон монашки"
+	category = list("Головные уборы", "Донат")
+	path = /obj/item/clothing/head/roguetown/nun
 	donatitem = TRUE
 
 // Пояса
