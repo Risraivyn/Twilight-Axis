@@ -1,6 +1,0 @@
-author: "Ryan180602"
-delete-after: True
-changes:
-  - code_imp: "Adds armour filtering."
-  - code_imp: "Adds Fencer's Dexterity trait."
-  - refactor: "Moves psydonic plate buffs to the new armour_filtering system."
