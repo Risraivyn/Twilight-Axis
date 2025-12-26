@@ -290,7 +290,7 @@
 	var/con_bonus = (con - 10) * 0.5
 	var/athl_bonus = (athl_skill * 0.25)
 	var/deminer_bonus = con_bonus + athl_bonus
-	var/cost = 5 - deminer_bonus
+	var/cost = 4 - deminer_bonus
 	return max(0, cost)
 
 /// Consume prepared note on swing attempt.
