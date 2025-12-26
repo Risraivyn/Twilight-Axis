@@ -327,6 +327,20 @@
 	. = ..()
 	AddComponent(/datum/component/cursed_item, TRAIT_CHOSEN, "VESTMENTS")
 
+/obj/item/clothing/suit/roguetown/shirt/robe/bishop/equipped(mob/living/user, slot)
+	..()
+	if(slot != SLOT_ARMOR|SLOT_SHIRT)
+		return
+	if(!HAS_TRAIT(user, TRAIT_CHOSEN))	//Requires this cus it's a priest-only thing.
+		return
+	ADD_TRAIT(user, TRAIT_MONK_ROBE, TRAIT_GENERIC)
+	to_chat(user, span_notice("With my vows to poverty and my vestments, I feel vigorous - empowered by my God!"))
+
+/obj/item/clothing/suit/roguetown/shirt/robe/bishop/dropped(mob/living/user)
+	..()
+	REMOVE_TRAIT(user, TRAIT_MONK_ROBE, TRAIT_GENERIC)
+	to_chat(user, span_notice("I must lay down my robes and rest; even God's chosen must rest.."))
+
 /obj/item/clothing/suit/roguetown/shirt/robe/nun
 	name = "nun dress"
 	desc = ""
