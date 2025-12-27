@@ -322,9 +322,7 @@
 							if(used_intent.miss_text)
 								visible_message(span_warning("[src] [used_intent.miss_text]!"), \
 												span_warning("I [used_intent.miss_text]!"))
-					// TA Add start - SOUNDBREAKER
-					soundbreaker_try_consume_prepared_attack(src, T, zone_selected)
-					// TA Add end - SOUNDBREAKER
+					soundbreaker_try_consume_prepared_attack(src, T, zone_selected) // TA Add - SOUNDBREAKER
 					aftermiss()
 					atkswinging = null
 					//update_warning()
