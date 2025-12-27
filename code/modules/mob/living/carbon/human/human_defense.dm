@@ -36,11 +36,11 @@
 			playsound(loc, get_armor_sound(used.blocksound, blade_dulling), 100)
 		var/intdamage = damage
 		// Penetrative damage deals significantly less to the armor. Tentative.
-		if((damage + armor_penetration) > protection && d_type != "blunt" && mind)
+		if((damage + armor_penetration) > protection && d_type != "blunt")
 			intdamage = (damage + armor_penetration) - protection
 		if(intdamfactor != 1)
 			intdamage *= intdamfactor
-		if(d_type == "blunt")
+		if(d_type == "blunt" && mind)
 			if(used.armor?.getRating("blunt") > 0)
 				var/bluntrating = used.armor.getRating("blunt")
 				intdamage -= intdamage * ((bluntrating / 2) / 100)	//Half of the blunt rating reduces blunt damage taken by %-age.
@@ -58,6 +58,8 @@
 /mob/living/carbon/human/proc/checkcritarmor(def_zone, bclass)
 	if(!bclass)
 		return FALSE
+	if(bclass == BCLASS_PIERCE)
+		return TRUE
 	if(isbodypart(def_zone))
 		var/obj/item/bodypart/CBP = def_zone
 		def_zone = CBP.body_zone
