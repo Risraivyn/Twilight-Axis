@@ -322,6 +322,9 @@
 							if(used_intent.miss_text)
 								visible_message(span_warning("[src] [used_intent.miss_text]!"), \
 												span_warning("I [used_intent.miss_text]!"))
+					// TA Add start - SOUNDBREAKER
+					soundbreaker_try_consume_prepared_attack(src, T, zone_selected)
+					// TA Add end - SOUNDBREAKER
 					aftermiss()
 					atkswinging = null
 					//update_warning()
@@ -347,11 +350,7 @@
 		return
 	// TA Add start - SOUNDBREAKER
 	if(used_intent.is_attack_swing())
-		if(soundbreaker_try_consume_prepared_attack(
-			src,
-			A,
-			zone_selected
-		))
+		if(soundbreaker_try_consume_prepared_attack(src, A, zone_selected))
 			atkswinging = null
 			return
 	// TA Add end - SOUNDBREAKER
@@ -400,16 +399,9 @@
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		H.stamina_add(used_intent.misscost)
-	// TA Add start - SOUNDBREAKER
 	if(used_intent.is_attack_swing())
-		if(soundbreaker_try_consume_prepared_attack(
-			src,
-			null,
-			zone_selected
-		))
-			atkswinging = null
-			return
-	// TA Add end - SOUNDBREAKER
+		atkswinging = null
+		return
 
 //Is the atom obscured by a PREVENT_CLICK_UNDER_1 object above it
 /atom/proc/IsObscured()

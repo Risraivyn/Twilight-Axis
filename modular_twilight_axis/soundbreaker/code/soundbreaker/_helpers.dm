@@ -35,10 +35,8 @@
 /proc/soundbreaker_try_consume_prepared_attack(mob/living/user, atom/target_atom, zone)
 	if(!isliving(user))
 		return FALSE
-
 	if(SEND_SIGNAL(user, COMSIG_SOUNDBREAKER_TRY_CONSUME_PREPARED, target_atom, zone) & COMPONENT_SOUNDBREAKER_CONSUMED)
 		return TRUE
-
 	return FALSE
 
 /proc/soundbreaker_riff_defense_success(mob/living/defender)
