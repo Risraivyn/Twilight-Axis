@@ -4,14 +4,16 @@
 	outfit = /datum/outfit/job/roguetown/adventurer/soundbreaker
 	cmode_music = 'sound/music/cmode/adventurer/combat_outlander3.ogg'
 	traits_applied = list(
-		TRAIT_CRITICAL_RESISTANCE, TRAIT_GOODLOVER, TRAIT_EMPATH
+		TRAIT_GOODLOVER, TRAIT_EMPATH, TRAIT_NOPAINSTUN, TRAIT_CIVILIZEDBARBARIAN
 	)
 	class_select_category = CLASS_CAT_ROGUE
 	category_tags = list(CTAG_ADVENTURER)
+	maximum_possible_slots = 3
 	subclass_stats = list(
 		STATKEY_STR = 2,
-		STATKEY_CON = 1,
-		STATKEY_SPD = 1
+		STATKEY_CON = 2,
+		STATKEY_WIL = 2,
+		STATKEY_INT = -1
 	)
 	subclass_skills = list(
 		/datum/skill/combat/wrestling = SKILL_LEVEL_APPRENTICE,
@@ -45,7 +47,7 @@
 	)
 
 	var/datum/inspiration/I = new /datum/inspiration(H)
-	I.grant_inspiration(H, bard_tier = BARD_T3)
+	I.grant_inspiration(H, bard_tier = BARD_T2)
 
 	if(H.mind)
 		H.AddComponent(/datum/component/combo_core/soundbreaker, SB_COMBO_WINDOW, SB_MAX_HISTORY, SB_MAX_VISIBLE_NOTES)

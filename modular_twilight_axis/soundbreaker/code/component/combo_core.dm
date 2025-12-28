@@ -11,6 +11,11 @@
 // - optionally push inputs directly via RegisterInput() (no signals inside component)
 
 
+/datum/combo_pending_action
+	var/execute_at
+	var/callback
+	var/list/args
+
 /datum/combo_input_entry
 	var/skill_id
 	var/time
@@ -29,17 +34,13 @@
 	
 /datum/component/combo_core
 	dupe_mode = COMPONENT_DUPE_UNIQUE
-
 	var/mob/living/owner
-
 	var/combo_window = 8 SECONDS
 	var/max_history = 5
-
 	var/list/history
 	var/list/rules
-
 	var/last_input_time = 0
-	var/_expire_stamp = 0
+	var/list/pending_actions = list()
 
 /datum/component/combo_core/Initialize(_combo_window, _max_history)
 	. = ..()
@@ -49,6 +50,7 @@
 	owner = parent
 	history = list()
 	rules = list()
+	pending_actions = list()
 
 	if(_combo_window)
 		combo_window = _combo_window
@@ -62,6 +64,8 @@
 	RegisterSignal(owner, COMSIG_COMBO_CORE_CLEAR, PROC_REF(_sig_clear))
 
 /datum/component/combo_core/Destroy(force)
+	SScombo_expire.Untrack(src)
+	pending_actions = null
 	if(owner)
 		UnregisterSignal(owner, COMSIG_COMBO_CORE_REGISTER_INPUT)
 		UnregisterSignal(owner, COMSIG_COMBO_CORE_CLEAR)
@@ -90,7 +94,6 @@
 	return
 
 // ----------------- Registration helpers -----------------
-
 /datum/component/combo_core/proc/RegisterRule(rule_id, list/pattern, priority = 0, callback = null)
 	if(!rule_id || !islist(pattern) || !pattern.len)
 		return
@@ -112,7 +115,6 @@
 	return 0
 
 // ----------------- Signals -----------------
-
 /datum/component/combo_core/proc/_sig_register_input(datum/source, skill_id, mob/living/target, zone)
 	SIGNAL_HANDLER
 	if(!owner)
@@ -126,14 +128,22 @@
 	return COMPONENT_COMBO_ACCEPTED
 
 // ----------------- Core API -----------------
+/datum/component/combo_core/proc/LazyExpireIfNeeded()
+	if(!owner)
+		return
+	if(!history || !history.len)
+		return
+
+	if(world.time - last_input_time >= combo_window)
+		ClearHistory("expired")
 
 /datum/component/combo_core/proc/RegisterInput(skill_id, mob/living/target, zone)
 	if(!owner || !skill_id)
 		return FALSE
+	LazyExpireIfNeeded()
 
 	last_input_time = world.time
 
-	// add entry
 	var/datum/combo_input_entry/E = new
 	E.skill_id = skill_id
 	E.time = world.time
@@ -143,9 +153,8 @@
 
 	CleanupHistory()
 	OnHistoryChanged()
-	ScheduleExpire()
+	Reschedule()
 
-	// match combos
 	return CheckCombos()
 
 /datum/component/combo_core/proc/CleanupHistory()
@@ -209,17 +218,54 @@
 /datum/component/combo_core/proc/ClearHistory(reason = "manual")
 	if(history)
 		history.Cut()
+	SScombo_expire.Untrack(src)
 	OnHistoryCleared(reason)
 
-/datum/component/combo_core/proc/ScheduleExpire()
-	_expire_stamp++
-	var/stamp = _expire_stamp
-	addtimer(CALLBACK(src, PROC_REF(_expire_check), stamp), combo_window)
+/datum/component/combo_core/proc/QueueAction(delay, callback, ...)
+	if(!callback)
+		return
 
-/datum/component/combo_core/proc/_expire_check(stamp)
-	if(stamp != _expire_stamp)
-		return
-	if(!owner)
-		return
-	if(world.time - last_input_time >= combo_window)
+	var/datum/combo_pending_action/A = new
+	A.execute_at = world.time + delay
+	A.callback = callback
+	A.args = args.Copy()
+	pending_actions += A
+
+	Reschedule()
+
+/datum/component/combo_core/proc/Reschedule()
+	var/next = GetNextWakeTime()
+	if(next > 0)
+		SScombo_expire.Track(src, next)
+	else
+		SScombo_expire.Untrack(src)
+
+/datum/component/combo_core/proc/GetNextWakeTime()
+	var/next = 0
+	if(history?.len)
+		next = last_input_time + combo_window
+
+	if(pending_actions?.len)
+		var/soonest = 0
+		for(var/datum/combo_pending_action/A as anything in pending_actions)
+			if(!A) continue
+			if(!soonest || A.execute_at < soonest)
+				soonest = A.execute_at
+
+		if(soonest && (!next || soonest < next))
+			next = soonest
+
+	return next
+
+/datum/component/combo_core/proc/ProcessTimers(now)
+	if(history?.len && (now >= last_input_time + combo_window))
 		ClearHistory("expired")
+
+	if(pending_actions?.len)
+		for(var/datum/combo_pending_action/A as anything in pending_actions.Copy())
+			if(!A || A.execute_at > now)
+				continue
+			pending_actions -= A
+			call(src, A.callback)(arglist(A.args))
+
+	Reschedule()

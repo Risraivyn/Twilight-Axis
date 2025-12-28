@@ -1,5 +1,6 @@
 #include "code/component/_defines.dm"
 #include "code/component/_helpers.dm"
+#include "code/component/combo_expire.dm"
 #include "code/component/combo_core.dm"
 #include "code/soundbreaker/_defines.dm"
 #include "code/soundbreaker/_helpers.dm"

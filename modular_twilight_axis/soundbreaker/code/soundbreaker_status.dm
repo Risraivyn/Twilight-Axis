@@ -20,7 +20,6 @@
 	. = ..()
 	if(stacks <= 0)
 		stacks = 1
-	update_visuals()
 	if(owner)
 		to_chat(owner, span_notice("Your rhythm begins to build."))
 	return TRUE
@@ -31,12 +30,10 @@
 		return
 
 	stacks = min(stacks + 1, max_stacks)
-	update_visuals()
 	if(owner)
 		to_chat(owner, span_notice("Your rhythm surges ([stacks]/[max_stacks])."))
 
 /datum/status_effect/buff/soundbreaker_combo/on_remove()
-	clear_visuals()
 	if(owner)
 		if(aura_overlay)
 			owner.cut_overlay(aura_overlay)
@@ -45,37 +42,6 @@
 		SEND_SIGNAL(owner, COMSIG_SOUNDBREAKER_COMBO_CLEARED)
 
 	. = ..()
-
-/datum/status_effect/buff/soundbreaker_combo/proc/update_visuals()
-	if(!owner)
-		return
-
-	clear_visuals()
-
-	var/colour
-	switch(stacks)
-		if(1) colour = "#44aaff"
-		if(2) colour = "#55dd77"
-		if(3) colour = "#ffdd66"
-		if(4) colour = "#ff8844"
-		if(5) colour = "#ff4444"
-		else colour = "#888888"
-
-	owner.add_filter(SOUNDBREAKER_COMBO_FILTER, 2, list(
-		"type" = "outline",
-		"color" = colour,
-		"alpha" = 80,
-		"size" = 1,
-	))
-
-	owner.regenerate_icons()
-
-/datum/status_effect/buff/soundbreaker_combo/proc/clear_visuals()
-	if(owner)
-		owner.remove_filter(SOUNDBREAKER_COMBO_FILTER)
-		owner.regenerate_icons()
-
-#undef SOUNDBREAKER_COMBO_FILTER
 
 /datum/status_effect/buff/soundbreaker_prepared
 	id = "soundbreaker_prepared"

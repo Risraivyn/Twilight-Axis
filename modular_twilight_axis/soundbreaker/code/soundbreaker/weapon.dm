@@ -147,17 +147,9 @@
 					user.do_attack_animation(M, user.used_intent.animname, used_item = src, used_intent = user.used_intent, simplified = TRUE)
 			return
 
-	if(user.mob_biotypes & MOB_UNDEAD)
-		if(M.has_status_effect(/datum/status_effect/buff/necras_vow))
-			if(isnull(user.mind))
-				user.adjust_fire_stacks(5)
-				user.ignite_mob()
-			else
-				if(prob(30))
-					to_chat(M, span_warning("The foul blessing of the Undermaiden hurts us!"))
-			user.adjust_blurriness(3)
-			user.adjustBruteLoss(5)
-			user.apply_status_effect(/datum/status_effect/churned, M)
+	var/rmb_stam_penalty = user.get_rmb_stamina_penalty()
+	var/drain = max(0, user.used_intent?.releasedrain + rmb_stam_penalty)
+	user.stamina_add(drain)
 
 	_attacker_signal = null
 	_attacker_signal = SEND_SIGNAL(user, COMSIG_MOB_ITEM_ATTACK_POST_SWINGDELAY, M, user, src)

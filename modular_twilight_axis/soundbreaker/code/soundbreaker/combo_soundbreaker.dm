@@ -23,6 +23,7 @@
 	var/list/granted_spells = list()
 	var/spells_granted = FALSE
 	var/last_input_dir = SOUTH
+	var/list/note_mas = list()
 
 /datum/component/combo_core/soundbreaker/Initialize(_combo_window, _max_history)
 	. = ..(_combo_window || SB_COMBO_WINDOW, _max_history || SB_MAX_HISTORY)
@@ -218,16 +219,15 @@
 	return proxy
 
 /datum/component/combo_core/soundbreaker/proc/OnHit(mob/living/target, note_id, zone = BODY_ZONE_CHEST)
-	if(!owner || !note_id)
+	if(!owner || !note_id || !target)
 		return
 
-	if(target)
-		var/turf/ot = get_turf(owner)
-		var/turf/tt = get_turf(target)
-		if(ot && tt)
-			var/d = get_dir(ot, tt)
-			if(d)
-				last_input_dir = d
+	var/turf/ot = get_turf(owner)
+	var/turf/tt = get_turf(target)
+	if(ot && tt)
+		var/d = get_dir(ot, tt)
+		if(d)
+			last_input_dir = d
 	else
 		last_input_dir = owner.dir
 
@@ -319,13 +319,21 @@
 	return TRUE
 
 /datum/component/combo_core/soundbreaker/proc/GetNoteStaminaCost()
-	var/con = owner.get_stat(STATKEY_CON)
+	var/wil = owner.get_stat(STATKEY_WIL)
 	var/athl_skill = owner.get_skill_level(/datum/skill/misc/athletics)
-	var/con_bonus = (con - 10) * 0.5
-	var/athl_bonus = (athl_skill * 0.25)
-	var/deminer_bonus = con_bonus + athl_bonus
-	var/cost = 4 - deminer_bonus
-	return max(0, cost)
+	var/wil_bonus = (wil - 10)
+	var/athl_bonus = (athl_skill * 0.5)
+	var/deminer_bonus = wil_bonus + athl_bonus
+	var/cost = 10 - deminer_bonus
+
+	if(istype(owner.rmb_intent, /datum/rmb_intent/strong))
+		cost += 1
+	else if(istype(owner.rmb_intent, /datum/rmb_intent/swift))
+		cost += 0 // swift и так платит через releasedrain+penalty, пусть тут не страдает
+	else if(istype(owner.rmb_intent, /datum/rmb_intent/feint))
+		cost += 2
+	
+	return max(1, cost)
 
 /// Consume prepared note on swing attempt.
 /datum/component/combo_core/soundbreaker/proc/TryConsumePreparedAttack(atom/target_atom, zone = BODY_ZONE_CHEST)
@@ -352,15 +360,14 @@
 	owner.stamina_add(GetNoteStaminaCost())
 
 	var/mob/living/last_hit = ExecuteNote(target_atom, aim_dir, note_id, damage_mult, damage_type, zone)
-
 	if(last_hit)
 		OnHit(last_hit, note_id, zone)
-	else
-		if(TryHitAtom(target_atom, damage_mult, damage_type, BCLASS_PUNCH, zone))
-			OnHit(null, note_id, zone)
-		else
-			playsound(owner, 'sound/combat/sp_whip_whiff.ogg', 40, TRUE)
+		return TRUE
 
+	if(TryHitAtom(target_atom, damage_mult, damage_type, BCLASS_PUNCH, zone))
+		return TRUE
+
+	playsound(owner, 'sound/combat/sp_whip_whiff.ogg', 40, TRUE)
 	return TRUE
 
 /datum/component/combo_core/soundbreaker/proc/ExecuteNote(atom/target_atom, aim_dir, note_id, damage_mult, damage_type, zone = BODY_ZONE_CHEST)
@@ -590,14 +597,12 @@
 /datum/component/combo_core/soundbreaker/proc/TryHitAtom(atom/target_atom, damage_mult = 1, damage_type = BRUTE, bclass = BCLASS_PUNCH, zone = BODY_ZONE_CHEST, params = null)
 	if(!owner || !target_atom)
 		return FALSE
-
 	if(isliving(target_atom))
 		return FALSE
 
 	var/obj/item/soundbreaker_proxy/P = GetProxy()
 	if(!P)
 		return FALSE
-
 	if(P.loc != owner)
 		P.forceMove(owner)
 
@@ -615,10 +620,14 @@
 	var/obj/item/active = owner.get_active_held_item()
 	P.name = active ? active.name : "soundbreaking strike"
 
+	P.last_attack_success = FALSE
+	P.last_attack_target = null
+
 	owner.face_atom(target_atom)
 	owner.do_attack_animation(target_atom, ATTACK_EFFECT_DISARM)
 	P.melee_attack_chain(owner, target_atom, params)
-	return TRUE
+
+	return P.last_attack_success
 
 /datum/component/combo_core/soundbreaker/proc/ScaleDamage(damage_mult, hand_index = null)
 	if(!owner || damage_mult <= 0)
@@ -742,19 +751,21 @@
 	if(!owner)
 		return
 
-	if(islist(note_overlays) && note_overlays.len)
-		SSvis_overlays.remove_vis_overlay(owner, note_overlays)
-		note_overlays.Cut()
+	// снять старые
+	if(islist(note_mas) && note_mas.len)
+		for(var/mutable_appearance/ma in note_mas)
+			owner.overlays -= ma
+		note_mas.Cut()
 	else
-		note_overlays = list()
+		note_mas = list()
 
 	if(!islist(note_history) || !note_history.len)
 		return
 
 	var/base_y = 18
 	var/step_x = 8
-	var/offset_idx = 0
 	var/start_x = 8
+	var/idx = 0
 
 	for(var/i = note_history.len, i >= 1, i--)
 		var/note_id = note_history[i]
@@ -762,34 +773,34 @@
 		if(!state)
 			continue
 
-		var/obj/effect/overlay/vis/overlay = SSvis_overlays.add_vis_overlay(
-			owner,
-			SOUNDBREAKER_NOTES_ICON,
-			state,
-			ABOVE_MOB_LAYER + 0.2,
-			FLOAT_PLANE,
-			owner.dir,
-			255,
-			NONE,
-			unique = TRUE
-		)
+		var/mutable_appearance/ma = mutable_appearance(SOUNDBREAKER_NOTES_ICON, state)
+		ma.layer = ABOVE_MOB_LAYER + 0.2
+		ma.plane = GAME_PLANE_UPPER // ключевое: поверх мира, но в “мобовом” стеке
+		ma.pixel_y = base_y
+		ma.pixel_x = -(idx * step_x) + start_x
+		ma.appearance_flags = RESET_TRANSFORM|KEEP_TOGETHER|PIXEL_SCALE
 
-		overlay.pixel_y = base_y
-		overlay.pixel_x = -(offset_idx * step_x) + start_x
-		offset_idx++
+		note_mas += ma
+		owner.overlays += ma
+		idx++
 
-		note_overlays += overlay
+	if(owner?.client)
+		owner.update_cone()
 
 /datum/component/combo_core/soundbreaker/proc/ClearNoteIcons()
 	if(!owner)
 		return
 
-	if(islist(note_overlays) && note_overlays.len)
-		SSvis_overlays.remove_vis_overlay(owner, note_overlays)
-		note_overlays.Cut()
+	if(islist(note_mas) && note_mas.len)
+		for(var/mutable_appearance/ma in note_mas)
+			owner.overlays -= ma
+		note_mas.Cut()
 
 	if(islist(note_history))
 		note_history.Cut()
+	
+	if(owner?.client)
+		owner.update_cone()
 
 /datum/component/combo_core/soundbreaker/proc/ShowComboIcon(mob/living/target, icon_state)
 	if(!target || !icon_state)
@@ -975,7 +986,7 @@
 	var/mob/living/M = _first_living_on_turf(T)
 	if(M)
 		if(HitSpecific(M, damage_mult, damage_type, BCLASS_PUNCH, zone))
-			SafeOffbalance(M, 1 SECONDS)
+			SmallBleed(M, 1)
 			return M
 
 	return null
@@ -1011,7 +1022,11 @@
 	if(!start)
 		return null
 
-	// normalize inputs like other notes
+	if(owner.pulledby)
+		if(!owner.resist_grab(TRUE))
+			soundbreaker_spawn_afterimage(owner, start, 0.3 SECONDS)
+			return null
+
 	if(!aim_dir)
 		aim_dir = owner.dir
 
@@ -1136,7 +1151,6 @@
 
 /datum/component/combo_core/soundbreaker/proc/ComboBassDrop(mob/living/target)
 	var/zone = TryGetZone(owner.zone_selected)
-
 	var/turf/front1 = GetFrontTurf(1)
 	var/list/wave2 = GetArcTurfs(2)
 	if(islist(wave2))
@@ -1144,16 +1158,15 @@
 
 	if(front1)
 		ExclaimFX(front1)
-		addtimer(CALLBACK(src, PROC_REF(_combo_4112_stage1), target, front1, zone, 1.3), 0 SECONDS)
+		QueueAction(0, PROC_REF(_combo_4112_stage1), target, front1, zone, 1.3)
 
-	addtimer(CALLBACK(src, PROC_REF(_combo_4112_stage2), target, wave2, zone, 1.8), 0.35 SECONDS)
+	QueueAction(0.35 SECONDS, PROC_REF(_combo_4112_stage2), target, wave2, zone, 1.8)
+	QueueAction(0.6 SECONDS, PROC_REF(_combo_4112_finish), target)
 
 	owner.visible_message(
 		span_danger("[owner]'s bass pattern detonates in two beats!"),
 		span_notice("You slam a two-beat drop: close, then wide."),
 	)
-
-	addtimer(CALLBACK(src, PROC_REF(_combo_4112_finish), target), 0.6 SECONDS)
 
 /datum/component/combo_core/soundbreaker/proc/_combo_4112_stage1(mob/living/primary, turf/front1, zone, dmg)
 	if(!owner || !front1)
@@ -1281,7 +1294,7 @@
 
 /datum/component/combo_core/soundbreaker/proc/ComboBladeDancer(mob/living/target)
 	ApplyDamage(target, 0.9, BCLASS_PUNCH)
-	SmallBleed(target, 5)
+	SmallBleed(target, 2)
 
 	owner.visible_message(
 		span_danger("[owner] carves [target] in a shredding sequence!"),
@@ -1292,8 +1305,8 @@
 	ResetRhythm()
 
 /datum/component/combo_core/soundbreaker/proc/ComboCrescendo(mob/living/target)
-	ApplyDamage(target, 1.7, BCLASS_PUNCH)
-	SafeOffbalance(target, 5 SECONDS)
+	ApplyDamage(target, 1.3, BCLASS_PUNCH)
+	SafeOffbalance(target, 2 SECONDS)
 
 	owner.visible_message(
 		span_danger("[owner] uppercuts [target] with a crushing crescendo!"),
