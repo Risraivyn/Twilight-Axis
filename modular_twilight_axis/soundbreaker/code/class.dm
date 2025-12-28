@@ -10,11 +10,12 @@
 	category_tags = list(CTAG_ADVENTURER)
 	subclass_stats = list(
 		STATKEY_STR = 2,
+		STATKEY_CON = 1,
 		STATKEY_SPD = 1
 	)
 	subclass_skills = list(
 		/datum/skill/combat/wrestling = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/misc/music = SKILL_LEVEL_MASTER,
+		/datum/skill/misc/music = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/athletics = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/climbing = SKILL_LEVEL_APPRENTICE,
@@ -39,7 +40,7 @@
 	beltl = /obj/item/flashlight/flare/torch/lantern
 
 	backpack_contents = list(
-		/obj/item/lockpick = 1,
+		/obj/item/book/rogue/soundbreaker_codex = 1,
 		/obj/item/recipe_book/survival = 1,
 	)
 

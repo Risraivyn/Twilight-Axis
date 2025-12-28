@@ -22,6 +22,7 @@
 
 	var/list/granted_spells = list()
 	var/spells_granted = FALSE
+	var/last_input_dir = SOUTH
 
 /datum/component/combo_core/soundbreaker/Initialize(_combo_window, _max_history)
 	. = ..(_combo_window || SB_COMBO_WINDOW, _max_history || SB_MAX_HISTORY)
@@ -220,6 +221,16 @@
 	if(!owner || !note_id)
 		return
 
+	if(target)
+		var/turf/ot = get_turf(owner)
+		var/turf/tt = get_turf(target)
+		if(ot && tt)
+			var/d = get_dir(ot, tt)
+			if(d)
+				last_input_dir = d
+	else
+		last_input_dir = owner.dir
+
 	RegisterInput(note_id, target, zone, null)
 	ShowNoteIcon(note_id)
 	AddComboStack()
@@ -268,13 +279,10 @@
 /datum/component/combo_core/soundbreaker/proc/FaceTurf(turf/T)
 	if(!owner || !T)
 		return
-	var/turf/me = get_turf(owner)
-	if(!me)
-		return
-	var/d = GetAimDir(me, T)
+
+	var/d = GetAimDir(T)
 	if(d)
 		owner.setDir(d)
-
 
 /// Берём "primary" моба, если кликнули по мобу, иначе пытаемся найти живого на тайле
 /datum/component/combo_core/soundbreaker/proc/GetPrimaryFromClick(atom/target_atom, turf/target_turf)
@@ -1066,7 +1074,11 @@
 	ResetRhythm()
 
 /datum/component/combo_core/soundbreaker/proc/ComboTempoFlick(mob/living/target)
-	sb_fire_sound_note(owner, 0.5, BRUTE, BODY_ZONE_CHEST)
+	var/d = last_input_dir || owner.dir
+	if(d)
+		owner.setDir(d)
+
+	sb_fire_sound_note(owner, target, 0.5, BRUTE, BODY_ZONE_CHEST, d)
 	ResetRhythm()
 
 /datum/component/combo_core/soundbreaker/proc/ComboSnapback(mob/living/target)
