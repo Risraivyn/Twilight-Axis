@@ -1,3 +1,63 @@
+#define SB_ARMOR_WEAR_MULT 1.2
+#define SB_ARMOR_WEAR_MIN  1
+#define SB_ARMOR_WEAR_MAX  50
+
+/obj/item/soundbreaker_proxy/proc/_zone_to_covered_flag(zone)
+	switch(zone)
+		if(BODY_ZONE_HEAD)   return HEAD
+		if(BODY_ZONE_CHEST)  return CHEST
+		if(BODY_ZONE_L_ARM, BODY_ZONE_R_ARM) return ARMS
+		if(BODY_ZONE_L_LEG, BODY_ZONE_R_LEG) return LEGS
+	return 0
+
+/obj/item/soundbreaker_proxy/proc/_item_has_armor_for(obj/item/I, attack_flag)
+	if(!I || !attack_flag)
+		return FALSE
+
+	var/datum/armor/A = I.armor
+	if(!A)
+		return FALSE
+
+	if(istype(A))
+		var/v = A.vars[attack_flag]
+		return (isnum(v) && v > 0)
+
+	if(islist(I.armor))
+		var/v2 = I.armor[attack_flag]
+		return (isnum(v2) && v2 > 0)
+
+	return FALSE
+
+/obj/item/soundbreaker_proxy/proc/_apply_armor_wear(mob/living/carbon/human/target, hit_zone, attack_flag, force_dynamic)
+	if(!target || !attack_flag)
+		return
+
+	var/wear = round(force_dynamic * SB_ARMOR_WEAR_MULT)
+	wear = clamp(wear, SB_ARMOR_WEAR_MIN, SB_ARMOR_WEAR_MAX)
+	if(wear <= 0)
+		return
+
+	var/cover_flag = _zone_to_covered_flag(hit_zone)
+	if(!cover_flag)
+		return
+
+	for(var/obj/item/clothing/C in target.contents)
+		if(!C || C.loc != target)
+			continue
+
+		if(!isnum(C.body_parts_covered) || !(C.body_parts_covered & cover_flag))
+			continue
+
+		if(!_item_has_armor_for(C, attack_flag))
+			continue
+
+		C.take_damage(wear, BRUTE, "blunt")
+		break
+
+#undef SB_ARMOR_WEAR_MULT
+#undef SB_ARMOR_WEAR_MIN
+#undef SB_ARMOR_WEAR_MAX
+
 /obj/item/soundbreaker_proxy
 	name = "soundbreaking strike"
 	desc = ""
@@ -215,6 +275,9 @@
 		nodmg = TRUE
 		target.next_attack_msg += VISMSG_ARMOR_BLOCKED
 	else
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = target
+			_apply_armor_wear(H, hit_zone, attack_flag, force_dynamic)
 		affecting.bodypart_attacked_by(
 			thrown_bclass,
 			force_dynamic,

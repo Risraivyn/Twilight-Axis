@@ -356,7 +356,10 @@
 	if(last_hit)
 		OnHit(last_hit, note_id, zone)
 	else
-		playsound(owner, 'sound/combat/sp_whip_whiff.ogg', 40, TRUE)
+		if(TryHitAtom(target_atom, damage_mult, damage_type, BCLASS_PUNCH, zone))
+			OnHit(null, note_id, zone)
+		else
+			playsound(owner, 'sound/combat/sp_whip_whiff.ogg', 40, TRUE)
 
 	return TRUE
 
@@ -583,6 +586,39 @@
 		return max(1, round(damage))
 
 	return max(1, round(owner.get_stat(STATKEY_STR)))
+
+/datum/component/combo_core/soundbreaker/proc/TryHitAtom(atom/target_atom, damage_mult = 1, damage_type = BRUTE, bclass = BCLASS_PUNCH, zone = BODY_ZONE_CHEST, params = null)
+	if(!owner || !target_atom)
+		return FALSE
+
+	if(isliving(target_atom))
+		return FALSE
+
+	var/obj/item/soundbreaker_proxy/P = GetProxy()
+	if(!P)
+		return FALSE
+
+	if(P.loc != owner)
+		P.forceMove(owner)
+
+	var/dmg = ScaleDamage(damage_mult) * 2
+	if(dmg <= 0)
+		return FALSE
+
+	P.force = dmg
+	P.force_dynamic = dmg
+	P.damtype = damage_type
+	P.thrown_bclass = bclass
+	P.d_type = GetDamageFlag(bclass, damage_type)
+	P.armor_penetration = CalcAP(bclass)
+
+	var/obj/item/active = owner.get_active_held_item()
+	P.name = active ? active.name : "soundbreaking strike"
+
+	owner.face_atom(target_atom)
+	owner.do_attack_animation(target_atom, ATTACK_EFFECT_DISARM)
+	P.melee_attack_chain(owner, target_atom, params)
+	return TRUE
 
 /datum/component/combo_core/soundbreaker/proc/ScaleDamage(damage_mult, hand_index = null)
 	if(!owner || damage_mult <= 0)
@@ -848,13 +884,16 @@
 /datum/component/combo_core/soundbreaker/proc/_first_living_on_turf(turf/T)
 	if(!T)
 		return null
+	var/mob/living/first_dead = null
 	for(var/mob/living/L in T)
 		if(L == owner)
 			continue
 		if(L.stat == DEAD)
+			if(!first_dead)
+				first_dead = L
 			continue
 		return L
-	return null
+	return first_dead
 
 // ----------------- Notes play procs -----------------
 /datum/component/combo_core/soundbreaker/proc/NoteBendPlay(atom/target_atom, aim_dir, damage_mult, damage_type, zone)
