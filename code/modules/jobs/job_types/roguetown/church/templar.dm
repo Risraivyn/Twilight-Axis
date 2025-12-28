@@ -143,7 +143,7 @@
 			weapons += "Barotrauma"
 
 	var/weapon_choice = input(H,"Choose your weapon.", "TAKE UP ARMS") as anything in weapons
-		switch(weapon_choice)
+	switch(weapon_choice)
 		if("Discipline - Unarmed")
 			H.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 5, TRUE)
 			H.equip_to_slot_or_del(new /obj/item/clothing/gloves/roguetown/bandages/pugilist, SLOT_GLOVES, TRUE)
