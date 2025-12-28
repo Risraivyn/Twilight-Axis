@@ -54,11 +54,11 @@
 			gloves = /obj/item/clothing/gloves/roguetown/leather
 			head = /obj/item/clothing/head/roguetown/bucklehat/gunslinger
 			pants = /obj/item/clothing/under/roguetown/heavy_leather_pants
-			backpack_contents = list(/obj/item/roguekey/mercenary = 1, /obj/item/twilight_powderflask = 1, /obj/item/rogueweapon/huntingknife = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1)
+			backpack_contents = list(/obj/item/roguekey/mercenary = 1, /obj/item/twilight_powderflask = 1, /obj/item/rogueweapon/huntingknife = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1, /obj/item/rogueweapon/scabbard/sheath = 1)
 		if("Otavan Dragoon")
 			H.set_blindness(0)
 			to_chat(H, span_warning("Having left the ranks of the Otavan militant orders, you set off into the wider world, selling your combat skills to the highest bidder. Your rare runelock firearm, once awarded to you for your service, is now your primary tool of the trade."))
-			if(istype(H.patron, /datum/patron/inhumen/zizo) || istype(H.patron, /datum/patron/inhumen/matthios) || istype(H.patron, /datum/patron/inhumen/graggar) || istype(H.patron, /datum/patron/inhumen/baotha))
+			if(!istype(H.patron, /datum/patron/old_god))
 				to_chat(H, span_warning("Even if Inhumen once watched over me, my loyalty to them did not survive the trials of Otava. Psydon is one true God!"))
 				H.set_patron(/datum/patron/old_god)
 			H.adjust_skillrank(/datum/skill/misc/riding, 3, TRUE)
@@ -70,7 +70,7 @@
 			gloves = /obj/item/clothing/gloves/roguetown/otavan
 			head = /obj/item/clothing/head/roguetown/duelhat/gunslinger
 			pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/otavan
-			backpack_contents = list(/obj/item/roguekey/mercenary = 1, /obj/item/rogueweapon/huntingknife = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1)
+			backpack_contents = list(/obj/item/roguekey/mercenary = 1, /obj/item/rogueweapon/huntingknife = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1, /obj/item/rogueweapon/scabbard/sheath = 1)
 			H.merctype = 10
 			H.grant_language(/datum/language/otavan)
 
