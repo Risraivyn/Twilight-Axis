@@ -1,0 +1,5 @@
+author: "dopamiin0"
+delete-after: True
+changes:
+  - bugfix: "all onhit enchantments have lost their bluetooth compatability. you have to actually hit people with your sword now </3"
+  - balance: "freezing and flame are compatible again"

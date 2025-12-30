@@ -93,6 +93,8 @@
 
 /datum/magic_item/mythic/briarcurse/on_hit(obj/item/source, atom/target, mob/user, proximity_flag, click_parameters)
 	.=..()
+	if(!proximity_flag)
+		return
 	if(isliving(target))
 		var/mob/living/carbon/targeted = target
 		targeted.adjustBruteLoss(10)
@@ -107,6 +109,8 @@
 
 /datum/magic_item/mythic/rewind/on_hit(obj/item/source, atom/target, mob/user, proximity_flag, click_parameters)
 	.=..()
+	if(!proximity_flag)
+		return
 	if(world.time < src.last_used + REWIND_COOLDOWN)
 		return
 	else
@@ -137,6 +141,8 @@
 
 /datum/magic_item/mythic/chaos_storm/on_hit(obj/item/source, atom/target, mob/user, proximity_flag, click_parameters)
 	.=..()
+	if(!proximity_flag)
+		return
 	if(world.time < (src.last_used + CHAOS_COOLDOWN))
 		return
 	if(isliving(target))
