@@ -555,3 +555,26 @@
   dopamiin0:
   - bugfix: starting sentences with bold words no longer makes it a whisper
   - bugfix: ending sentences with bold words no longer adds an extra period
+2025-12-30:
+  FreeStylaLT:
+  - balance: Face / Helmet FOV limits now stack.
+  - balance: Targeting face carries a heavier accuracy malus on fully-able player
+      targets. Does not apply to NPCs.
+  - balance: Face targeting zones (Eyes, Ears, Mouth, Nose) now all count as each
+      other for the purposes of bait.
+  - bugfix: Fixes projectile crits for real (for real)
+  - bugfix: Fixed faith salute icons behaving erratically.
+  - rscadd: Rumors & Gossip
+  JustSomeGalSS13:
+  - bugfix: Followers of the Inhumen can actually pray within the Z-church now
+  Ryan180602:
+  - sound: New embed noise for projectiles.
+  SirSwagmeyer:
+  - bugfix: old valiant warrior duke has master swords as intended
+  dopamiin0:
+  - balance: aerosolize has 1.2 second telegraphed delay before casting
+  hollyhock:
+  - bugfix: Fixed the psyalter's stole's masculine sprites.
+  kano-dot:
+  - rscadd: Tweaked roll stat dice emotes to be affected by relevant traits.
+  - rscadd: Added a roll charisma emote.
