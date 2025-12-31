@@ -14,17 +14,18 @@
 	if(!I || !attack_flag)
 		return FALSE
 
-	var/datum/armor/A = I.armor
-	if(!A)
+	var/armor_any = I.armor
+	if(!armor_any)
 		return FALSE
 
-	if(istype(A))
+	if(islist(armor_any))
+		var/v_list = armor_any[attack_flag]
+		return (isnum(v_list) && v_list > 0)
+
+	if(istype(armor_any, /datum/armor))
+		var/datum/armor/A = armor_any
 		var/v = A.vars[attack_flag]
 		return (isnum(v) && v > 0)
-
-	if(islist(I.armor))
-		var/v2 = I.armor[attack_flag]
-		return (isnum(v2) && v2 > 0)
 
 	return FALSE
 
