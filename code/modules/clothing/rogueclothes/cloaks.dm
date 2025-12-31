@@ -197,7 +197,7 @@
 	alternate_worn_layer = TABARD_LAYER
 	boobed = FALSE
 	name = "astratan tabard"
-	desc = "The washed out golds of an asratan crusader adorn these fine robes."
+	desc = "The washed out golds of an Astratan crusader adorn these fine robes."
 	icon_state = "astratatabard"
 	resistance_flags = FIRE_PROOF
 
