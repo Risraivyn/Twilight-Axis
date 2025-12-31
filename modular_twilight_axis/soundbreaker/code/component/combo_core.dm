@@ -218,8 +218,8 @@
 /datum/component/combo_core/proc/ClearHistory(reason = "manual")
 	if(history)
 		history.Cut()
-	SScombo_expire.Untrack(src)
 	OnHistoryCleared(reason)
+	Reschedule()
 
 /datum/component/combo_core/proc/QueueAction(delay, callback, ...)
 	if(!callback)
@@ -228,7 +228,7 @@
 	var/datum/combo_pending_action/A = new
 	A.execute_at = world.time + delay
 	A.callback = callback
-	A.args = args.Copy()
+	A.args = args.Copy(3)
 	pending_actions += A
 
 	Reschedule()

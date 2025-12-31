@@ -1154,10 +1154,11 @@
 
 	if(front1)
 		ExclaimFX(front1)
-		QueueAction(0, PROC_REF(_combo_4112_stage1), target, front1, zone, 1.3)
+		_combo_4112_stage1(target, front1, zone, 1.3)
 
-	QueueAction(0.35 SECONDS, PROC_REF(_combo_4112_stage2), target, wave2, zone, 1.8)
-	QueueAction(0.6 SECONDS, PROC_REF(_combo_4112_finish), target)
+	QueueAction(0.5 SECONDS, PROC_REF(_combo_4112_stage2), target, wave2, zone, 1.8)
+	ShowComboIcon(target, SB_COMBO_ICON_BASS)
+	ResetRhythm()
 
 	owner.visible_message(
 		span_danger("[owner]'s bass pattern detonates in two beats!"),
@@ -1196,17 +1197,11 @@
 			hit = HitOneOnTurf(T, dmg, BRUTE, BCLASS_PUNCH, zone)
 
 		if(hit)
-			hit.Immobilize(2 SECONDS)
-
-/datum/component/combo_core/soundbreaker/proc/_combo_4112_finish(mob/living/target)
-	if(!owner || !target)
-		return
-	ShowComboIcon(target, SB_COMBO_ICON_BASS)
-	ResetRhythm()
+			hit.Immobilize(1 SECONDS)
 
 /datum/component/combo_core/soundbreaker/proc/ComboCrossfade(mob/living/target)
 	ApplyDamage(target, 0.3, BCLASS_PUNCH)
-	target.Stun(2 SECONDS)
+	target.Stun(1 SECONDS)
 
 	owner.visible_message(
 		span_danger("[owner] catches [target] in a nasty cross-beat stun!"),
@@ -1242,14 +1237,8 @@
 	ResetRhythm()
 
 /datum/component/combo_core/soundbreaker/proc/ComboSyncopation(mob/living/target)
-	var/was_off = IsOffbalanced(target)
-
 	ApplyDamage(target, 0.5, BCLASS_PUNCH)
-	target.Immobilize(1.5 SECONDS)
 	SafeOffbalance(target, 3 SECONDS)
-
-	if(was_off)
-		target.Knockdown(1.5 SECONDS)
 
 	owner.visible_message(
 		span_danger("[owner]'s pattern locks [target]—and if they were already shaken, it drops them!"),
@@ -1263,8 +1252,8 @@
 	for(var/mob/living/L in view(1, owner))
 		if(L == owner) continue
 		if(L.stat == DEAD) continue
-		ApplyDamage(L, 0.7, BCLASS_PUNCH)
-		SmallBleed(L, 3)
+		ApplyDamage(L, 0.3, BCLASS_PUNCH)
+		SmallBleed(L, 1)
 
 	playsound(get_turf(owner), 'sound/combat/ground_smash1.ogg', 90, TRUE)
 
@@ -1278,7 +1267,7 @@
 
 /datum/component/combo_core/soundbreaker/proc/ComboRitmo(mob/living/target)
 	ApplyDamage(target, 0.6, BCLASS_PUNCH)
-	SafeSlow(target, 5)
+	SafeSlow(target, 2)
 
 	owner.visible_message(
 		span_danger("[owner] drags [target]'s tempo down into a heavy slow!"),
