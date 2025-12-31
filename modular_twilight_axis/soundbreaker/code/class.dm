@@ -29,7 +29,7 @@
 	to_chat(H, span_warning("You are a Soundbreaker – a brawling bard who weaves strikes into melody. Your fists keep the rhythm, your enemies keep the bruises."))
 	head = /obj/item/clothing/head/roguetown/bardhat/soundbreakerhat
 	pants = /obj/item/clothing/under/roguetown/trou/leather
-	shirt = /obj/item/clothing/suit/roguetown/shirt/shortshirt
+	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/light
 	armor = /obj/item/clothing/suit/roguetown/shirt/robe/spellcasterrobe/soundbreakerrobe
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
 	gloves = /obj/item/clothing/gloves/roguetown/fingerless_leather
