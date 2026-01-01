@@ -88,6 +88,7 @@
 	new /obj/item/storage/keyring/guard(src)
 	new /obj/item/clothing/suit/roguetown/armor/leather/studded/warden(src)
 	new /obj/item/rogueweapon/stoneaxe/woodcut/wardenpick(src)
+	new /obj/item/rogueweapon/huntingknife/idagger/warden_machete(src)
 	new /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve/warden(src)
 
 /datum/roguestock/import/manatarms
