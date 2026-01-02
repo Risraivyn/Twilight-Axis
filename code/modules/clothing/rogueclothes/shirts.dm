@@ -20,6 +20,16 @@
 	grid_width = 64
 	grid_height = 64
 
+/obj/item/clothing/suit/roguetown/shirt/MiddleClick(mob/user, params)
+	var/mob/living/carbon/H = user
+	if(!ishuman(H))
+		return
+	if(flags_inv & HIDEWINGS)
+		flags_inv &= ~HIDEWINGS
+	else
+		flags_inv |= HIDEWINGS
+	H.update_inv_armor()
+
 /obj/item/clothing/suit/roguetown/shirt/undershirt
 	name = "shirt"
 	desc = "Modest and humble. It lets you walk around in public with your dignity intact."
