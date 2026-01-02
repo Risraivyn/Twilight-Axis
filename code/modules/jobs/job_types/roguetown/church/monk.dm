@@ -124,9 +124,6 @@
 			shoes = /obj/item/clothing/shoes/roguetown/sandals
 			armor = /obj/item/clothing/suit/roguetown/shirt/robe/eora
 			cloak = /obj/item/clothing/cloak/templar/eoran
-			H.mind.special_items["Pink Robe"] = /obj/item/clothing/suit/roguetown/shirt/robe/eora/resprite/pink
-			H.mind.special_items["Blue Robe"] = /obj/item/clothing/suit/roguetown/shirt/robe/eora/resprite
-			H.mind.special_items["Alt Tabard"] = /obj/item/enchantingkit/eoran_helm_resprite
 		if(/datum/patron/divine/malum)
 			head = /obj/item/clothing/head/roguetown/roguehood
 			neck = /obj/item/clothing/neck/roguetown/psicross/malum
@@ -204,6 +201,9 @@
 		ADD_TRAIT(H, TRAIT_BEAUTIFUL, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
 		H.cmode_music = 'sound/music/cmode/church/combat_eora.ogg'
+		H.mind.special_items["Pink Robe"] = /obj/item/clothing/suit/roguetown/shirt/robe/eora/resprite/pink
+		H.mind.special_items["Blue Robe"] = /obj/item/clothing/suit/roguetown/shirt/robe/eora/resprite
+		H.mind.special_items["Alt Tabard"] = /obj/item/clothing/cloak/templar/eoran/alt
 	if(H.patron?.type == /datum/patron/divine/malum) // Craft and Creativity - they can make stuff.
 		ADD_TRAIT(H, TRAIT_SMITHING_EXPERT, TRAIT_GENERIC)
 		H.adjust_skillrank(/datum/skill/craft/blacksmithing, 2, TRUE)

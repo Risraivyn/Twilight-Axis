@@ -200,6 +200,7 @@
 		ADD_TRAIT(H, TRAIT_BEAUTIFUL, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
 		H.cmode_music = 'sound/music/cmode/church/combat_eora.ogg'
+		H.mind.special_items["Alt Tabard"] = /obj/item/clothing/cloak/templar/eoran/alt
 	if(H.patron?.type == /datum/patron/divine/malum)
 		ADD_TRAIT(H, TRAIT_SMITHING_EXPERT, TRAIT_GENERIC) // ONE exception for the "no combat role get this" rules
 		H.adjust_skillrank(/datum/skill/craft/blacksmithing, 1, TRUE)
@@ -307,8 +308,6 @@
 			wrists = /obj/item/clothing/neck/roguetown/psicross/eora
 			head = /obj/item/clothing/head/roguetown/helmet/heavy/eoran
 			cloak = /obj/item/clothing/cloak/templar/eoran
-			H.mind.special_items["Alt Tabard"] = /obj/item/clothing/cloak/templar/eoran/alt
-			H.mind.special_items["Helmet Morphing Elixer"] = /obj/item/enchantingkit/eoran_helm_resprite
 		if(/datum/patron/divine/noc)
 			wrists = /obj/item/clothing/neck/roguetown/psicross/noc
 			head = /obj/item/clothing/head/roguetown/helmet/heavy/nochelm
@@ -473,6 +472,8 @@
 		ADD_TRAIT(H, TRAIT_BEAUTIFUL, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
 		H.cmode_music = 'sound/music/cmode/church/combat_eora.ogg'
+		H.mind.special_items["Alt Tabard"] = /obj/item/clothing/cloak/templar/eoran/alt
+		H.mind.special_items["Helmet Morphing Elixer"] = /obj/item/enchantingkit/eoran_helm_resprite
 	if(H.patron?.type == /datum/patron/divine/malum)
 		H.adjust_skillrank(/datum/skill/craft/blacksmithing, 1, TRUE)
 		H.adjust_skillrank(/datum/skill/craft/armorsmithing, 1, TRUE)
