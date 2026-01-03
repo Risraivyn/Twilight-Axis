@@ -321,17 +321,17 @@
 /datum/component/combo_core/soundbreaker/proc/GetNoteStaminaCost()
 	var/wil = owner.get_stat(STATKEY_WIL)
 	var/athl_skill = owner.get_skill_level(/datum/skill/misc/athletics)
-	var/wil_bonus = (wil - 10) * 0.15
-	var/athl_bonus = (athl_skill) * 0.4
+	var/wil_bonus = (wil - 10) * 0.2
+	var/athl_bonus = (athl_skill) * 0.5
 	var/deminer_bonus = wil_bonus + athl_bonus
 	var/cost = 5 - deminer_bonus
 
 	if(istype(owner.rmb_intent, /datum/rmb_intent/strong))
-		cost += 2
-	if(istype(owner.rmb_intent, /datum/rmb_intent/swift))
 		cost += 1
+	if(istype(owner.rmb_intent, /datum/rmb_intent/swift))
+		cost += 0.5
 	
-	return max(1, cost)
+	return max(0.1, cost)
 
 /// Consume prepared note on swing attempt.
 /datum/component/combo_core/soundbreaker/proc/TryConsumePreparedAttack(atom/target_atom, zone = BODY_ZONE_CHEST)
@@ -352,7 +352,7 @@
 	var/note_id = P.note_id
 	var/damage_mult = P.damage_mult
 	var/damage_type = P.damage_type
-	damage_mult *= (!HasMusic() ? 0.5 : 1)
+	damage_mult *= (!HasMusic() ? 0.6 : 1)
 
 	owner.remove_status_effect(/datum/status_effect/buff/soundbreaker_prepared)
 	owner.stamina_add(GetNoteStaminaCost())
