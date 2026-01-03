@@ -11,7 +11,7 @@
 	sellprice = 25
 
 /datum/advclass/wretch/twilight_corsair
-	name = "Sea Beast"
+	name = "Sea Rogue"
 	tutorial = "You spent your entire lyfe making a living through piracy in the seas of Grimoria, where gunpowder and steel were always your loyal companions."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
@@ -19,11 +19,11 @@
 	category_tags = list(CTAG_WRETCH)
 	traits_applied = list(TRAIT_FIREARMS_MARKSMAN, TRAIT_DODGEEXPERT)
 	maximum_possible_slots = 2
-	classes = list("Corsair" = "During the Twilight War, you served aboard a Reichsmarine warship, intercepting, \
+	classes = list("Kaper" = "During the Twilight War, you served aboard a Reichsmarine warship, intercepting, \
 	boarding and ravaging Golden Empire's trade vessels on Kaiser's orders. \
 	After the war ended, your crew saw it fit to continue with the practice, flying a flag with a different shade of black.",
 	
-	"Naked Blade" = "For a long time you plundered ships of various flags and origins, \
+	"Wōkòu" = "For a long time you plundered ships of various flags and origins, \
 	burning through your lyfe on the islands of Kazengun. \
 	After your peak, you were smashed against the rocks of battles and had to flee further from your native seas \
 	to foreign lands to continue your trade.")
@@ -56,11 +56,11 @@
 /datum/outfit/job/roguetown/wretch/twilight_corsair/pre_equip(mob/living/carbon/human/H)
 	..()
 	H.adjust_blindness(-3)
-	var/classes = list("Corsair", "Naked Blade")
+	var/classes = list("Kaper", "Wōkòu")
 	var/classchoice = input("Choose your archetypes", "Available archetypes") as anything in classes
 
 	switch(classchoice)
-		if("Corsair")
+		if("Kaper")
 			H.set_blindness(0)
 			wrists = /obj/item/clothing/wrists/roguetown/bracers/leather/heavy
 			belt = /obj/item/storage/belt/rogue/leather
@@ -80,7 +80,7 @@
 			backpack_contents = list(/obj/item/twilight_powderflask = 1, /obj/item/natural/cloth = 1, /obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/rope/chain = 1, /obj/item/storage/belt/rogue/pouch/coins/poor = 1)
 			H.grant_language(/datum/language/grenzelhoftian)
 
-		if("Naked Blade")
+		if("Wōkòu")
 			H.set_blindness(0)
 			mask = /obj/item/clothing/mask/rogue/facemask/steel/kazengun
 			pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/eastpants2
