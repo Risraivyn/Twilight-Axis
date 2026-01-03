@@ -927,13 +927,13 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	donatitem = TRUE
 
 /datum/loadout_item/donator_dasfox
-	name = "Donator Kit - Archaic Ceremonial Valkyrhelm"
+	name = "Donator Kit - Archaic Ceremonial Valkyrhelm - Required: Armet"
 	path = /obj/item/enchantingkit/dasfox_helm
 	category = list("Разное", "Донат")
 	donatitem = TRUE
 
 /datum/loadout_item/donator_dasfox/cuirass
-	name = "Donator Kit - Archaic Ceremonial Cuirass"
+	name = "Donator Kit - Archaic Ceremonial Cuirass - Required: Fluted Cuirass(No Small Races)"
 	path = /obj/item/enchantingkit/dasfox_cuirass
 	category = list("Разное", "Донат")
 	donatitem = TRUE
