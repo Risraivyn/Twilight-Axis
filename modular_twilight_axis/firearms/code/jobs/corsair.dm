@@ -84,6 +84,7 @@
 			H.set_blindness(0)
 			mask = /obj/item/clothing/mask/rogue/facemask/steel/kazengun
 			pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/eastpants2
+			armor = /obj/item/clothing/suit/roguetown/armor/basiceast/captainrobe
 			cloak = /obj/item/clothing/cloak/eastcloak1
 			wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
 			head = /obj/item/clothing/head/roguetown/mentorhat
