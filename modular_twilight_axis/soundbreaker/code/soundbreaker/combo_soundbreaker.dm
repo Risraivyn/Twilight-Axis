@@ -215,7 +215,7 @@
 	if(!owner)
 		return null
 	if(!proxy || QDELETED(proxy))
-		proxy = new /obj/item/soundbreaker_proxy(owner) // loc=owner is important
+		proxy = new /obj/item/soundbreaker_proxy(owner)
 	return proxy
 
 /datum/component/combo_core/soundbreaker/proc/OnHit(mob/living/target, note_id, zone = BODY_ZONE_CHEST)
@@ -260,7 +260,6 @@
 		return target_atom
 	return get_turf(target_atom)
 
-/// Направление "туда", куда кликнули. Если кликнули в свой же тайл — fallback на owner.dir
 /datum/component/combo_core/soundbreaker/proc/GetAimDir(atom/target_atom)
 	if(!owner)
 		return SOUTH
@@ -275,7 +274,6 @@
 	var/d = get_dir(ot, tt)
 	return d ? d : owner.dir
 
-/// Синхронизируем поворот под клик (это важно для визуала/FX), но не ломаем механику
 /datum/component/combo_core/soundbreaker/proc/FaceTurf(turf/T)
 	if(!owner || !T)
 		return
@@ -284,7 +282,6 @@
 	if(d)
 		owner.setDir(d)
 
-/// Берём "primary" моба, если кликнули по мобу, иначе пытаемся найти живого на тайле
 /datum/component/combo_core/soundbreaker/proc/GetPrimaryFromClick(atom/target_atom, turf/target_turf)
 	if(isliving(target_atom))
 		return target_atom
@@ -751,7 +748,6 @@
 	if(!owner)
 		return
 
-	// снять старые
 	if(islist(note_mas) && note_mas.len)
 		for(var/mutable_appearance/ma in note_mas)
 			owner.overlays -= ma
@@ -775,7 +771,7 @@
 
 		var/mutable_appearance/ma = mutable_appearance(SOUNDBREAKER_NOTES_ICON, state)
 		ma.layer = ABOVE_MOB_LAYER + 0.2
-		ma.plane = GAME_PLANE_UPPER // ключевое: поверх мира, но в “мобовом” стеке
+		ma.plane = GAME_PLANE_UPPER
 		ma.pixel_y = base_y
 		ma.pixel_x = -(idx * step_x) + start_x
 		ma.appearance_flags = RESET_TRANSFORM|KEEP_TOGETHER|PIXEL_SCALE
@@ -1049,8 +1045,6 @@
 			continue
 
 		SwingFX(T)
-
-		// first living on each affected tile
 		var/mob/living/M = _first_living_on_turf(T)
 		if(!M)
 			continue
@@ -1233,8 +1227,6 @@
 		dash_dir = owner.dir
 
 	var/zone = TryGetZone(owner.zone_selected)
-
-	// tune: harmonic as dash-strike, not the old aoe nuke
 	var/dmg_mult = 0.85
 	var/dmg_type = BRUTE
 
@@ -1249,8 +1241,6 @@
 
 	soundbreaker_spawn_afterimage(owner, start, 0.8 SECONDS)
 	soundbreaker_spawn_afterimage(owner, t1, 0.8 SECONDS)
-
-	// track real hit to face it later
 	var/mob/living/hit_mob = null
 
 	if(!t2 || _turf_is_dash_blocked(t2))
@@ -1280,7 +1270,7 @@
 	var/mob/living/M2 = _first_living_on_turf(t2)
 	if(M2)
 		if(HitSpecific(M2, dmg_mult, dmg_type, BCLASS_PUNCH, zone))
-			hit_mob = M2 // приоритетнее, т.к. дальше по рывку
+			hit_mob = M2
 
 	if(M2)
 		var/turf/behind2 = get_step(t2, dash_dir)
