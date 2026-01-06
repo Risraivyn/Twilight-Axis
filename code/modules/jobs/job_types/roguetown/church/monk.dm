@@ -142,12 +142,12 @@
 			armor = /obj/item/clothing/suit/roguetown/shirt/robe/white
 			backpack_contents = list(/obj/item/ritechalk, /obj/item/book/rogue/law)
 		if(/datum/patron/divine/xylix)
-			head = /obj/item/clothing/head/roguetown/roguehood
+			head = /obj/item/clothing/head/roguetown/roguehood/black
 			cloak = /obj/item/clothing/cloak/templar/xylixian
 			wrists = /obj/item/clothing/wrists/roguetown/wrappings
 			shoes = /obj/item/clothing/shoes/roguetown/sandals
-			armor = /obj/item/clothing/suit/roguetown/shirt/robe
-			neck = /obj/item/clothing/neck/roguetown/luckcharm // For good luck, as Xylix would intend
+			armor = /obj/item/clothing/suit/roguetown/shirt/robe/black
+			neck = /obj/item/clothing/neck/roguetown/psicross/xylix
 			mask = /obj/item/clothing/mask/rogue/facemask/xylixmask //TA edit
 			H.cmode_music = 'sound/music/combat_jester.ogg'
 			var/datum/inspiration/I = new /datum/inspiration(H)

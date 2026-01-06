@@ -93,7 +93,7 @@
 			neck = /obj/item/clothing/neck/roguetown/psicross/abyssor
 			cloak = /obj/item/clothing/cloak/tabard/abyssortabard
 		if(/datum/patron/divine/xylix)
-			neck = /obj/item/clothing/neck/roguetown/luckcharm
+			neck = /obj/item/clothing/neck/roguetown/psicross/xylix
 			cloak = /obj/item/clothing/cloak/templar/xylixian
 			H.cmode_music = 'sound/music/combat_jester.ogg'
 		if(/datum/patron/divine/dendor)
