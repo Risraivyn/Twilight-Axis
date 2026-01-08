@@ -857,6 +857,7 @@
 	rattlesound = 'sound/foley/doors/lockrattlemetal.ogg'
 	attacked_sound = list("sound/combat/hits/onmetal/metalimpact (1).ogg", "sound/combat/hits/onmetal/metalimpact (2).ogg")
 	lock_strength = 200
+	lockdifficulty = 3
 	repair_cost_second = /obj/item/ingot/iron
 	repair_skill = /datum/skill/craft/carpentry
 
@@ -948,6 +949,7 @@
 	ridethrough = TRUE
 	swing_closed = FALSE
 	lock_strength = 150
+	lockdifficulty = 2
 	repairable = TRUE
 	repair_cost_first = /obj/item/ingot/iron
 	repair_cost_second = /obj/item/ingot/iron
