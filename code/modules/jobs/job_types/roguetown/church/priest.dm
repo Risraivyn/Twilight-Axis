@@ -113,6 +113,10 @@ GLOBAL_LIST_EMPTY(heretical_players)
 	H.verbs |= /mob/living/carbon/human/proc/completesermon
 	H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/convert_heretic_priest)
 	H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/revive)
+	H.mind.special_items["Bishop Cape"] = /obj/item/clothing/cloak/bishop
+	H.mind.special_items["Bishop Hood"] = /obj/item/clothing/head/roguetown/roguehood/bishop
+	H.mind.special_items["Bishop Mask"] = /obj/item/clothing/mask/rogue/ragmask/bishop
+	H.mind.special_items["Bishop Robe"] = /obj/item/clothing/suit/roguetown/shirt/robe/bishop
 	if(H.mind)
 		SStreasury.give_money_account(ECONOMIC_UPPER_CLASS, H, "Church Funding.")
 	switch(H.patron?.type)
