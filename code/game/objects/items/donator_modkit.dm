@@ -173,7 +173,11 @@
 //Ryan180602 - Armet
 /obj/item/enchantingkit/ryan_psyhelm
 	name = "'maimed psydonic helm' morphing elixir"
-	target_items = list(/obj/item/clothing/head/roguetown/helmet/heavy/psydonhelm)
-	result_item = /obj/item/clothing/head/roguetown/helmet/heavy/psydonhelm/ryan
+	desc = "A small container of special morphing dust, perfect to make a specifc item. Required: Psydonic Helmet(Armet,Barbute,Bucket Helmet or Sallet)"
+	target_items = list(/obj/item/clothing/head/roguetown/helmet/heavy/psydonhelm = /obj/item/clothing/head/roguetown/helmet/heavy/psydonhelm/ryan,
+	/obj/item/clothing/head/roguetown/helmet/heavy/psybucket = /obj/item/clothing/head/roguetown/helmet/heavy/psydonhelm/ryan,
+	/obj/item/clothing/head/roguetown/helmet/heavy/psysallet = /obj/item/clothing/head/roguetown/helmet/heavy/psydonhelm/ryan,
+	/obj/item/clothing/head/roguetown/helmet/heavy/psydonbarbute = /obj/item/clothing/head/roguetown/helmet/heavy/psydonhelm/ryan)
+	icon_loadout = /obj/item/clothing/head/roguetown/helmet/heavy/psydonhelm/ryan
 
 

@@ -963,7 +963,7 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	donatitem = TRUE
 
 /datum/loadout_item/donator_ryan/psy_helm
-	name = "Donator Kit - Unorthodoxist Psydonite Helm"
+	name = "Donator Kit - Unorthodoxist Psydonite Helm - Required: Psydonic Helmet(Armet,Barbute,Bucket Helmet or Sallet)"
 	path = /obj/item/enchantingkit/ryan_psyhelm
 	category = list("Разное", "Донат")
 	donatitem = TRUE
