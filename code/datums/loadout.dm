@@ -258,6 +258,10 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	category = "Плащи"
 	path = /obj/item/clothing/head/roguetown/roguehood/shroudblack
 
+/datum/loadout_item/aproncook
+	name = "Apron, Cooking"
+	path = /obj/item/clothing/cloak/apron/cook
+
 //SHOES
 /datum/loadout_item/darkboots
 	name = "Dark Boots"
@@ -492,6 +496,7 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	name = "White Foreign Shirt"
 	category = "Одежда"
 	path = /obj/item/clothing/suit/roguetown/shirt/undershirt/eastshirt2
+
 //PANTS
 /datum/loadout_item/tights
 	name = "Cloth Tights"
