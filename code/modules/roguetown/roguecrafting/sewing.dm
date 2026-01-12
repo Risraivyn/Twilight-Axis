@@ -1620,3 +1620,20 @@
 /datum/crafting_recipe/roguetown/sewing/caparison/eora
 	name = "eoran caparison"
 	result = list(/obj/item/caparison/eora)
+
+/datum/crafting_recipe/roguetown/sewing/paperparasol
+	name = "paper parasol"
+	result = list(/obj/item/rogueweapon/mace/parasol)
+	reqs = list(/obj/item/natural/cloth = 1,
+				/obj/item/natural/fibers = 2,
+				/obj/item/paper/scroll = 3)
+	craftdiff = 3
+
+/datum/crafting_recipe/roguetown/sewing/fineparasol
+	name = "fine parasol"
+	result = list(/obj/item/rogueweapon/mace/parasol/noble)
+	reqs = list(/obj/item/natural/cloth = 2,
+				/obj/item/natural/silk = 4,
+				/obj/item/paper/scroll = 2)
+	craftdiff = 5
+	sellprice = 45

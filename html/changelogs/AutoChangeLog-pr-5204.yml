@@ -1,0 +1,6 @@
+author: "Geevies"
+delete-after: True
+changes:
+  - rscadd: "Added Parasols. They can be sewn, bought from the Luxury section, or spawned in via the loadout."
+  - rscadd: "Walking in gentle rain or snow with a parasol will give you a short mood boost. It will not help in stormy weather."
+  - rscadd: "Graggarites now get a mood boost when standing in blood rain. Blood rain now has extra unique effects."

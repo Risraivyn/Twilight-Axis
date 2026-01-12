@@ -53,6 +53,14 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	path = /obj/item/rogueweapon/huntingknife/throwingknife/bauernwehr
 	triumph_cost = 3
 
+/datum/loadout_item/paper_parasol
+	name = "Paper Parasol"
+	path = /obj/item/rogueweapon/mace/parasol
+
+/datum/loadout_item/fine_parasol
+	name = "Fine Parasol"
+	path = /obj/item/rogueweapon/mace/parasol/noble
+
 //HATS
 /datum/loadout_item/shalal
 	name = "Keffiyeh"
