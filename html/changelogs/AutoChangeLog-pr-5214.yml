@@ -1,0 +1,4 @@
+author: "Randall"
+delete-after: True
+changes:
+  - bugfix: "Various HERMES mailtag fixes to clean up the directory."

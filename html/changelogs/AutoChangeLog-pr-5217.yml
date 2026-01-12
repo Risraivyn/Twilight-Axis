@@ -1,0 +1,6 @@
+author: "Ollanius"
+delete-after: True
+changes:
+  - rscadd: "The Stockpile should now accept all decrepit artifacts, alongside miscellaneous valuables. No longer shall your collection of golden spoons be left mysteriously worthless."
+  - bugfix: "Silk tablecloths now only occupy two gridspaces, instead of nine(!!!) gridspaces."
+  - bugfix: "Silver War Axes no longer have an accidental -10 damage malus."

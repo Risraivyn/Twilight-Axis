@@ -1,0 +1,4 @@
+author: "Kokserva"
+delete-after: True
+changes:
+  - balance: "a change in the color of sparks, indicating the location of ore and its type."

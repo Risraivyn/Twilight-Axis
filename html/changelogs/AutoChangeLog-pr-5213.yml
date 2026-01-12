@@ -1,0 +1,11 @@
+author: "Ollanius"
+delete-after: True
+changes:
+  - balance: "Elvish Sabres and Daggers have been reset to their original damage values, and now count (again) as silver weapons."
+  - balance: "Removed the Stalker Falx's damage malus."
+  - balance: "Elvish weapons now exclusively smelt into gold."
+  - balance: "Dark Elven weapons and armorpieces now smelt into a special ingot, which can be further refined into iron."
+  - balance: "Elvish weapons are now in the 'Decorated' smithing category, require Master-level skills to properly forge, and cost additional ingots to create."
+  - rscadd: "Adds the Poop Knife. If you know, you know."
+  - rscadd: "Adds the Skikudic ingot, with lore contributed from DrunkenLombax."
+  - rscadd: "Adds new descriptions to a smattering of Elvish weapons, alongside the Seax."

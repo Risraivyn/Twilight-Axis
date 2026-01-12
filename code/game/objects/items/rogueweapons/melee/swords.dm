@@ -235,9 +235,10 @@
 /obj/item/rogueweapon/sword/falx/stalker
 	name = "stalker falx"
 	desc = "A jagged blade with an in inward edge. Once a reputable weapon, now little more than a thug's tool."
-	force = 20 //trades damage for swift balance
 	icon_state = "spiderfalx"
 	wbalance = WBALANCE_SWIFT
+	smeltresult = /obj/item/ingot/drow
+	smelt_bar_num = 1
 
 /obj/item/rogueweapon/sword/decorated
 	name = "decorated arming sword"
@@ -1058,28 +1059,41 @@
 
 /obj/item/rogueweapon/sword/sabre/elf
 	name = "elvish saber"
-	desc = "This finely crafted saber is of elven design."
+	desc = "A single-edged masterwork of Elven design, who's silvered blade glimmers under the sun's glare."
 	icon_state = "esaber"
 	item_state = "esaber"
 	lefthand_file = 'icons/mob/inhands/weapons/swords_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/swords_righthand.dmi'
-	force = 25
-	force_wielded = 25
+	force = 23 //Equalized with the Stalker Sabre, with a +1DMG boost to its original stats.
+	force_wielded = 23
 	minstr = 7
-	wdefense = 9
+	wdefense = 7
 	last_used = 0
-	is_silver = FALSE
+	is_silver = TRUE //One of the rare silver-edged weapons that has a positive damage boost, due to it requiring both silver and gold to create.
 	smeltresult = /obj/item/ingot/gold
 	smelt_bar_num = 1
 
+/obj/item/rogueweapon/sword/sabre/elf/ComponentInitialize()
+	AddComponent(\
+		/datum/component/silverbless,\
+		pre_blessed = BLESSING_NONE,\
+		silver_type = SILVER_TENNITE,\
+		added_force = 0,\
+		added_blade_int = 100,\
+		added_int = 100,\
+		added_def = 2,\
+	)
+
 /obj/item/rogueweapon/sword/sabre/stalker
 	name = "stalker sabre"
-	desc = "A once elegant blade of mythril, diminishing under the suns gaze."
+	desc = "A once-elegant blade of mythril, who's sunless edge now menaces with obsidian-hued mirth."
 	icon_state = "spidersaber"
 	force = 23
 	force_wielded = 23
 	minstr = 7
 	wdefense = 8
+	smeltresult = /obj/item/ingot/drow
+	smelt_bar_num = 1
 
 /obj/item/rogueweapon/sword/sabre/shamshir
 	name = "shamshir"

@@ -1,0 +1,5 @@
+author: "Ollanius"
+delete-after: True
+changes:
+  - rscadd: "Casting the 'PRAYER', 'RESPITE', and 'PERSIST' miracles now prints an emote instead of forcing the caster to whisper."
+  - bugfix: "Fixed a bug where mute Psydonites - either through vice or injury - were unable to use any of their miracles."

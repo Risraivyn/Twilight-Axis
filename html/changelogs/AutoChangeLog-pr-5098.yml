@@ -1,0 +1,5 @@
+author: "Onutsio"
+delete-after: True
+changes:
+  - rscadd: "Parlor Trick Xylixian miracle"
+  - rscadd: "Ventriloquism Xylix miracle"

@@ -1,0 +1,8 @@
+author: "mumblemancer"
+delete-after: True
+changes:
+  - rscadd: "dunjon stone and normal dunjon doors now have harder subtypes"
+  - balance: "manor kitchen and manor front doors are now \"high security\" doors and are harder to lockpick"
+  - balance: "martyr room, church vault, and normal vault are now \"high security\" doors and are harder to lockpick"
+  - balance: "other doors are less ass to lockpick"
+  - balance: "iron bars are now harder to pick than normal doors but still less so than high security ones"
