@@ -497,6 +497,9 @@
 	sleeved = 'icons/roguetown/clothing/onmob/helpers/stonekeep_merc.dmi'
 	armor = ARMOR_LEATHER_GOOD
 
+/obj/item/clothing/shoes/roguetown/armor/rumaclan/shitty
+	armor = ARMOR_CLOTHING
+
 // horseshoes!
 /obj/item/clothing/shoes/roguetown/horseshoes
 	name = "iron horseshoes"

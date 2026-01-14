@@ -339,8 +339,10 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 
 /datum/loadout_item/rumaclanshoes
 	name = "Raised Sandals"
+	path = /obj/item/clothing/shoes/roguetown/armor/rumaclan/shitty
 	category = "Обувь"
-	path = /obj/item/clothing/shoes/roguetown/armor/rumaclan
+
+
 
 //SHIRTS
 /datum/loadout_item/longcoat
