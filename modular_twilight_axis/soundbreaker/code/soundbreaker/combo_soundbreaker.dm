@@ -733,7 +733,7 @@
 	var/turf/start = get_turf(target)
 	var/turf/dest = get_ranged_target_turf(start, dir, tiles)
 	if(dest)
-		target.safe_throw_at(dest, tiles, 1, owner, force = MOVE_FORCE_NORMAL)
+		target.safe_throw_at(dest, tiles, 1, owner, force = MOVE_FORCE_EXTREMELY_STRONG)
 
 /datum/component/combo_core/soundbreaker/proc/GetEffectiveHitZone(mob/living/target, desired_zone)
 	if(!desired_zone || !owner || !target)
