@@ -391,7 +391,7 @@
 	if(dmg <= 0)
 		return FALSE
 
-	zone = GetEffectiveHitZone(mob/living/target, zone)
+	zone = GetEffectiveHitZone(target, zone)
 	var/ap = CalcAP(bclass)
 	return AttackViaPipeline(target, dmg, bclass, damage_type, zone, ap)
 
