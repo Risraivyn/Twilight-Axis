@@ -499,3 +499,24 @@
   - rscadd: Added Matricaria, Calendula, and Manabloom flower crowns, and sprites
       for those individual flowers too.
   - rscadd: Added a non-armour crown variant of the Briar Thorns.
+2026-01-16:
+  FreeStylaLT:
+  - bugfix: Fixed fixedeye getting locked up randomly.
+  Lamasmaster:
+  - balance: Boot strip speed
+  - rscadd: Ducal Caparison
+  - balance: Eagle Beak
+  Ollanius:
+  - balance: Increases the damage of Psydonic Knuckles from 17 to 27, fixing a months-long
+      oversight that left them far weaker than intended.
+  Quinalion:
+  - rscadd: New Head Physician Drip
+  - rscadd: New Head Physician Canesword
+  Randall:
+  - rscadd: Adds a Finisher effect for Frost Bolt for hitting someone that's arcyne
+      marked, triggering an Ensnare-like effect.
+  Ryan180602:
+  - code_imp: Golgotha nuke is now bigger + gibs surrounding mobs.
+  - balance: Golgotha smash takes 3s to wind up.
+  adonai:
+  - bugfix: close caress is steel equivalent again
