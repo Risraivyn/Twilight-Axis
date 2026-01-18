@@ -1,0 +1,4 @@
+author: "the real lockpicking lawyer"
+delete-after: True
+changes:
+  - balance: "\"high security\" doors (check their descriptions for \"reinforced locks\") are slightly easier to pick than before"
