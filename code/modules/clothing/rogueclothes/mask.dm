@@ -16,6 +16,8 @@
 	experimental_inhand = FALSE
 	experimental_onhip = FALSE
 	var/overarmor = TRUE
+	equip_delay_self = 2.5 SECONDS
+	unequip_delay_self = 2.5 SECONDS
 
 /obj/item/clothing/mask/rogue/attack_right(mob/user)
 	. = ..()
@@ -315,6 +317,8 @@
 	anvilrepair = /datum/skill/craft/armorsmithing
 	smeltresult = /obj/item/ingot/iron
 	stack_fovs = TRUE
+	equip_delay_self = 3 SECONDS
+	unequip_delay_self = 3 SECONDS
 
 /obj/item/clothing/mask/rogue/facemask
 	name = "iron mask"
@@ -333,6 +337,8 @@
 	anvilrepair = /datum/skill/craft/armorsmithing
 	smeltresult = /obj/item/ingot/iron
 	stack_fovs = TRUE
+	equip_delay_self = 3 SECONDS
+	unequip_delay_self = 3 SECONDS
 
 /obj/item/clothing/mask/rogue/facemask/ComponentInitialize()
 	AddComponent(/datum/component/armour_filtering/positive, TRAIT_FENCERDEXTERITY)
@@ -431,6 +437,8 @@
 	icon_state = "smask"
 	max_integrity = 200
 	smeltresult = /obj/item/ingot/steel
+	equip_delay_self = 4 SECONDS
+	unequip_delay_self = 4 SECONDS
 
 /obj/item/clothing/mask/rogue/facemask/steel/paalloy
 	name = "ancient mask"
@@ -564,6 +572,8 @@
 	armor = ARMOR_PLATE
 	flags_inv = HIDEFACE|HIDESNOUT
 	sellprice = 0
+	equip_delay_self = 3 SECONDS
+	unequip_delay_self = 3 SECONDS
 
 /obj/item/clothing/mask/rogue/lordmask/naledi/equipped(mob/user, slot)
 	. = ..()
@@ -591,6 +601,8 @@
 	armor = ARMOR_PLATE
 	flags_inv = HIDEFACE|HIDESNOUT
 	sellprice = 0
+	equip_delay_self = 3.5 SECONDS
+	unequip_delay_self = 3.5 SECONDS
 
 /obj/item/clothing/mask/rogue/exoticsilkmask
 	name = "exotic silk mask"
