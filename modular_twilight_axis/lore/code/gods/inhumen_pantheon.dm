@@ -84,8 +84,8 @@
 	. = ..()
 	if(ishuman(pious))
 		var/mob/living/carbon/human/human = pious
-		if(pious.mind)
-			pious.mind.special_items["Lexicon of Her Truth"] = /obj/item/book/rogue/bibble/zizo
+		if(human.mind)
+			human.mind.special_items["Lexicon of Her Truth"] = /obj/item/book/rogue/bibble/zizo
 
 /datum/patron/inhumen/graggar
 	name = "Graggar"
