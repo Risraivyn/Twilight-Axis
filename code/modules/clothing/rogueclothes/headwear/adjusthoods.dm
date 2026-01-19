@@ -24,8 +24,8 @@
 	block2add = FOV_BEHIND
 	salvage_result = /obj/item/natural/cloth
 	salvage_amount = 1
-	equip_delay_self = 2.5 SECONDS
-	unequip_delay_self = 2.5 SECONDS
+	equip_delay_self = 1.5 SECONDS
+	unequip_delay_self = 1.5 SECONDS
 
 /obj/item/clothing/head/roguetown/roguehood/ComponentInitialize()
 	. = ..()
@@ -109,8 +109,6 @@
 	item_state = "hijab"
 	icon_state = "hijab"
 	naledicolor = TRUE
-	equip_delay_self = 3.5 SECONDS
-	unequip_delay_self = 3.5 SECONDS
 
 /obj/item/clothing/head/roguetown/roguehood/shalal/heavyhood
 	name = "heavy hood"
