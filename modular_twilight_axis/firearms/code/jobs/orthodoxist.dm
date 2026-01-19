@@ -105,6 +105,16 @@
 				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_EXPERT, TRUE)
 
 			if ("Otavan Volf")
+				var/weapons = list("Dagger", "Knuckledbusters")
+				var/weapon_choice = input(H,"Choose your WEAPON.", "TAKE UP PSYDON'S ARMS.") as anything in weapons
+				switch(weapon_choice)
+					if("Dagger")
+						r_hand = /obj/item/rogueweapon/huntingknife/idagger/silver/psydagger
+						beltl = /obj/item/rogueweapon/scabbard/sheath
+						H.adjust_skillrank_up_to(/datum/skill/combat/knives, SKILL_LEVEL_EXPERT, TRUE)
+					if("Knuckledbusters")
+						r_hand = /obj/item/rogueweapon/knuckles/psydon
+						H.adjust_skillrank_up_to(/datum/skill/combat/unarmed, SKILL_LEVEL_EXPERT, TRUE)
 				armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat/confessor
 				l_hand = /obj/item/gun/ballistic/twilight_firearm/arquebus_pistol/umbra
 				head = /obj/item/clothing/head/roguetown/roguehood/psydon/confessor
@@ -112,25 +122,21 @@
 				pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/otavan
 				belt = /obj/item/storage/belt/rogue/leather/twilight_holsterbelt
 				beltr = /obj/item/quiver/twilight_bullet/lead_ten
-				beltl = /obj/item/rogueweapon/scabbard/sheath
-				r_hand = /obj/item/rogueweapon/huntingknife/idagger/silver/psydagger
 				backpack_contents = list(/obj/item/roguekey/inquisitionmanor = 1,
 						/obj/item/paper/inqslip/arrival/ortho = 1,
 						/obj/item/twilight_powderflask/holyfyre = 1,
 						/obj/item/storage/belt/rogue/pouch/coins/mid = 1,
 						/obj/item/inqarticles/garrote = 1)
 				H.adjust_skillrank_up_to(/datum/skill/magic/arcane, SKILL_LEVEL_NOVICE, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/combat/knives, SKILL_LEVEL_EXPERT, TRUE)
-				var/arcane = list("Shadow Step", "Fetch", "Invisible", "Blast", "Leap")
+				H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/shadowstep)
+				var/arcane = list("Fetch", "Invisibility", "Repulse", "Leap")
 				var/arcane_choice = input("TAKE YOUR RUNE", "PSYDON'S RUNE") as anything in arcane
 				switch(arcane_choice)
-					if("Shadow Step")
-						H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/shadowstep)
 					if("Fetch")
 						H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/fetch)
-					if("Invisible")
+					if("Invisibility")
 						H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/invisibility)
-					if("Blast")
+					if("Repulse")
 						H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/repulse)
 					if("Leap")
 						H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/leap)
