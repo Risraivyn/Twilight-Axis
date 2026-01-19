@@ -17,8 +17,6 @@
 	blocksound = SOFTHIT
 	salvage_result = /obj/item/natural/hide
 	salvage_amount = 1
-	equip_delay_self = 2.5 SECONDS
-	unequip_delay_self = 2.5 SECONDS
 
 /obj/item/clothing/head/roguetown/beekeeper
 	name = "beekeeper's hood"
