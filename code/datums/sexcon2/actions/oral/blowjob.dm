@@ -38,7 +38,6 @@
 	if(istype(user.head, /obj/item/clothing/head/roguetown/jester))
 		playsound(user, SFX_JINGLE_BELLS, 30, TRUE, -2, ignore_walls = FALSE)
 
-	var/datum/sex_session/sex_session = get_sex_session(user, target)
 	do_thrust_animate(user, target, sex_session)
 	sex_session.perform_sex_action(target, 2, 0, TRUE)
 
