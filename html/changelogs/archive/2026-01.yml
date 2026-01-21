@@ -642,3 +642,24 @@
   - balance: Once a martyr weapon breaks, it reshifts into a random martyr weapon.
   - balance: Pulling in a new martyr weapon from a cross carries the old integrity.
   - balance: Martyr armour sellprice is 999 mammons.
+2026-01-21:
+  FreeStylaLT:
+  - bugfix: Fixed Averse Vice not working properly.
+  - rscadd: Added a Dagger Special -- Dash
+  Lamasmaster:
+  - spellcheck: Lick emote
+  Onutsio:
+  - balance: Rogue mages now can only buy spellbooks or gem-staves, not gems. Kills
+      a related exploit.
+  - balance: spike pits are breakable
+  PatapoIIIa:
+  - bugfix: Punish Minion now targets only clan hierarchy subordinates again, with
+      the original guard messaging restored.
+  RandomGooberCoder:
+  - rscadd: Bed interactions for the infamous verb panel. Beds now creak and take
+      damage during action. Be careful, as too much action can cause the bed to break.
+  THE GRAND DUKE OF AZURE:
+  - balance: masc clothes ruma clan leader class thing get raised sandals instead
+      of dark boots
+  hubertjones:
+  - rscadd: drip for 1 person

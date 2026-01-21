@@ -915,6 +915,22 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	path = /obj/item/enchantingkit/bigfoot_axe
 	donatitem = TRUE
 
+
+/datum/loadout_item/donator_zydrasiconocrown
+	name = "Donator Kit - Iconoclast Crown"
+	path = /obj/item/enchantingkit/zydrasiconocrown
+	ckeywhitelist = list("1ceres")
+	
+/datum/loadout_item/donator_zydrasiconopauldrons
+	name = "Donator Kit - Iconoclast Pauldrons"
+	path = /obj/item/enchantingkit/zydrasiconopauldrons
+	ckeywhitelist = list("1ceres")
+	
+/datum/loadout_item/donator_zydrasiconosash
+	name = "Donator Kit - Iconoclast Sash"
+	path = /obj/item/enchantingkit/zydrasiconosash
+	ckeywhitelist = list("1ceres")
+	
 /datum/loadout_item/donator_zydras
 	name = "Donator Kit - Padded silky dress - Required: Silky Dress(No Small Races)"
 	category = list("Разное", "Донат")
