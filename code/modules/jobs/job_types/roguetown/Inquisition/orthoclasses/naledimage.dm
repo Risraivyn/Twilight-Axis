@@ -31,9 +31,8 @@ datum/advclass/naledimage
 		/datum/skill/misc/climbing = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/athletics = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/craft/crafting = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/misc/medicine = SKILL_LEVEL_EXPERT,
+		/datum/skill/misc/medicine = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/riding = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/misc/reading = SKILL_LEVEL_EXPERT,
 		/datum/skill/craft/alchemy = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/magic/arcane = SKILL_LEVEL_EXPERT,
 		/datum/skill/craft/sewing = SKILL_LEVEL_JOURNEYMAN,
@@ -50,6 +49,9 @@ datum/advclass/naledimage
 
 /datum/outfit/job/roguetown/naledimage/pre_equip(mob/living/carbon/human/H, visualsOnly)
 	..()
+	if(!H)
+		return
+		
 	cloak = /obj/item/clothing/suit/roguetown/shirt/robe/pointfex
 	gloves = /obj/item/clothing/gloves/roguetown/chain/psydon
 	head = /obj/item/clothing/head/roguetown/roguehood/psydon
@@ -69,6 +71,6 @@ datum/advclass/naledimage
 		/obj/item/rogueweapon/huntingknife,
 		/obj/item/rogueweapon/scabbard/sheath,
 		/obj/item/book/spellbook
-		)
+	)
 	if(H.age == AGE_OLD)
 		H.adjust_skillrank(/datum/skill/magic/arcane, SKILL_LEVEL_MASTER, TRUE)
