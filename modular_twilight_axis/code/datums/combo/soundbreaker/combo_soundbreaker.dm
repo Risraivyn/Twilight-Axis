@@ -335,21 +335,6 @@
 	P.set_payload(note_id, damage_mult, damage_type, nname)
 	return TRUE
 
-/datum/component/combo_core/soundbreaker/proc/GetNoteStaminaCost()
-	var/wil = owner.get_stat(STATKEY_WIL)
-	var/athl_skill = owner.get_skill_level(/datum/skill/misc/athletics)
-	var/wil_bonus = (wil - 10) * 0.5
-	var/athl_bonus = (athl_skill) * 0.75
-	var/deminer_bonus = wil_bonus + athl_bonus
-	var/cost = 10 - deminer_bonus
-
-	if(istype(owner.rmb_intent, /datum/rmb_intent/strong))
-		cost += 2
-	if(istype(owner.rmb_intent, /datum/rmb_intent/swift))
-		cost += 1
-	
-	return max(1, cost)
-
 /// Consume prepared note on swing attempt.
 /datum/component/combo_core/soundbreaker/proc/TryConsumePreparedAttack(atom/target_atom, zone = BODY_ZONE_CHEST)
 	if(!owner)
@@ -372,8 +357,6 @@
 	damage_mult *= (!HasMusic() ? 0.6 : 1)
 
 	owner.remove_status_effect(/datum/status_effect/buff/soundbreaker_prepared)
-	owner.stamina_add(GetNoteStaminaCost())
-
 	var/mob/living/last_hit = ExecuteNote(target_atom, aim_dir, note_id, damage_mult, damage_type, zone)
 	if(last_hit)
 		OnHit(last_hit, note_id, zone)

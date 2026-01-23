@@ -27,7 +27,6 @@
 	var/datum/status_effect/buff/soundbreaker_breaker_window/buff = user.has_status_effect(/datum/status_effect/buff/soundbreaker_breaker_window)
 	if(buff)
 		breaker = prob(buff.success_chance)
-		user.remove_status_effect(/datum/status_effect/buff/soundbreaker_breaker_window)
 
 	if(SEND_SIGNAL(src, COMSIG_ITEM_ATTACK, M, user) & COMPONENT_ITEM_NO_ATTACK)
 		return FALSE
