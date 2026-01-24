@@ -32,7 +32,7 @@
 		/datum/skill/misc/athletics = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/craft/crafting = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/medicine = SKILL_LEVEL_JOURNEYMAN,
-		/datum/skill/misc/riding = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/misc/reading = SKILL_LEVEL_EXPERT,
 		/datum/skill/craft/alchemy = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/magic/arcane = SKILL_LEVEL_EXPERT,
 		/datum/skill/craft/sewing = SKILL_LEVEL_JOURNEYMAN,
@@ -42,7 +42,7 @@
 		"Psydon Gift" = /obj/item/hourglass/temporal
 	)
 
-	extra_context = "Как одиному из лучших магов, тебе удалось прихватить в с собой свои любимые часы."
+	extra_context = "Как одному из лучших магов, тебе удалось прихватить в с собой свои любимые часы."
 
 /datum/outfit/job/roguetown/naledimage
 	job_bitflag = BITFLAG_HOLY_WARRIOR
@@ -51,7 +51,7 @@
 	..()
 	if(!H)
 		return
-		
+
 	cloak = /obj/item/clothing/suit/roguetown/shirt/robe/pointfex
 	gloves = /obj/item/clothing/gloves/roguetown/chain/psydon
 	head = /obj/item/clothing/head/roguetown/roguehood/psydon
@@ -75,3 +75,9 @@
 	)
 	if(H.age == AGE_OLD)
 		H.adjust_skillrank(/datum/skill/magic/arcane, SKILL_LEVEL_MASTER, TRUE)
+		H?.mind.adjust_spellpoints(-9)
+		H.change_stat(STATKEY_STR, -2)
+		H.change_stat(STATKEY_CON, -1)
+		H.change_stat(STATKEY_WIL, -1)
+		H.change_stat(STATKEY_SPD, -1)
+		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/gientrock)
