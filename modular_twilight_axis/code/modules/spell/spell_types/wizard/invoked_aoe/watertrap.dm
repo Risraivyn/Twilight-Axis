@@ -33,6 +33,7 @@
 	var/list/turf_data = list()
 	var/duration = 7 SECONDS
 	var/radius = 1
+	var/atom/movable/spawned_maneater
 
 /obj/effect/proc_holder/spell/invoked/watertrap/cast(list/targets, mob/user)
 	. = ..()
@@ -48,6 +49,10 @@
 		return FALSE 
 
 /obj/effect/watertrap/Destroy()
+
+	if(spawned_maneater && !QDELETED(spawned_maneater))
+		qdel(spawned_maneater)
+
 	for(var/turf/T in turf_data)
 		if(T)
 			T.ChangeTurf(turf_data[T], flags = CHANGETURF_IGNORE_AIR)
@@ -65,7 +70,7 @@
 	var/list/affected = range(radius, origin)
 
 	for(var/turf/T in affected)
-		if(istype(T, /turf/closed))
+		if(istype(T, /turf/closed) || istype(T, /turf/open/transparent/openspace)) 
 			continue
 		
 		turf_data[T] = T.type
@@ -75,10 +80,14 @@
 
 		if(dx == 0 && dy == 0)
 			new_type = /turf/open/water/ocean/deep
+			spawned_maneater = new /obj/structure/flora/roguegrass/maneater/real(T) 
+
 		else if(dx == 0) 
 			new_type = (dy > 0) ? /turf/open/water/river/flow : /turf/open/water/river/flow/north
+
 		else if(dy == 0) 
 			new_type = (dx > 0) ? /turf/open/water/river/flow/west : /turf/open/water/river/flow/east
+
 		else 
 			if(dx < 0)
 				new_type = (dy < 0) ? /turf/open/water/river/flow/east : /turf/open/water/river/flow
@@ -88,3 +97,5 @@
 		T.ChangeTurf(new_type, flags = CHANGETURF_IGNORE_AIR)
 
 	QDEL_IN(src, duration)
+
+/obj/structure/flora/roguegrass/maneater/real
