@@ -1,0 +1,4 @@
+author: "FreeStylaLT"
+delete-after: True
+changes:
+  - balance: "Successfully proccing Clingy / Finicky vices will now delay the next vice check for longer."

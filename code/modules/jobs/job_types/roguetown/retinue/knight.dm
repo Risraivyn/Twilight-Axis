@@ -605,6 +605,7 @@
 		/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1,
 		/obj/item/rogueweapon/scabbard/sheath = 1,
 		/obj/item/clothing/cloak/banneret = 1,
+		/obj/item/scomstone/garrison = 1
 		)
 	cloak = /obj/item/clothing/cloak/tabard/retinue/banneret
 	neck = /obj/item/clothing/neck/roguetown/bevor
@@ -612,7 +613,6 @@
 	gloves = /obj/item/clothing/gloves/roguetown/plate
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	shoes = /obj/item/clothing/shoes/roguetown/boots/armor
-	beltl = /obj/item/scomstone/garrison
 
 	job_bitflag = BITFLAG_ROYALTY | BITFLAG_GARRISON
 
