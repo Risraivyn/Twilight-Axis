@@ -706,7 +706,7 @@
 	. = ..()
 	owner.change_stat(STATKEY_LCK, -woeeffect)
 	REMOVE_TRAIT(owner, TRAIT_BAD_MOOD, MAGIC_TRAIT)
-=======
+
 #define NOTHING "nothing"
 #define XYLIX "xylix"
 #define ASTRATA "astrata"
