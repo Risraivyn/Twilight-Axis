@@ -1,0 +1,6 @@
+author: "Lamasmaster"
+delete-after: True
+changes:
+  - balance: "Egg foods and Salo"
+  - bugfix: "Stuffed Egg"
+  - image: "Stonekeep food sprites (at least some)"
