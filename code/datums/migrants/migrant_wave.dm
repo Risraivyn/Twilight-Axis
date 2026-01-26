@@ -118,7 +118,7 @@
 	weight = 16
 	spawn_landmark = "Bandit"
 	roles = list(
-		/datum/migrant_role/bandit = 4,
+		/datum/migrant_role/bandit = 3,
 	)
 
 /datum/migrant_wave/bandit_down_one
@@ -127,19 +127,10 @@
 	can_roll = FALSE
 	spawn_landmark = "Bandit"
 	roles = list(
-		/datum/migrant_role/bandit = 3,
-	)
-
-/datum/migrant_wave/bandit_down_two
-	name = "Bandit Raid"
-	downgrade_wave = /datum/migrant_wave/bandit_down_three
-	can_roll = FALSE
-	spawn_landmark = "Bandit"
-	roles = list(
 		/datum/migrant_role/bandit = 2,
 	)
 
-/datum/migrant_wave/bandit_down_three
+/datum/migrant_wave/bandit_down_two
 	name = "Bandit Raid"
 	can_roll = FALSE
 	spawn_landmark = "Bandit"
