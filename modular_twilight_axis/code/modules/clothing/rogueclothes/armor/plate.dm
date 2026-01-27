@@ -44,15 +44,6 @@
 
 // Heavy armour NECK coverage buff:
 
-/obj/item/clothing/suit/roguetown/armor/brigandine/coatplates
-	body_parts_covered = COVERAGE_ALL_BUT_HANDFEET | NECK
-
-/obj/item/clothing/suit/roguetown/armor/brigandine/banneret
-	body_parts_covered = COVERAGE_ALL_BUT_HANDFEET | NECK
-
-/obj/item/clothing/suit/roguetown/armor/chainmail/hauberk/ornate
-	body_parts_covered = COVERAGE_ALL_BUT_HANDFEET | NECK
-
 /obj/item/clothing/suit/roguetown/armor/plate/fluted
 	body_parts_covered = COVERAGE_ALL_BUT_HANDFEET | NECK
 
@@ -71,14 +62,14 @@
 /obj/item/clothing/suit/roguetown/armor/plate/full/samsibsa
 	body_parts_covered = COVERAGE_ALL_BUT_LEGS | NECK
 
-/obj/item/clothing/suit/roguetown/armor/heartfelt/lord
-	body_parts_covered = COVERAGE_ALL_BUT_LEGS | NECK 
-
-/obj/item/clothing/suit/roguetown/armor/heartfelt/hand
-	body_parts_covered = COVERAGE_ALL_BUT_LEGS | NECK 
-
 /obj/item/clothing/suit/roguetown/armor/plate/vampire
 	body_parts_covered = COVERAGE_ALL_BUT_LEGS | NECK // No idea if it's necessary, BUT
 
 /obj/item/clothing/suit/roguetown/armor/plate/full/bikini
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS|NECK
+
+/obj/item/clothing/suit/roguetown/armor/heartfelt/lord // In fact - is plate armour
+	body_parts_covered = COVERAGE_ALL_BUT_LEGS | NECK 
+
+/obj/item/clothing/suit/roguetown/armor/heartfelt/hand
+	body_parts_covered = COVERAGE_ALL_BUT_LEGS | NECK 
