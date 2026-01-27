@@ -1,7 +1,7 @@
 /obj/effect/proc_holder/spell/invoked/watertrap
 	name = "Water Trap"
 	desc = "Causes a whirlpool with a strong current."
-	cost = 9
+	cost = 6
 	range = 7
 	xp_gain = TRUE
 	releasedrain = 30
@@ -15,7 +15,7 @@
 	chargedloop = /datum/looping_sound/invokegen
 	associated_skill = /datum/skill/magic/arcane
 	overlay_state = "nondetection"
-	spell_tier = 4
+	spell_tier = 3
 	invocations = list("Submergi!")
 	invocation_type = "shout"
 	glow_color = GLOW_COLOR_METAL

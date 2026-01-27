@@ -58,13 +58,14 @@
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy
 	pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/otavan/generic
-	mask = /obj/item/clothing/mask/rogue/lordmask/naledi
+	mask = /obj/item/clothing/mask/rogue/facemask/psydonmask
 	wrists = /obj/item/clothing/neck/roguetown/psicross
 	belt = /obj/item/storage/belt/rogue/leather
 	beltl = /obj/item/flashlight/flare/torch/lantern
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
 	shoes = /obj/item/clothing/shoes/roguetown/boots/psydonboots
 	backr = /obj/item/storage/backpack/rogue/satchel/black
+	id = /obj/item/clothing/ring/signet/silver
 	backl = /obj/item/rogueweapon/woodstaff/naledi
 	backpack_contents = list(
 		/obj/item/roguekey/inquisitionmanor,
@@ -75,10 +76,4 @@
 	)
 	if(H.age == AGE_OLD)
 		H.adjust_skillrank(/datum/skill/magic/arcane, SKILL_LEVEL_MASTER, TRUE)
-		H?.mind.adjust_spellpoints(-9)
-		H.change_stat(STATKEY_STR, -2)
-		H.change_stat(STATKEY_CON, -2)
-		H.change_stat(STATKEY_WIL, -2)
-		H.change_stat(STATKEY_SPD, -1)
-		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/gientrock)
-		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/watertrap)
+		H?.mind.adjust_spellpoints(12)
