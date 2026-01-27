@@ -33,7 +33,7 @@
 	sleeved = 'modular_twilight_axis/icons/roguetown/clothing/onmob/helpers/32х48/sleeves_armor.dmi'
 	icon_state = "heavy_armour"
 	item_state = "heavy_armour"
-	body_parts_covered = COVERAGE_FULL
+	body_parts_covered = COVERAGE_FULL | NECK
 	equip_delay_self = 12 SECONDS
 	unequip_delay_self = 12 SECONDS
 	equip_delay_other = 3 SECONDS
@@ -41,3 +41,32 @@
 	max_integrity = ARMOR_INT_CHEST_PLATE_STEEL
 	smelt_bar_num = 4
 	armor_class = ARMOR_CLASS_HEAVY
+
+// Heavy armour NECK coverage buff:
+
+/obj/item/clothing/suit/roguetown/armor/plate/fluted
+	body_parts_covered = COVERAGE_ALL_BUT_HANDFEET | NECK
+
+/obj/item/clothing/suit/roguetown/armor/plate/fluted/graggar // As specified in PR neck coverage buff is only for HEAVY, therefore i exclude graggar halfplate.
+	body_parts_covered = COVERAGE_ALL_BUT_HANDFEET
+
+/obj/item/clothing/suit/roguetown/armor/plate/fluted/ornate
+	body_parts_covered = COVERAGE_ALL_BUT_HANDFEET | NECK
+
+/obj/item/clothing/suit/roguetown/armor/plate/otavan
+	body_parts_covered = COVERAGE_TORSO | NECK
+
+/obj/item/clothing/suit/roguetown/armor/plate/full
+	body_parts_covered = COVERAGE_ALL_BUT_HANDFEET | NECK
+
+/obj/item/clothing/suit/roguetown/armor/plate/full/samsibsa
+	body_parts_covered = COVERAGE_ALL_BUT_LEGS | NECK
+
+/obj/item/clothing/suit/roguetown/armor/heartfelt/lord
+	body_parts_covered = COVERAGE_ALL_BUT_LEGS | NECK 
+
+/obj/item/clothing/suit/roguetown/armor/heartfelt/hand
+	body_parts_covered = COVERAGE_ALL_BUT_LEGS | NECK 
+
+/obj/item/clothing/suit/roguetown/armor/plate/full/bikini
+	body_parts_covered = CHEST|GROIN|LEGS|ARMS|NECK
