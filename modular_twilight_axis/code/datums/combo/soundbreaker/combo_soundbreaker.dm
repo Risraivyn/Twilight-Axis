@@ -75,8 +75,11 @@
 		UnregisterSignal(owner, COMSIG_SOUNDBREAKER_COMBO_CLEARED)
 		RevokeSpells()
 
-	if(proxy && !QDELETED(proxy))
-		qdel(proxy)
+	if(proxy)
+		proxy.force = 0
+		proxy.last_attack_target = null
+		if(!QDELETED(proxy))
+			qdel(proxy)
 	proxy = null
 
 	note_history = null
@@ -160,12 +163,18 @@
 
 /datum/component/combo_core/soundbreaker/proc/_sig_note_projectile_hit(datum/source, mob/living/target, damage_mult, damage_type, zone)
 	SIGNAL_HANDLER
-	INVOKE_ASYNC(src, PROC_REF(_async_note_projectile_hit), target, damage_mult, damage_type, zone)
+	if(!owner || QDELETED(owner))
+		return 0
+
+	var/mob/living/local_owner = owner
+	INVOKE_ASYNC(src, PROC_REF(_async_note_projectile_hit), local_owner, target, damage_mult, damage_type, zone)
 	return 0
 
-/datum/component/combo_core/soundbreaker/proc/_async_note_projectile_hit(mob/living/target, damage_mult, damage_type, zone)
-	if(!owner || !target)
+
+/datum/component/combo_core/soundbreaker/proc/_async_note_projectile_hit(mob/living/local_owner, mob/living/target, damage_mult, damage_type, zone)
+	if(!local_owner || QDELETED(local_owner) || !target)
 		return
+
 	ApplyDamage(target, damage_mult, BCLASS_PUNCH, zone, damage_type)
 	OnHit(target, SOUNDBREAKER_NOTE_BARE, zone)
 
@@ -225,8 +234,12 @@
 /datum/component/combo_core/soundbreaker/proc/GetProxy()
 	if(!owner)
 		return null
-	if(!proxy || QDELETED(proxy))
+	if(proxy && QDELETED(proxy))
+		proxy = null
+
+	if(!proxy)
 		proxy = new /obj/item/soundbreaker_proxy(owner)
+
 	return proxy
 
 /datum/component/combo_core/soundbreaker/proc/OnHit(mob/living/target, note_id, zone = BODY_ZONE_CHEST)
@@ -337,6 +350,9 @@
 
 /// Consume prepared note on swing attempt.
 /datum/component/combo_core/soundbreaker/proc/TryConsumePreparedAttack(atom/target_atom, zone = BODY_ZONE_CHEST)
+	if(QDELETED(src))
+		return
+
 	if(!owner)
 		return FALSE
 
@@ -514,9 +530,14 @@
 	var/obj/item/soundbreaker_proxy/P = GetProxy()
 	if(!P)
 		return FALSE
+	if(!P)
+		return FALSE
 
 	if(P.loc != owner)
 		P.forceMove(owner)
+
+	if(!islist(params))
+		params = list()
 
 	P.force = damage
 	P.force_dynamic = damage
@@ -1167,8 +1188,8 @@
 	var/d = last_input_dir || owner.dir
 	if(d)
 		owner.setDir(d)
-
-	sb_fire_sound_note(owner, target, 1.5, BRUTE, BODY_ZONE_CHEST, d)
+	var/zone = accuracy_check(owner.zone_selected, owner, target, /datum/skill/combat/unarmed, owner.used_intent)
+	sb_fire_sound_note(owner, target, 1.5, BRUTE, zone, d)
 	ResetRhythm()
 
 /datum/component/combo_core/soundbreaker/proc/ComboBassDrop(mob/living/target)
@@ -1403,3 +1424,9 @@
 
 	ShowComboIcon(target, SB_COMBO_ICON_OVERTURE)
 	ResetRhythm()
+
+/datum/component/combo_core/soundbreaker/proc/OnNoteProjectileHit(mob/living/local_owner, mob/living/target, damage_mult, damage_type, zone)
+	if(!local_owner || QDELETED(local_owner) || !target)
+		return
+
+	ApplyDamage(target, damage_mult, BCLASS_PUNCH, zone, damage_type)
