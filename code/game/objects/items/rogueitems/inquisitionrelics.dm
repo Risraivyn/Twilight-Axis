@@ -1241,6 +1241,9 @@ Inquisitorial armory down here
 		for(var/mob/living/carbon/human/HL in GLOB.player_list) 
 		//	to_chat(world, "going through mob: [HL] | real_name: [HL.real_name] | input: [input] | [world.time]") Mirror-bugsplatter. Disregard this.
 			if(HL.real_name == input)
+				if(HAS_TRAIT(HL, TRAIT_ANTISCRYING))
+					to_chat(user, span_warning("They are not within the gaze of the Mirror."))
+					return
 				target = HL
 				active = TRUE
 				effect = target.throw_alert("blackmirror", /atom/movable/screen/alert/blackmirror, override = TRUE)
@@ -1386,6 +1389,11 @@ Inquisitorial armory down here
 		QDEL_NULL(soundloop)
 	return ..()
 
+/atom/movable/screen/alert/scryingeye
+	name = "SCRYING EYE"
+	desc = "I SEE YOU."
+	icon_state = "scryingeye"
+	timeout = 8 SECONDS
 
 /atom/movable/screen/alert/blackmirror
 	name = "BLACK EYE"
