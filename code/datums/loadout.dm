@@ -1122,7 +1122,7 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 // Одежда для донатеров
 
 /datum/loadout_item/stargazer
-	name = "stargazer robe"
+	name = "Мантия звездочета"
 	category = list ("Донат", "Одежда")
 	path = /obj/item/clothing/suit/roguetown/shirt/robe/noc/stargazer
 	donatitem = TRUE
@@ -1390,7 +1390,7 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	donatitem = TRUE
 
 /datum/loadout_item/owlmask
-	name = "owl mask"
+	name = "Совиная маска"
 	category = list ("Донат", "Головные уборы")
 	path = /obj/item/clothing/mask/rogue/owlmask
 	donatitem = TRUE
@@ -1398,7 +1398,7 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 // Шляпы
 
 /datum/loadout_item/stargazerhood
-	name = "stargazer hood"
+	name = "Капюшон звездочета"
 	category = list ("Донат", "Головные уборы")
 	path = /obj/item/clothing/head/roguetown/roguehood/stargazer
 	donatitem = TRUE
