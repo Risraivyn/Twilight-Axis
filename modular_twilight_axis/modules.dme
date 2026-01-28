@@ -54,7 +54,7 @@
 #include "code/modules/clothing/rogueclothes/shirts/shirts.dm"
 #include "code/modules/clothing/rogueclothes/storage/storage.dm"
 #include "code/modules/clothing/rogueclothes/wrists/wrists.dm"
-#include "code/modules/hairstyles/module.dm" // ренейм
+#include "code/modules/hairstyles/hairstyles.dm"
 #include "code/modules/jobs/job_types/roguetown/adventurer/types/wretch/lunacyembracer.dm"
 #include "code/modules/jobs/job_types/roguetown/burghers/mage_apprentice.dm"
 #include "code/modules/jobs/job_types/roguetown/courtier/steward.dm"
@@ -90,60 +90,10 @@
 #include "code/modules/projectiles/soundbreaker_note.dm"
 #include "code/modules/spells/soundbreaker.dm"
 #include "code/onclick/click.dm"
-#include "lore/code/gods/cult_of_salvation.dm"
-#include "lore/code/gods/divine_pantheon.dm"
-#include "lore/code/gods/inhumen_pantheon.dm"
-#include "lore/code/gods/old_god.dm"
-#include "lore/code/jobs/job_descs.dm"
-#include "lore/code/language/gyedzenese.dm"
-#include "lore/code/mob/emote.dm"
-#include "lore/code/objects/books.dm"
-#include "lore/code/objects/objects_desc.dm"
-#include "lore/code/objects/ritechalk.dm"
-#include "lore/code/objects/ritualcircles.dm"
-#include "lore/code/species_types/roguetown_species.dm"
-#include "lore/code/tips/time.dm"
 
-//ВЫНЕСТИ В САБ-МОДУЛЬ DME
-#include "awful_artillery/code/_artillery.dm"
-#include "awful_artillery/code/merchant.dm"
-#include "awful_artillery/code/craft.dm"
-#include "awful_artillery/code/mortar.dm"
-
-//ВЫНЕСТИ В САБ-МОДУЛЬ DME
-#include "firearms/code/clothes/feet.dm"
-#include "firearms/code/clothes/hats.dm"
-#include "firearms/code/clothes/neck.dm"
-
-#include "firearms/code/craft/artificer_recipes.dm"
-#include "firearms/code/craft/craft_recipes.dm"
-#include "firearms/code/craft/trade_packs.dm"
-
-#include "firearms/code/datums/components.dm"
-#include "firearms/code/datums/skills.dm"
-
-#include "firearms/code/jobs/afreet.dm"
-#include "firearms/code/jobs/marshal.dm"
-#include "firearms/code/jobs/corsair.dm"
-#include "firearms/code/jobs/grenzelhoft_jager.dm"
-#include "firearms/code/jobs/guildmaster.dm"
-#include "firearms/code/jobs/guildsman.dm"
-#include "firearms/code/jobs/gunslinger.dm"
-#include "firearms/code/jobs/lord.dm"
-#include "firearms/code/jobs/manatarms_grenadier.dm"
-#include "firearms/code/jobs/orthodoxist.dm"
-#include "firearms/code/jobs/prince.dm"
-#include "firearms/code/jobs/inquisitor.dm"
-
-#include "firearms/code/weapons/ammo.dm"
-#include "firearms/code/weapons/ammo_holders.dm"
-#include "firearms/code/weapons/firearm.dm"
-#include "firearms/code/weapons/holster_belt.dm"
-#include "firearms/code/weapons/runelock.dm"
-#include "firearms/code/weapons/virtues.dm"
-#include "firearms/code/weapons/wounds_logic.dm"
-
-
+#include "awful_artillery/awful_artillery.dme"
+#include "firearms/firearms.dme"
+#include "lore/lore.dme"
 
 
 
