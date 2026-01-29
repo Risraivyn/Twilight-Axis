@@ -92,7 +92,7 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	category = "Головные уборы"
 	path = /obj/item/clothing/head/roguetown/eaststrawhat
 
-/datum/loadout_item/
+/datum/loadout_item/antlers
 	name = "Old antlers"
 	category = "Головные уборы"
 	path = /obj/item/clothing/head/roguetown/antlers
