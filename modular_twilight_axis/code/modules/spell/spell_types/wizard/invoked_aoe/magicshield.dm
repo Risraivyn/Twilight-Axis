@@ -35,10 +35,10 @@
 		return
 	
 	if(charges <= 0)
-		playsound(target.loc, 'sound/spellbooks/glass.ogg', 50, 1) // Звук разбитого щита
+		playsound(target.loc, 'sound/spellbooks/glass.ogg', 50, 1)
 		to_chat(target, "<span class='danger'>The mirror shield around you shatters!</span>")
 	else
-		playsound(target.loc, 'sound/spellbooks/glass.ogg', 50, 1) // Стандартный звук исчезновения
+		playsound(target.loc, 'sound/spellbooks/glass.ogg', 50, 1)
 		to_chat(target, "<span class='notice'>The mirror shield around you disappears.</span>")
 	
 	target.cut_overlay(shield_overlay_image)
