@@ -52,13 +52,25 @@
 		playsound(src.loc, 'sound/combat/parry/shield/magicshield (1).ogg', 50, TRUE)
 
 		var/new_angle = Get_Angle(src, P.firer)
+		new_angle += rand(-90, 90)
 		P.setAngle(new_angle)
 
 		P.decayedRange = max(0, P.decayedRange - P.reflect_range_decrease)
 		P.range = P.decayedRange
 
-		P.permutated = list() 
+		P.permutated = list()
 		P.firer = src
+
+		var/obj/effect/proc_holder/spell/self/magic_shield/S
+		if(src.status_traits && src.status_traits[TRAIT_MAGIC_SHIELD])
+			for(var/source in src.status_traits[TRAIT_MAGIC_SHIELD])
+				if(istype(source, /obj/effect/proc_holder/spell/self/magic_shield))
+					S = source
+					break
+		if(S)
+			S.charges--
+			if(S.charges <= 0)
+				S.end_reflection_effect(src)
 
 		return BULLET_ACT_FORCE_PIERCE //TA EDIT END
 	

@@ -1,3 +1,5 @@
+#define MAX_SHIELD_HITS 5
+
 /obj/effect/proc_holder/spell/self/magic_shield
 	name = "Acrane Shield"
 	desc = "Creates a temporary magical barrier that reflects projectiles flying at you back at the shooter."
@@ -22,6 +24,7 @@
 	gesture_required = TRUE
 	sound = 'sound/magic/repulse.ogg'
 	var/image/shield_overlay_image
+	var/charges = MAX_SHIELD_HITS
 
 /obj/effect/proc_holder/spell/self/magic_shield/Initialize()
 	. = ..()
@@ -30,19 +33,28 @@
 /obj/effect/proc_holder/spell/self/magic_shield/proc/end_reflection_effect(mob/living/target)
 	if(!target)
 		return
-	playsound(target.loc, 'sound/spellbooks/glass.ogg', 50, 1)
+	
+	if(charges <= 0)
+		playsound(target.loc, 'sound/spellbooks/glass.ogg', 50, 1) // Звук разбитого щита
+		to_chat(target, "<span class='danger'>The mirror shield around you shatters!</span>")
+	else
+		playsound(target.loc, 'sound/spellbooks/glass.ogg', 50, 1) // Стандартный звук исчезновения
+		to_chat(target, "<span class='notice'>The mirror shield around you disappears.</span>")
+	
 	target.cut_overlay(shield_overlay_image)
 
 	if(HAS_TRAIT(target, TRAIT_MAGIC_SHIELD))
 		REMOVE_TRAIT(target, TRAIT_MAGIC_SHIELD, src)
-		to_chat(target, "<span class='notice'>The mirror shield around you disappears</span>")
 
 /obj/effect/proc_holder/spell/self/magic_shield/cast(mob/living/user = usr)
-	var/duration = 30 SECONDS 
+	var/duration = 30 SECONDS
 
 	if(HAS_TRAIT(user, TRAIT_MAGIC_SHIELD))
 		to_chat(user, "<span class='warning'>You are already experiencing a similar effect!</span>")
 		return
+
+	charges = MAX_SHIELD_HITS
+
 	playsound(user.loc, 'sound/spellbooks/scrapeblade.ogg', 50, 1)
 	user.add_overlay(shield_overlay_image)
 	ADD_TRAIT(user, TRAIT_MAGIC_SHIELD, src)
