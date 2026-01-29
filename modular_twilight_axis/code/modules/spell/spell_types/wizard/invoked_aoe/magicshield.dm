@@ -1,4 +1,4 @@
-#define MAX_SHIELD_HITS 5
+#define MAX_SHIELD_HP 1000
 
 /obj/effect/proc_holder/spell/self/magic_shield
 	name = "Acrane Shield"
@@ -24,7 +24,7 @@
 	gesture_required = TRUE
 	sound = 'sound/magic/repulse.ogg'
 	var/image/shield_overlay_image
-	var/charges = MAX_SHIELD_HITS
+	var/shield_hp = 0
 
 /obj/effect/proc_holder/spell/self/magic_shield/Initialize()
 	. = ..()
@@ -34,7 +34,7 @@
 	if(!target)
 		return
 	
-	if(charges <= 0)
+	if(shield_hp <= 0)
 		playsound(target.loc, 'sound/spellbooks/glass.ogg', 50, 1)
 		to_chat(target, "<span class='danger'>The mirror shield around you shatters!</span>")
 	else
@@ -53,7 +53,7 @@
 		to_chat(user, "<span class='warning'>You are already experiencing a similar effect!</span>")
 		return
 
-	charges = MAX_SHIELD_HITS
+	shield_hp = MAX_SHIELD_HP
 
 	playsound(user.loc, 'sound/spellbooks/scrapeblade.ogg', 50, 1)
 	user.add_overlay(shield_overlay_image)
