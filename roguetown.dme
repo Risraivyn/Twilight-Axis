@@ -3013,6 +3013,7 @@
 #include "modular_twilight_axis\code\modules\jobs\job_types\roguetown\courtier\councillor.dm"
 #include "modular_twilight_axis\code\modules\jobs\job_types\roguetown\Inquisition\absolutionist.dm"
 #include "modular_twilight_axis\code\modules\jobs\job_types\roguetown\Inquisition\inquisitor.dm"
+#include "modular_twilight_axis\code\modules\spell\spell_types\runes.dm"
 #include "modular_twilight_axis\code\modules\jobs\job_types\roguetown\retinue\marshal.dm"
 #include "modular_twilight_axis\code\modules\jobs\job_types\roguetown\nobility\consort.dm"
 #include "modular_twilight_axis\code\modules\jobs\job_types\roguetown\courtier\hand.dm"
