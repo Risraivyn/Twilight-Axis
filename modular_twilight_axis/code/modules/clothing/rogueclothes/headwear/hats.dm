@@ -178,7 +178,8 @@
 	worn_x_dimension = 64
 	worn_y_dimension = 64
 	alternate_worn_layer  = 8.9
-	slot_flags = ITEM_SLOT_HEAD|ITEM_SLOT_MASK
+	slot_flags = ITEM_SLOT_HEAD|ITEM_SLOT_MASK|ITEM_SLOT_NECK
+	resistance_flags = FIRE_PROOF
 	var/picked = FALSE
 	var/rogavid = list("halo", "knighty")
 	var/antlers_final_icon = null
