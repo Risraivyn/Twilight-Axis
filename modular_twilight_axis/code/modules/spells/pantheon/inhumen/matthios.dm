@@ -722,6 +722,11 @@
 		revert_cast(user)
 		return FALSE
 
+	if(istype(get_area(user), /area/rogue/indoors/ravoxarena))
+		to_chat(user, span_userdanger("I reach for my draconic form, but something rebukes me! Ravox is too strong in this dimension!"))
+		revert_cast(user)
+		return FALSE
+
 	user.Stun(30)
 	user.Knockdown(30)
 	INVOKE_ASYNC(user, TYPE_PROC_REF(/mob/living/carbon/human, wildshape_transformation_twilight_dragon), /mob/living/carbon/human/species/wildshape/dragon_matthios)
@@ -934,6 +939,11 @@
 	alert_type = /atom/movable/screen/alert/status_effect/buff/twilight_dragon_form
 	duration = 4 MINUTES
 
+/datum/status_effect/buff/twilight_dragon_form/short
+	id = "twilight_dragon_form_short"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/twilight_dragon_form
+	duration = 30 SECONDS
+
 /atom/movable/screen/alert/status_effect/buff/twilight_dragon_form
 	name = "Dragon Form"
 	desc = "Burn them! Burn them all!"
@@ -1024,7 +1034,16 @@
 	if(!stored_mob)
 		return
 	if(!mind)
-		log_runtime("NO MIND ON [src.name] WHEN UNTRANSFORMING")
+		if(has_status_effect(/datum/status_effect/buff/twilight_dragon_form))
+			remove_status_effect(/datum/status_effect/buff/twilight_dragon_form)
+		apply_status_effect(/datum/status_effect/buff/twilight_dragon_form/short)
+		return
+	if(istype(get_area(src), /area/rogue/indoors/ravoxarena))
+		to_chat(src, span_userdanger("I reach for my normal form, but something rebukes me! Ravox is too strong in this dimension!"))
+		if(has_status_effect(/datum/status_effect/buff/twilight_dragon_form))
+			remove_status_effect(/datum/status_effect/buff/twilight_dragon_form)
+		apply_status_effect(/datum/status_effect/buff/twilight_dragon_form/short)
+		return
 	var/mob/living/carbon/human/species/wildshape/WA = src
 	Paralyze(1, ignore_canstun = TRUE)
 	for(var/obj/item/W in src)
