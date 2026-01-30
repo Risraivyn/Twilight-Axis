@@ -1,8 +1,8 @@
 #define THRALLS_METHUSELAH	69
 #define THRALLS_ANCILLAE	69
 #define THRALLS_NEONATE		10
-#define THRALLS_THINBLOOD 	0
-#define THRALLS_DEFAULT 	0
+#define THRALLS_THINBLOOD 	1 // 0 - infinity. THINBLOOD can't convert anyway due the code.
+#define THRALLS_DEFAULT 	1
 
 /datum/antagonist/vampire/on_gain()
 	SSmapping.retainer.vampires |= owner
