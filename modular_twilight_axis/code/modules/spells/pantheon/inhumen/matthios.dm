@@ -768,9 +768,6 @@
 
 		real_name = "Dragon"
 
-/mob/living/carbon/human/species/wildshape/dragon_matthios/buckle_mob(mob/living/target, force = TRUE, check_loc = TRUE, lying_buckle = FALSE, hands_needed = 0, target_hands_needed = 0)
-	. = ..(target, force, check_loc, lying_buckle, hands_needed, target_hands_needed)
-
 /datum/species/dragon_matthios
 	name = "dragon"
 	id = "dragon_matthios"
@@ -1029,6 +1026,7 @@
 
 	playsound(W.loc, 'sound/vo/mobs/vdragon/drgnroar.ogg', 100, FALSE, 3)
 	W.gain_inherent_skills()
+	addtimer(CALLBACK(W, PROC_REF(energy_add), 1000), 3 SECONDS)
 
 /mob/living/carbon/human/proc/wildshape_untransform_twilight_dragon(dead)
 	if(!stored_mob)
