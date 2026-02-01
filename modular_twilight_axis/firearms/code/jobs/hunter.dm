@@ -28,7 +28,6 @@
 
 /datum/outfit/job/roguetown/twilight_hunter/pre_equip(mob/living/carbon/human/H)
 	..()
-
 	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
 	mask = /obj/item/clothing/mask/rogue/ragmask/black
 	belt = /obj/item/storage/belt/rogue/leather
@@ -46,7 +45,7 @@
 	backpack_contents = list(
 		/obj/item/rogueweapon/huntingknife = 1,
 		/obj/item/recipe_book/survival = 1, 
-		/obj/item/flashlight/flare/torch/lantern,
+		/obj/item/flashlight/flare/torch/lantern = 1,
 		/obj/item/storage/belt/rogue/pouch/coins/poor = 1,
 		/obj/item/twilight_powderflask = 1,
 		/obj/item/natural/bundle/fibers/full = 1
