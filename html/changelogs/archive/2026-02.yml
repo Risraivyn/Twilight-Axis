@@ -58,3 +58,29 @@
   - rscadd: Added a toggle under the Options menu titled 'Toggle Mood Messages'. If
       enabled, this will show the player all mood messages in their chat as soon as
       they occur. If disabled, only severely negative mood messages will appear.
+2026-02-02:
+  ADONAI:
+  - bugfix: psydon again weeps, psydonites SHOULD be able to pray outdoors again.
+  FreeStylaLT:
+  - rscadd: Warrior (Fem) Voice Pack
+  - rscadd: Added a new Haughty VP Laugh
+  - rscadd: Added a *cackle and *hum to Warrior (Fem) VP
+  Ketrai:
+  - rscadd: psicrosses can be right clicked with an empty hand to toggle their wrist/neck
+      display state
+  Lamasmaster:
+  - balance: Ranger Sentinel, Towner Hunters
+  - balance: Drying recipes
+  - bugfix: Some food inconsistencies
+  Ryan180602:
+  - balance: Ravox duel does not work on critted/floored/chained/pacifist people.
+  SillyMoff:
+  - rscadd: New hair gradient - streaked
+  Teragenic:
+  - qol: Migrant QOL once more
+  - balance: Gave Envoys a lot more money to RP instead of have to worry about actually
+      needing to rely on Keep to not be assholes, also allows them to have RP freedom
+      instead of needing to do contracts or random stuff.
+  zydras:
+  - rscdel: The Hand and Lord of Heartfelt seem to have lost their cloaks...
+  - image: '...But in turn, acquired fresh new pieces of armor!'
