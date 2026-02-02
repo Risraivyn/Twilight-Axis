@@ -1075,6 +1075,7 @@
 #include "code\game\objects\items\dice.dm"
 #include "code\game\objects\items\etherealdiscoball.dm"
 #include "code\game\objects\items\granters.dm"
+#include "code\game\objects\items\holster_component.dm"
 #include "code\game\objects\items\hot_potato.dm"
 #include "code\game\objects\items\hourglass.dm"
 #include "code\game\objects\items\scrolls.dm"

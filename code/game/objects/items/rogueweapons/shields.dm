@@ -257,6 +257,7 @@
 	parrysound = list('sound/combat/parry/shield/metalshield (1).ogg','sound/combat/parry/shield/metalshield (2).ogg','sound/combat/parry/shield/metalshield (3).ogg')
 	max_integrity = 50
 	smeltresult = /obj/item/ingot/gold
+	unenchantable = TRUE
 
 /obj/item/rogueweapon/shield/tower/metal/psy
 	name = "Covenant"
@@ -583,6 +584,7 @@
 	var/smoke_path = /obj/effect/particle_effect/smoke/transparent
 	var/cooldowny
 	var/cdtime = 30 SECONDS
+	unenchantable = TRUE
 
 /obj/item/rogueweapon/shield/tower/metal/gold/king/attack_self(mob/user)
 	if(cooldowny)
