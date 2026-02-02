@@ -285,19 +285,19 @@ GLOBAL_LIST_EMPTY(cmode_tracks_by_name)
 	credits = "Warhammer 40,000: Darktide - Disposal Unit"
 	musicpath = list('modular_twilight_axis/firearms/sound/music/combat_blackpowder.ogg')
 
-/datum/combat_music/BPHunter //TA mandated cmode music
-	name = "Blackpowder Hunter"
-	desc = ""
-	shortname = "Koseposha"
-	credits = "KCD 2, Tavern song"
-	musicpath = list('modular_twilight_axis/firearms/sound/music/combat_blackpowderhunter.ogg')
-
 /datum/combat_music/jester
 	name = "Jester"
 	desc = ""
 	shortname = "Jester"
 	credits = "Alias Conrad Coldwood - Pepper Steak (OFF OST)"
 	musicpath = list('sound/music/combat_jester.ogg')
+
+/datum/combat_music/BPHunter //TA mandated cmode music
+	name = "Blackpowder Hunter"
+	desc = ""
+	shortname = "Koseposha"
+	credits = "KCD 2, Tavern song"
+	musicpath = list('modular_twilight_axis/firearms/sound/music/combat_blackpowderhunter.ogg')
 
 /datum/combat_music/kazengite
 	name = "Kazengite"
