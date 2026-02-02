@@ -12,7 +12,7 @@
 	color = "#FFFFFF"
 	detail_color = "#262927"
 	altdetail_color = "#FFFFFF"
-	max_integrity = ARMOR_INT_HELMET_HEAVY_STEEL + 15
+	max_integrity = ARMOR_INT_HELMET_HEAVY_STEEL + 10
 
 /obj/item/clothing/head/roguetown/helmet/heavy/knight/skettle/grenzelhoft/update_icon()
 	cut_overlays()
