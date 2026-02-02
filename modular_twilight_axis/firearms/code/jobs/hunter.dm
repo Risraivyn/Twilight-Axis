@@ -1,6 +1,6 @@
 /datum/advclass/twilight_hunter
 	name = "Blackpowder Hunter"
-	tutorial = "As gunpowder becomes more widespread accross Psydonia, so do the Gunslingers - those who earn their living through their skill with those advanced weapons. But you are not one of 'em, you are just a wanderer with the weapon of new times. You are too young or too old to learn properly how to use effectively"
+	tutorial = "As gunpowder becomes more widespread accross Grimmoria, so do the Gunslingers - those who earn their living through their skill with those advanced weapons. But you are not one of 'em, you are just a wanderer with the weapon of new times. You are too young or too old to learn properly how to use effectively"
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/twilight_hunter
@@ -11,7 +11,8 @@
 	subclass_stats = list(
 		STATKEY_PER = 2,
 		STATKEY_CON = 1,
-		STATKEY_WILL = 2
+		STATKEY_WILL = 2,
+		STATKEY_SPD = 1
 	)
 	subclass_skills = list(
 		/datum/skill/combat/twilight_firearms = SKILL_LEVEL_JOURNEYMAN,
