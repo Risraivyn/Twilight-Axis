@@ -94,6 +94,7 @@
 #include "code\modules\spell\spell_types\wizard\invoked_aoe\rotting_cloud.dm"
 #include "code\modules\spell\spell_types\wizard\invoked_aoe\meteor.dm"
 #include "code\modules\spell\spell_types\wizard\projectiles_aoe\rockytrown.dm"
+#include "code\modules\spell\spell_types\wizard\projectiles_aoe\ballistic_mortar.dm"
 #include "code\modules\spell\spell_types\wizard\newspell.dm"	
 #include "code\modules\spell\spell_types\wizard\misc\swap.dm"
 #include "code\modules\spell\spell_types\wizard\misc\vampiric_drain.dm"
