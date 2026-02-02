@@ -17,6 +17,9 @@
 	category = "General"
 	always_availible = TRUE
 
+/datum/crafting_recipe/roguetown/sewing/grenzelhelm
+	subtype_reqs = FALSE
+
 /datum/crafting_recipe/roguetown/sewing/grenzelsallet_visor
 	name = "grenzelhoftian hat with steel visored sallet"
 	result = list(/obj/item/clothing/head/roguetown/helmet/sallet/visored/grenzelhoft)
