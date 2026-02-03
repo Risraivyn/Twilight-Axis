@@ -62,3 +62,48 @@
 	.=..()
 	if((src.holy_area == TRUE) && HAS_TRAIT(guy, TRAIT_CLERGY_TA) && !guy.has_status_effect(/datum/status_effect/buff/clergybuff) && !HAS_TRAIT(guy, TRAIT_EXCOMMUNICATED) && !HAS_TRAIT(guy, TRAIT_HERESIARCH))
 		guy.apply_status_effect(/datum/status_effect/buff/clergybuff)
+
+/datum/status_effect/buff/mist_form //TA EDIT
+	id = "mist_form"
+	duration = 80
+	alert_type = /atom/movable/screen/alert/status_effect/buff/dagger_dash
+
+/datum/status_effect/buff/mist_form/on_apply()
+	if(!isliving(owner))
+		return FALSE
+	var/mob/living/L = owner
+	
+	L.alpha = 100 
+	
+
+	ADD_TRAIT(L, "ethereal", MAGIC_TRAIT)
+	ADD_TRAIT(L, TRAIT_PACIFISM, MAGIC_TRAIT)
+	ADD_TRAIT(L, TRAIT_GRABIMMUNE, MAGIC_TRAIT)
+	ADD_TRAIT(L, TRAIT_PUSHIMMUNE, MAGIC_TRAIT)
+	ADD_TRAIT(L, TRAIT_NOSLIPALL, MAGIC_TRAIT)
+
+	
+
+	ENABLE_BITFIELD(L.pass_flags, PASSMOB)
+	
+	ENABLE_BITFIELD(L.pass_flags, PASSTABLE)
+	
+	return ..()
+
+/datum/status_effect/buff/mist_form/on_remove()
+	var/mob/living/L = owner
+	L.alpha = 255
+	
+
+	REMOVE_TRAIT(L, "ethereal", MAGIC_TRAIT)
+	REMOVE_TRAIT(L, TRAIT_PACIFISM, MAGIC_TRAIT)
+	REMOVE_TRAIT(L, TRAIT_GRABIMMUNE, MAGIC_TRAIT)
+	REMOVE_TRAIT(L, TRAIT_PUSHIMMUNE, MAGIC_TRAIT)
+	REMOVE_TRAIT(L, TRAIT_NOSLIPALL, MAGIC_TRAIT)
+	
+
+	DISABLE_BITFIELD(L.pass_flags, PASSMOB)
+	DISABLE_BITFIELD(L.pass_flags, PASSTABLE)
+	
+	L.visible_message(span_notice("[L] solidifies back into physical form."))
+	..()
