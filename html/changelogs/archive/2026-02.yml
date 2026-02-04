@@ -150,3 +150,45 @@
       can now be changed an unlimited amount of times - subject to admin discretion.
   - qol: Grace period for latejoining Dukes choosing the royal standard has been bumped
       from 10 minutes to 30.
+2026-02-04:
+  FreeStylaLT:
+  - refactor: Normalized Dainty Voice Pack volume.
+  - rscadd: Added combat attack sounds for Voice Packs.
+  - refactor: Normalized most of Haughty Voice Pack audio.
+  - bugfix: Failed casts will no longer unselect the spell.
+  Ketrai:
+  - bugfix: Siege crossbows hurt walls now. They also use their damage modifier against
+      objects & walls now.
+  Ollanius:
+  - rscadd: New weapons from the 'Big One' PR can now be acquired, in limited amounts,
+      by Adventuring Warriors and Clerics.
+  - rscadd: New sprites for the Iron Flail, alongside the Studded Flail - a cosmetic
+      alternative.
+  - rscadd: New sprite for the Iron Axe. The original Iron Axe is now available as
+      the Woodcutter's Handaxe, which can be smithed and imported for a little more
+      than usual. This variant also gets a small bonus to integrity and demolishing!
+  - rscadd: Rondel Daggers, Baurenwehrs, Broadswords and Studded Flails can now be
+      imported.
+  - balance: Combat Knives have lost Rend, in favor of  their original Chops (1.5x
+      + 30AP) and their newly-acquired Cuts (1.2x + 20 AP).
+  - balance: Kampfmessers are now the sole retainers of Rend. Hack and slash away!
+  - balance: Maciejowskis can now chop with one hand.
+  - balance: Exorcists no longer spawn with a spare Hunting Knife. Plan accordingly.
+  - balance: The Poop Knife can no longer Rend.
+  Ryan180602:
+  - rscadd: give revenants taur options.
+  - bugfix: fix donor item
+  - rscadd: Iron plate gauntlets to smith silverface.
+  SpartanBobby:
+  - bugfix: replaces huntingknife/cleaver with huntingknife/chefknife/cleaver
+  Vladmar11:
+  - bugfix: fixed a lot of runtimes
+  - code_imp: separate controller for the stat panel, improved optimization
+  WeNeedMorePhoron:
+  - rscadd: You can now jump over spike pits safely.
+  - rscadd: When you are thrown into a spike pit, for example by fetch / repel, the
+      impact destroys the spike pit.
+  - bugfix: Crystallized Mana gathered by Presdtidigitation from a Mana Fountain now
+      appears below the user instead of underneath the fountain.
+  bearrrrrrrr:
+  - rscadd: Adds new racial-exclusive Lirvan Tithebound mercenary class.

@@ -1,4 +1,4 @@
 author: "Ryan180602"
 delete-after: True
 changes:
-  - rscadd: "give revenants taur options."
+  - code_imp: "added min/max intent damages."
