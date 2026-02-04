@@ -465,6 +465,13 @@
 	height = 3
 	type_weight = 35 
 
+/datum/map_template/dungeon/hallway/filler/l_turn
+	mappath = "_maps/dungeon_generator/filler/filler_l_turn.dmm"
+	width = 3
+	height = 3
+	north_offset = 1 
+	east_offset = 1  
+
 /datum/map_template/dungeon/hallway/filler/t_junction/nwe
 	mappath = "_maps/dungeon_generator/filler/filler_t_nwe.dmm"
 	north_offset = 1
