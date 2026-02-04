@@ -93,11 +93,11 @@
 	id = "drugden"
 	width = 20
 	height = 20
-
-	north_offset = 10
-	south_offset = 10
-	east_offset = 10
-	west_offset = 10
+	
+	north_offset = 10 
+	south_offset = 10 
+	west_offset = 9   
+	east_offset = 9   
 
 /datum/map_template/dungeon/room/dwelfhome
 	mappath = "_maps/dungeon_generator/room/dwelfhome.dmm"
@@ -425,3 +425,60 @@
 	west_offset = 18
 	east_offset = 18
 	south_offset = 26
+
+
+/datum/map_template/dungeon/room/bathhouse_custom
+	width = 20
+	height = 20
+	north_offset = 10
+	south_offset = 10
+	west_offset = 9
+	east_offset = 9
+
+
+/datum/map_template/dungeon/hallway/t_junction_nse
+	width = 6
+	height = 6
+	north_offset = 2
+	south_offset = 2
+	east_offset = 2
+
+
+/datum/map_template/dungeon/hallway/t_junction_nwe
+	width = 6
+	height = 6
+	north_offset = 2
+	west_offset = 3
+	east_offset = 2
+
+
+/datum/map_template/dungeon/hallway/t_junction_nsw
+	width = 6
+	height = 6
+	north_offset = 2
+	south_offset = 2
+	west_offset = 3
+
+
+/datum/map_template/dungeon/hallway/filler/t_junction
+	width = 3
+	height = 3
+	type_weight = 35 
+
+/datum/map_template/dungeon/hallway/filler/t_junction/nwe
+	mappath = "_maps/dungeon_generator/filler/filler_t_nwe.dmm"
+	north_offset = 1
+	west_offset = 1
+	east_offset = 1
+
+/datum/map_template/dungeon/hallway/filler/t_junction/swe
+	mappath = "_maps/dungeon_generator/filler/filler_t_swe.dmm"
+	south_offset = 1
+	west_offset = 1
+	east_offset = 1
+
+/datum/map_template/dungeon/hallway/filler/t_junction/nse
+	mappath = "_maps/dungeon_generator/filler/filler_t_nse.dmm"
+	north_offset = 1
+	south_offset = 1
+	east_offset = 1
