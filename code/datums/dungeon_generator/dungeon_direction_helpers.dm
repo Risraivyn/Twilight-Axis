@@ -6,24 +6,15 @@
 	invisibility = INVISIBILITY_ABSTRACT
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	anchored = TRUE
-	
-	var/attempts = 0
-	var/max_attempts = 30 
-	var/top = FALSE
 
 /obj/effect/dungeon_directional_helper/Initialize(mapload)
 	. = ..()
 	SSdungeon_generator.markers |= src
 	alpha = 0 
 
-/obj/effect/dungeon_directional_helper/proc/seal_connection()
-	
-	qdel(src)
-
 /obj/effect/dungeon_directional_helper/Destroy()
 	SSdungeon_generator.markers -= src
 	return ..()
-
 
 /obj/effect/dungeon_directional_helper/south
 	dir = SOUTH
@@ -33,20 +24,3 @@
 	dir = EAST
 /obj/effect/dungeon_directional_helper/west
 	dir = WEST
-
-/obj/effect/dungeon_directional_helper/south/top
-	dir = SOUTH
-	top = TRUE
-
-/obj/effect/dungeon_directional_helper/north/top
-	dir = NORTH
-	top = TRUE
-
-/obj/effect/dungeon_directional_helper/east/top
-	dir = EAST
-	top = TRUE
-
-/obj/effect/dungeon_directional_helper/west/top
-	dir = WEST
-	top = TRUE
-

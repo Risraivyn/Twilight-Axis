@@ -1,7 +1,7 @@
 /datum/map_template/dungeon/room
 	name = "Room Tile"
 	abstract_type = /datum/map_template/dungeon/room
-	type_weight = 15
+	type_weight = 40
 
 /datum/map_template/dungeon/room/sewer
 	mappath = "_maps/dungeon_generator/room/Sewers2.dmm"
