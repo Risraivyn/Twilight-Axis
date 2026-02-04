@@ -21,7 +21,6 @@ SUBSYSTEM_DEF(dungeon_generator)
 /datum/controller/subsystem/dungeon_generator/Initialize(start_timeofday)
 	unlinked_dungeon_length = length(GLOB.unlinked_dungeon_entries)
 	
-	
 	for(var/path in subtypesof(/datum/map_template/dungeon))
 		var/datum/map_template/dungeon/path_type = path
 		if(initial(path_type.abstract_type) == path) continue
@@ -33,7 +32,6 @@ SUBSYSTEM_DEF(dungeon_generator)
 		var/datum/map_template/dungeon/T = new path
 		if(!T.mappath) continue
 
-		
 		if(!templates_by_category[/datum/map_template/dungeon])
 			templates_by_category[/datum/map_template/dungeon] = list()
 		templates_by_category[/datum/map_template/dungeon] += T
@@ -53,11 +51,6 @@ SUBSYSTEM_DEF(dungeon_generator)
 				templates_by_category[/datum/map_template/dungeon/entry] = list()
 			templates_by_category[/datum/map_template/dungeon/entry] += T
 
-	
-	var/entry_count = length(templates_by_category[/datum/map_template/dungeon/entry])
-	world.log << "Dungeon Generator: Инициализация. Найдено входов: [entry_count]"
-
-	
 	addtimer(CALLBACK(src, .proc/spawn_initial_room), 5 SECONDS)
 	return ..()
 
@@ -78,22 +71,18 @@ SUBSYSTEM_DEF(dungeon_generator)
 /datum/controller/subsystem/dungeon_generator/proc/spawn_initial_room()
 	var/target_z = 6
 	var/turf/center = locate(world.maxx / 2, world.maxy / 2, target_z)
-	if(!center) 
-		world.log << "Dungeon Error: Не найден центр карты на Z [target_z]"
-		return
+	if(!center) return
 
 	var/list/entries = templates_by_category[/datum/map_template/dungeon/entry]
-	if(!length(entries)) 
-		world.log << "Dungeon Error: Список ENTRY пуст!"
-		return
+	if(!length(entries)) return
 
 	var/datum/map_template/dungeon/entry_tile = pick(entries)
 	var/spawn_x = center.x - round(entry_tile.width / 2)
 	var/spawn_y = center.y - round(entry_tile.height / 2)
 	var/turf/start_turf = locate(spawn_x, spawn_y, target_z)
 	
+	
 	if(start_turf && entry_tile.load(start_turf))
-		world.log << "Dungeon Success: Вход [entry_tile.name] заспавнен!"
 		on_template_placed(entry_tile)
 
 /datum/controller/subsystem/dungeon_generator/proc/process_markers(limit)
@@ -119,12 +108,18 @@ SUBSYSTEM_DEF(dungeon_generator)
 		processed++
 
 /datum/controller/subsystem/dungeon_generator/proc/find_soulmate(direction, turf/origin, obj/effect/dungeon_directional_helper/helper)
+	
 	var/turf/target_turf = get_step(origin, direction)
 	if(!target_turf || !is_void(target_turf))
 		return FALSE
 
 	var/picked_category = pickweight(parent_types)
 	
+	
+	var/entries_placed = placed_count[/datum/map_template/dungeon/entry] || 0
+	if(entries_placed >= required_entries && picked_category == /datum/map_template/dungeon/entry)
+		picked_category = /datum/map_template/dungeon/room
+
 	if(try_spawn_template(picked_category, direction, target_turf) || try_spawn_template(/datum/map_template/dungeon, direction, target_turf))
 		qdel(helper)
 		return TRUE
@@ -139,9 +134,13 @@ SUBSYSTEM_DEF(dungeon_generator)
 	var/entries_placed = placed_count[/datum/map_template/dungeon/entry] || 0
 
 	for(var/datum/map_template/dungeon/T in candidates)
+		if(!T.mappath) continue
 		var/offset = T.get_dir_offset(opp_dir)
 		if(offset == null) continue
-		if(entries_placed >= required_entries && istype(T, /datum/map_template/dungeon/entry)) continue
+		
+		
+		if(entries_placed >= required_entries && istype(T, /datum/map_template/dungeon/entry))
+			continue
 
 		var/spawn_x = target_turf.x
 		var/spawn_y = target_turf.y
@@ -169,8 +168,12 @@ SUBSYSTEM_DEF(dungeon_generator)
 /datum/controller/subsystem/dungeon_generator/proc/try_spawn_filler(direction, turf/target_turf)
 	var/opp_dir = reverse_direction(direction)
 	var/list/all_templates = templates_by_category[/datum/map_template/dungeon]
+	var/entries_placed = placed_count[/datum/map_template/dungeon/entry] || 0
+
 	for(var/datum/map_template/dungeon/T in shuffle(all_templates.Copy()))
 		if(T.width > 7 || T.height > 7) continue 
+		if(entries_placed >= required_entries && istype(T, /datum/map_template/dungeon/entry)) continue
+
 		var/offset = T.get_dir_offset(opp_dir)
 		if(offset == null) continue
 		var/spawn_x = target_turf.x
@@ -199,24 +202,34 @@ SUBSYSTEM_DEF(dungeon_generator)
 	var/end_x = start_T.x + T.width - 1
 	var/end_y = start_T.y + T.height - 1
 	var/turf/upper_right = locate(end_x, end_y, target_z)
+	
 	if(!upper_right || upper_right.z != target_z) return FALSE
+
 	for(var/turf/test in block(start_T, upper_right))
-		if(!is_void(test)) return FALSE
+		
+		if(!is_strictly_void(test)) 
+			return FALSE
 	return TRUE
 
 /datum/controller/subsystem/dungeon_generator/proc/is_void(turf/T)
-	if(!T) return FALSE
 	
-	if(istype(T, /turf/open/floor/rogue/hexstone)) 
-		return TRUE
+	if(!T) return FALSE
+	return (istype(T, /turf/closed/dungeon_void) || istype(T, /turf/closed/mineral/rogue/bedrock))
+
+/datum/controller/subsystem/dungeon_generator/proc/is_strictly_void(turf/T)
+	
+	if(!T) return FALSE
 	return (istype(T, /turf/closed/dungeon_void) || istype(T, /turf/closed/mineral/rogue/bedrock))
 
 /datum/controller/subsystem/dungeon_generator/proc/on_template_placed(datum/map_template/dungeon/T)
 	placed_count[T.type]++
-	created_since_entry++
+	
 	if(istype(T, /datum/map_template/dungeon/entry))
+		placed_count[/datum/map_template/dungeon/entry]++
 		created_since_entry = 0
 		unlinked_dungeon_length--
+	else
+		created_since_entry++
 
 /datum/controller/subsystem/dungeon_generator/proc/reverse_direction(dir)
 	switch(dir)
