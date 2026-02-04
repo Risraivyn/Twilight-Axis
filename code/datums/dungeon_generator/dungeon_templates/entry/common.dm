@@ -19,7 +19,7 @@
 	mappath = "_maps/dungeon_generator/entry/tented_entrance.dmm"
 	width = 15
 	height = 15
-	// Проходы ровно по центру
+	
 	north_offset = 7
 	south_offset = 7
 	west_offset = 7
