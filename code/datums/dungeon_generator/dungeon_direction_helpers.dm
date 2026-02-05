@@ -6,6 +6,7 @@
 	invisibility = INVISIBILITY_ABSTRACT
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	anchored = TRUE
+	var/top = FALSE
 
 /obj/effect/dungeon_directional_helper/Initialize(mapload)
 	. = ..()

@@ -1,7 +1,7 @@
 /datum/map_template/dungeon/room
 	name = "Room Tile"
 	abstract_type = /datum/map_template/dungeon/room
-	type_weight = 40
+	type_weight = 50
 
 /datum/map_template/dungeon/room/sewer
 	mappath = "_maps/dungeon_generator/room/Sewers2.dmm"
@@ -463,7 +463,7 @@
 /datum/map_template/dungeon/hallway/filler/t_junction
 	width = 3
 	height = 3
-	type_weight = 35 
+	type_weight = 35
 
 /datum/map_template/dungeon/hallway/filler/l_turn
 	mappath = "_maps/dungeon_generator/filler/filler_l_turn.dmm"
@@ -489,3 +489,27 @@
 	north_offset = 1
 	south_offset = 1
 	east_offset = 1
+
+/datum/map_template/dungeon/room/loot
+	rarity =20 
+
+/datum/map_template/dungeon/room/loot/jewelry_nook
+	name = "Gilded Alcove"
+	mappath = "_maps/dungeon_generator/room/loot_jewelry.dmm"
+	width = 3
+	height = 3
+	north_offset = 1
+
+/datum/map_template/dungeon/room/loot/closet
+	name = "Dusty Storage"
+	mappath = "_maps/dungeon_generator/room/loot_closet.dmm"
+	width = 4
+	height = 4
+	west_offset = 1
+
+/datum/map_template/dungeon/room/loot/dining
+	name = "Ruined Niche"
+	mappath = "_maps/dungeon_generator/room/loot_dining.dmm"
+	width = 3
+	height = 3
+	south_offset = 1
