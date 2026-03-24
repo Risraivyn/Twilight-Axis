@@ -1105,10 +1105,11 @@ GLOBAL_LIST_EMPTY(friendly_animal_types)
 		CRASH("Attempted to call get_flat_existing_human_icon on a [existing_human ? existing_human.type : "null"].")
 	// We need to force the dir of the human so we can take those pictures, we'll set it back afterwards.
 	var/initial_human_dir = existing_human.dir
-	
+
 	var/icon/out_icon = null
 
 	for(var/direction in directions_to_output)
+		existing_human.dir = direction 
 		var/icon/partial = getFlatIcon(existing_human, defdir = direction)
 		
 		if(!partial)
