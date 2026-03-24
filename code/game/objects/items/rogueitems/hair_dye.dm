@@ -54,10 +54,10 @@
                         head.remove_bodypart_feature(current_hair)
                         head.add_bodypart_feature(new_hair)
                         use_cream()
-                        H.dna.species.handle_body(H)
-                        H.update_body()
+                        //H.dna.species.handle_body(H)
+                        //H.update_body()
                         H.update_hair()
-                        H.update_body_parts()
+                        //H.update_body_parts()
                         user.visible_message(span_notice("[user] dyes [H]'s hair."), span_notice("You dye [H == user ? "your" : "[H]'s"] hair."))
 
         if("facial hair color")

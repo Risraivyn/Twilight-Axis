@@ -449,8 +449,21 @@
 
 /mob/living/carbon/proc/generate_icon_render_key()
 	. = list()
+	. += gender
+	. += dna.species.limbs_id
+	
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		. += H.hair_color
+		. += H.facial_hair_color
+		. += H.skin_tone
+
 	for(var/obj/item/bodypart/BP as anything in bodyparts)
 		. += BP.body_zone
+		. += BP.status
+		if(BP.brutestate || BP.burnstate)
+			. += "[BP.brutestate][BP.burnstate]"
+		
 		switch(BP.use_digitigrade)
 			if(FULL_DIGITIGRADE)
 				. += "digitigrade_full"
@@ -458,10 +471,10 @@
 				. += "digitigrade_squashed"
 		if(BP.animal_origin)
 			. += BP.animal_origin
-		. += (BP.status == BODYPART_ORGANIC) ? "organic" : "robotic"
 
 	if(HAS_TRAIT(src, TRAIT_HUSK))
 		. += "husk"
+		
 	return jointext(., "-")
 
 

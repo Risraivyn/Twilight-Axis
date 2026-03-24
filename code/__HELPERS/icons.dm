@@ -712,8 +712,22 @@ world
 /// appearance system (overlays/underlays, etc.) is not available.
 ///
 /// Only the first argument is required.
+GLOBAL_LIST_EMPTY(flat_icon_cache)
+
 /proc/getFlatIcon(image/appearance, defdir, deficon, defstate, defblend, start = TRUE, no_anim = FALSE)
-	// Loop through the underlays, then overlays, sorting them into the layers list
+
+	if(!appearance)
+		return icon('icons/blanks/32x32.dmi', "nothing")
+
+	var/cache_key = "[appearance.icon]-[appearance.icon_state]-[appearance.dir]-[appearance.color]-[appearance.alpha]-[appearance.blend_mode]-[no_anim]"
+	
+	if(appearance.overlays.len || appearance.underlays.len)
+		cache_key += "-complex-[appearance.overlays.len + appearance.underlays.len]"
+
+	var/icon/cached = GLOB.flat_icon_cache[cache_key]
+	if(cached && istype(cached, /icon))
+		return icon(cached)
+
 	#define PROCESS_OVERLAYS_OR_UNDERLAYS(flat, process, base_layer) \
 		for (var/i in 1 to process.len) { \
 			var/image/current = process[i]; \
@@ -747,7 +761,7 @@ world
 	var/static/icon/flat_template = icon('icons/blanks/32x32.dmi', "nothing")
 	var/icon/flat = icon(flat_template)
 
-	if(!appearance || appearance.alpha <= 0)
+	if(appearance.alpha <= 0)
 		return flat
 
 	if(start)
@@ -774,11 +788,9 @@ world
 			else
 				render_icon = FALSE
 
-	var/base_icon_dir //We'll use this to get the icon state to display if not null BUT NOT pass it to overlays as the dir we have
-
-	if(render_icon)
-		//Try to remove/optimize this section if you can, it's a CPU hog.
-		//Determines if there're directionals.
+	var/base_icon_dir  //We'll use this to get the icon state to display if not null BUT NOT pass it to overlays as the dir we have
+	// Add the atom's icon itself, without pixel_x/y offsets.
+	if(render_icon) 
 		if (curdir != SOUTH)
 			// icon states either have 1, 4 or 8 dirs. We only have to check
 			// one of NORTH, EAST or WEST to know that this isn't a 1-dir icon_state since they just have SOUTH.
@@ -818,11 +830,6 @@ world
 		var/flatY1 = 1
 		var/flatY2 = flat.Height()
 
-		var/addX1 = 0
-		var/addX2 = 0
-		var/addY1 = 0
-		var/addY2 = 0
-
 		for(var/image/layer_image as anything in layers)
 			if(layer_image.alpha == 0)
 				continue
@@ -832,29 +839,16 @@ world
 				add = icon(layer_image.icon, layer_image.icon_state, base_icon_dir)
 			else // 'I' is an appearance object.
 				add = getFlatIcon(image(layer_image), curdir, curicon, curstate, curblend, FALSE, no_anim)
-			if(!add)
-				continue
+			
+			if(!add) continue
 
-			// Find the new dimensions of the flat icon to fit the added overlay
-			addX1 = min(flatX1, layer_image.pixel_x + 1)
-			addX2 = max(flatX2, layer_image.pixel_x + add.Width())
-			addY1 = min(flatY1, layer_image.pixel_y + 1)
-			addY2 = max(flatY2, layer_image.pixel_y + add.Height())
+			var/addX1 = min(flatX1, layer_image.pixel_x + 1)
+			var/addX2 = max(flatX2, layer_image.pixel_x + add.Width())
+			var/addY1 = min(flatY1, layer_image.pixel_y + 1)
+			var/addY2 = max(flatY2, layer_image.pixel_y + add.Height())
 
-			if (
-				addX1 != flatX1 \
-				&& addX2 != flatX2 \
-				&& addY1 != flatY1 \
-				&& addY2 != flatY2 \
-			)
-				// Resize the flattened icon so the new icon fits
-				flat.Crop(
-					addX1 - flatX1 + 1,
-					addY1 - flatY1 + 1,
-					addX2 - flatX1 + 1,
-					addY2 - flatY1 + 1
-				)
-
+			if (addX1 != flatX1 && addX2 != flatX2 && addY1 != flatY1 && addY2 != flatY2)
+				flat.Crop(addX1 - flatX1 + 1, addY1 - flatY1 + 1, addX2 - flatX1 + 1, addY2 - flatY1 + 1)
 				flatX1 = addX1
 				flatX2 = addY1
 				flatY1 = addX2
@@ -873,24 +867,26 @@ world
 			flat.Blend(rgb(255, 255, 255, appearance.alpha), ICON_MULTIPLY)
 
 		if(no_anim)
-			//Clean up repeated frames
 			var/icon/cleaned = new /icon()
 			cleaned.Insert(flat, "", SOUTH, 1, 0)
+			GLOB.flat_icon_cache[cache_key] = cleaned
 			return cleaned
 		else
-			return icon(flat, "", SOUTH)
-	else if (render_icon) // There's no overlays.
+			var/icon/final = icon(flat, "", SOUTH)
+			GLOB.flat_icon_cache[cache_key] = final
+			return final
+			
+	else if (render_icon) 
 		var/icon/final_icon = icon(icon(curicon, curstate, base_icon_dir), "", SOUTH, no_anim ? TRUE : null)
-
 		if (appearance.alpha < 255)
 			final_icon.Blend(rgb(255,255,255, appearance.alpha), ICON_MULTIPLY)
-
 		if (appearance.color)
 			if (islist(appearance.color))
 				final_icon.MapColors(arglist(appearance.color))
 			else
 				final_icon.Blend(appearance.color, ICON_MULTIPLY)
-
+		
+		GLOB.flat_icon_cache[cache_key] = final_icon
 		return final_icon
 
 	#undef PROCESS_OVERLAYS_OR_UNDERLAYS
@@ -1066,11 +1062,20 @@ GLOBAL_LIST_EMPTY(friendly_animal_types)
 		body.update_inv_back(hide_experimental = TRUE)
 		body.update_inv_head(hide_nonstandard = TRUE)
 
-		var/icon/out_icon = icon('icons/effects/effects.dmi', "nothing")
+		var/icon/out_icon = null
 		for(var/D in showDirs)
 			body.setDir(D)
 			var/icon/partial = getFlatIcon(body)
-			out_icon.Insert(partial,dir=D)
+			if(!partial)
+				continue
+	
+			if(!out_icon)
+				out_icon = icon(partial) 
+			else
+				out_icon.Insert(partial, dir = D)
+	
+			if(!out_icon)
+				out_icon = icon('icons/blanks/32x32.dmi', "nothing")
 
 		body.update_inv_hands()
 		body.update_inv_belt()
@@ -1098,16 +1103,27 @@ GLOBAL_LIST_EMPTY(friendly_animal_types)
 	RETURN_TYPE(/icon)
 	if(!existing_human || !istype(existing_human))
 		CRASH("Attempted to call get_flat_existing_human_icon on a [existing_human ? existing_human.type : "null"].")
-
 	// We need to force the dir of the human so we can take those pictures, we'll set it back afterwards.
 	var/initial_human_dir = existing_human.dir
-	existing_human.dir = SOUTH
-	var/icon/out_icon = icon('icons/effects/effects.dmi', "nothing")
+	
+	var/icon/out_icon = null
+
 	for(var/direction in directions_to_output)
 		var/icon/partial = getFlatIcon(existing_human, defdir = direction)
-		out_icon.Insert(partial, dir = direction)
+		
+		if(!partial)
+			continue
+		
+		if(!out_icon)
+			out_icon = icon(partial)
+
+		else
+			out_icon.Insert(partial, dir = direction)
 
 	existing_human.dir = initial_human_dir
+
+	if(!out_icon)
+		return icon('icons/blanks/32x32.dmi', "nothing")
 
 	return out_icon
 

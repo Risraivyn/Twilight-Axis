@@ -60,7 +60,7 @@ There are several things that need to be remembered:
 //HAIR OVERLAY
 /mob/living/carbon/human/update_hair()
 	rebuild_obscured_flags()
-	update_body_parts(TRUE)
+	update_body_parts(FALSE)
 	return
 
 /mob/living/carbon/human/update_body()
@@ -99,8 +99,8 @@ There are several things that need to be remembered:
 
 #undef SUNDER_FILTER
 
-/mob/living/carbon/human/update_damage_overlays()
-	START_PROCESSING(SSdamoverlays,src)
+//mob/living/carbon/human/update_damage_overlays()
+	//START_PROCESSING(SSdamoverlays,src)
 
 /mob/living/carbon/human/proc/update_damage_overlays_real()
 	if(dna.species)
@@ -141,8 +141,8 @@ There are several things that need to be remembered:
 		var/list/damage_overlays = list()
 		var/list/legdam_overlays = list()
 		var/list/armdam_overlays = list()
-		if(BP.body_zone == BODY_ZONE_HEAD)
-			update_hair()
+		//if(BP.body_zone == BODY_ZONE_HEAD)
+			//update_hair()
 		var/bleed_checker = FALSE
 		var/list/wound_overlays
 		if(!BP.skeletonized)

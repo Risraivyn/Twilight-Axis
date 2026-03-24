@@ -409,12 +409,18 @@
 		owner.updatehealth()
 	consider_processing()
 	update_disabled()
+	if(owner && ishuman(owner))
+		var/mob/living/carbon/human/H = owner
+		H.update_damage_overlays_real()
 	cremation_progress = min(0, cremation_progress - ((brute_dam + burn_dam)*(100/max_damage)))
 	return update_bodypart_damage_state()
 
 //Returns total damage.
 /obj/item/bodypart/proc/get_damage(include_stamina = FALSE)
 	var/total = brute_dam + burn_dam
+	if(owner && ishuman(owner))
+		var/mob/living/carbon/human/H = owner
+		H.update_damage_overlays_real()
 	if(include_stamina)
 		total = max(total, stamina_dam)
 	return total
