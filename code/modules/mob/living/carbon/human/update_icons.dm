@@ -1919,44 +1919,39 @@ generate/load female uniform sprites matching all previously decided variables
 					break
 
 /mob/living/carbon/human/update_body_parts(redraw = FALSE)
-	//CHECK FOR UPDATE
-	var/oldkey = icon_render_key
-	icon_render_key = generate_icon_render_key()
-	if(oldkey == icon_render_key && !redraw)
+	var/new_key = generate_icon_render_key()
+
+	if(!redraw && icon_render_key == new_key)
 		return
+
+	if(!redraw && limb_icon_cache[new_key])
+		icon_render_key = new_key
+		load_limb_from_cache()
+		return
+
+	icon_render_key = new_key
 
 	remove_overlay(BODYPARTS_LAYER)
 
-	for(var/obj/item/bodypart/BP as anything in bodyparts)
+	for(var/obj/item/bodypart/BP in bodyparts)
 		BP.update_limb()
 
-	//LOAD ICONS
-	if(!redraw)
-		if(limb_icon_cache[icon_render_key])
-			load_limb_from_cache()
-			return
+	var/hiden = FALSE
+	if(wear_armor && (wear_armor.flags_inv & HIDEBOOB))
+		hiden = TRUE
+	else if(wear_shirt && (wear_shirt.flags_inv & HIDEBOOB))
+		hiden = TRUE
+	else if(cloak && (cloak.flags_inv & HIDEBOOB))
+		hiden = TRUE
 
-	//GENERATE NEW LIMBS
 	var/list/new_limbs = list()
-	var/hiden = FALSE //used to tell if we should hide boobs, basically
-	for(var/obj/item/bodypart/BP as anything in bodyparts)
-		if(BP.name == BODY_ZONE_CHEST)
-			if(wear_armor)
-				var/obj/item/I = wear_armor
-				if(I.flags_inv & HIDEBOOB)
-					hiden = TRUE
-			if(wear_shirt)
-				var/obj/item/I = wear_shirt
-				if(I.flags_inv & HIDEBOOB)
-					hiden = TRUE
-			if(cloak)
-				var/obj/item/I = cloak
-				if(I.flags_inv & HIDEBOOB)
-					hiden = TRUE
+	for(var/obj/item/bodypart/BP in bodyparts)
+		if(BP.body_zone == BODY_ZONE_CHEST)
 			new_limbs += BP.get_limb_icon(hideaux = hiden)
 		else
 			new_limbs += BP.get_limb_icon()
-	if(length(new_limbs))
+
+	if(new_limbs.len)
 		overlays_standing[BODYPARTS_LAYER] = new_limbs
 		limb_icon_cache[icon_render_key] = new_limbs
 

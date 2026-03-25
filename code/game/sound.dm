@@ -1,3 +1,14 @@
+GLOBAL_LIST_EMPTY(sound_cache)
+
+/proc/get_cached_sound(sound_path)
+	if(!sound_path)
+		return null
+	var/sound/S = GLOB.sound_cache[sound_path]
+	if(!S)
+		S = sound(sound_path)
+		GLOB.sound_cache[sound_path] = S
+	return S
+
 /client
 	var/list/played_loops = list() //uses dlink to link to the sound
 
@@ -25,40 +36,71 @@
 	if(!turf_source)
 		return
 
-	//allocate a channel if necessary now so its the same for everyone
-	channel = channel || SSsounds.random_available_channel()
-
-	// Looping through the player list has the added bonus of working for mobs inside containers
-	var/sound/S = soundin
-	if(!istype(S))
-		S = sound(get_sfx(soundin))
 	if(!extrarange)
 		extrarange = 1
 	var/maxdistance = (world.view + extrarange)
 	var/source_z = turf_source.z
+	
 	var/list/listeners = SSmobs.clients_by_zlevel[source_z].Copy()
 	var/list/muffled_listeners = list()
 
 	var/turf/above_turf = GET_TURF_ABOVE(turf_source)
 	var/turf/below_turf = GET_TURF_BELOW(turf_source)
 
-	if(soundping)
-		ping_sound(source)
-
-	if(!ignore_walls) //these sounds don't carry through walls or vertically
-		listeners = listeners & get_hearers_in_view(maxdistance,turf_source)
-	else
+	if(ignore_walls)
 		if(above_turf)
 			muffled_listeners += SSmobs.clients_by_zlevel[above_turf.z]
 			muffled_listeners += SSmobs.dead_players_by_zlevel[above_turf.z]
-
 		if(below_turf)
 			muffled_listeners += SSmobs.clients_by_zlevel[below_turf.z]
 			muffled_listeners += SSmobs.dead_players_by_zlevel[below_turf.z]
 
 	listeners += SSmobs.dead_players_by_zlevel[source_z]
 	listeners += muffled_listeners
+
+	if(!listeners.len)
+		return
+
+	var/sound/S = soundin
+	if(!istype(S))
+		S = get_cached_sound(get_sfx(soundin))
+
+	if(!S)
+		return
+
+	channel = channel || SSsounds.random_available_channel()
+	if(soundping)
+		ping_sound(source)
+
+	if(!ignore_walls) 
+		listeners = listeners & get_hearers_in_view(maxdistance, turf_source)
+
 	. = list()
+
+	for(var/mob/M as anything in listeners)
+		var/turf/turf_check = get_turf(M)
+		if(isdullahan(M))
+			var/mob/living/carbon/human = M
+			var/datum/species/dullahan/dullahan = human.dna.species
+			if(dullahan.headless)
+				turf_check = get_turf(dullahan.my_head)
+
+		if(quiet)
+			if(turf_check.z != turf_source.z)
+				continue
+			if(get_dist(turf_check, turf_source) > 3)
+				continue
+
+		if(get_dist(turf_check, turf_source) <= maxdistance)
+			if(animal_pref && M.client?.prefs?.mute_animal_emotes)
+				continue
+			if(pref_toggle && !(M.client?.prefs?.toggles & pref_toggle))
+				continue
+
+			var/is_muffled = (M in muffled_listeners)
+
+			if(M.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, channel, pressure_affected, S, repeat, is_muffled))
+				. += M
 
 	for(var/mob/M as anything in listeners)
 		var/turf/turf_check = get_turf(M)
