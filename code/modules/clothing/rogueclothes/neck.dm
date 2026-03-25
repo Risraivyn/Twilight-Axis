@@ -83,33 +83,34 @@
 	return
 
 /obj/item/clothing/neck/roguetown/coif/heavypadding/AdjustClothes(mob/user)
-	if(loc == user)
-		if(adjustable == CAN_CADJUST)
-			adjustable = CADJUSTED
-			if(toggle_icon_state)
-				icon_state = "fullpadded_down"
-			flags_inv = HIDEEARS|HIDEHAIR
-			body_parts_covered = NECK|HAIR|EARS|HEAD
-			if(ishuman(user))
-				var/mob/living/carbon/H = user
-				H.update_inv_neck()
-				H.update_inv_head()
-		else if(adjustable == CADJUSTED)
-			adjustable = CADJUSTED_MORE
-			if(toggle_icon_state)
-				icon_state = "fullpadded_neck"
-			flags_inv = null
-			body_parts_covered = NECK
-			if(ishuman(user))
-				var/mob/living/carbon/H = user
-				H.update_inv_neck()
-				H.update_inv_head()
-		else if(adjustable == CADJUSTED_MORE)
-			ResetAdjust(user)
-		if(ishuman(user))
-			var/mob/living/carbon/H = user
-			H.update_inv_neck()
-			H.update_inv_head()
+	if(loc != user || !ishuman(user))
+		return
+
+	var/mob/living/carbon/human/H = user
+
+	if(adjustable == CAN_CADJUST)
+		adjustable = CADJUSTED
+		if(toggle_icon_state)
+			icon_state = "fullpadded_down"
+		flags_inv = HIDEEARS|HIDEHAIR
+		body_parts_covered = NECK|HAIR|EARS|HEAD
+		
+	else if(adjustable == CADJUSTED)
+		adjustable = CADJUSTED_MORE
+		if(toggle_icon_state)
+			icon_state = "fullpadded_neck"
+		flags_inv = NONE 
+		body_parts_covered = NECK
+		
+	else if(adjustable == CADJUSTED_MORE)
+		ResetAdjust(user)
+
+	H.rebuild_obscured_flags()
+	H.update_inv_neck()
+	H.update_inv_head() 
+	
+	H.update_body_parts(TRUE) 
+	H.update_hair()
 
 /obj/item/clothing/neck/roguetown/coif/ComponentInitialize()
 	AddComponent(/datum/component/adjustable_clothing, NECK, null, null, null, null, (UPD_HEAD|UPD_MASK|UPD_NECK))	//Soundless coif
@@ -218,33 +219,31 @@
 	AddComponent(/datum/component/armour_filtering/negative, TRAIT_HONORBOUND)
 
 /obj/item/clothing/neck/roguetown/chaincoif/full/AdjustClothes(mob/user)
-	if(loc == user)
+	if(loc == user && ishuman(user))
+		var/mob/living/carbon/human/H = user
+
 		if(adjustable == CAN_CADJUST)
 			adjustable = CADJUSTED
 			if(toggle_icon_state)
 				icon_state = "chaincoif"
 			flags_inv = HIDEEARS|HIDEHAIR
 			body_parts_covered = NECK|HAIR|EARS|HEAD
-			if(ishuman(user))
-				var/mob/living/carbon/H = user
-				H.update_inv_neck()
-				H.update_inv_head()
+
 		else if(adjustable == CADJUSTED)
 			adjustable = CADJUSTED_MORE
 			if(toggle_icon_state)
 				icon_state = "chaincoif_t"
-			flags_inv = null
+			flags_inv = NONE 
 			body_parts_covered = NECK
-			if(ishuman(user))
-				var/mob/living/carbon/H = user
-				H.update_inv_neck()
-				H.update_inv_head()
+
 		else if(adjustable == CADJUSTED_MORE)
 			ResetAdjust(user)
-		if(ishuman(user))
-			var/mob/living/carbon/H = user
-			H.update_inv_neck()
-			H.update_inv_head()
+
+		H.rebuild_obscured_flags() 
+		H.update_inv_neck()
+		H.update_inv_head()
+		H.update_body_parts(TRUE) 
+		H.update_hair()
 
 /obj/item/clothing/neck/roguetown/chaincoif/full/black
 	color = "#323232"
