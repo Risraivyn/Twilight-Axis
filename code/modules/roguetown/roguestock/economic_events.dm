@@ -100,7 +100,7 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 
 /datum/economic_event/essence_scarcity
 	name = "ДЕФИЦИТ ЭССЕНЦИИ"
-	description = "Сбор эссенции в Терробоге провалился — алхимические реагенты становятся редкостью."
+	description = "Сбор эссенции в Болотах ужаса провалился — алхимические реагенты становятся редкостью."
 	announcement = "<font color='#c44'>ДЕФИЦИТ ЭССЕНЦИИ: Запасы эссенции Дендора и потрохов истощены. Волшебники в ярости.</font>"
 	affected_goods = list(TRADE_GOOD_DENDOR_ESSENCE, TRADE_GOOD_VISCERA)
 	price_mod = 5.5
@@ -145,7 +145,7 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 
 /datum/economic_event/quarry_windfall
 	name = "УДАЧА В КАМЕНОЛОМНЯХ"
-	description = "В каменоломнях горы Декапитация вскрыта богатая жила — телеги едут от заката до рассвета."
+	description = "В каменоломнях Безголовой Горы вскрыта богатая жила — телеги едут от заката до рассвета."
 	announcement = "<font color='#5cb85c'>УДАЧА В КАМЕНОЛОМНЯХ: Камень и уголь наводнили дворы. Строители ликуют, рабочие ворчат.</font>"
 	affected_goods = list(TRADE_GOOD_STONE, TRADE_GOOD_COAL)
 	price_mod = 0.7
@@ -198,7 +198,7 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 
 /datum/economic_event/orchard_locusts
 	name = "САРАНЧА В САДАХ"
-	description = "Рой саранчи объел сады Рокхилла дочиста. То немногое, что уцелело, продают по баснословным ценам."
+	description = "Рой саранчи объел сады Женавы дочиста. То немногое, что уцелело, продают по баснословным ценам."
 	announcement = "<font color='#c44'>САРАНЧА В САДАХ: Плодовые сады опустошены. Яблоки и ягоды теперь стоят целое состояние.</font>"
 	affected_goods = list(TRADE_GOOD_APPLE, TRADE_GOOD_PEAR, TRADE_GOOD_JACKSBERRY)
 	price_mod = 4.25
@@ -267,7 +267,7 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 
 /datum/economic_event/cidering_season
 	name = "СЕЗОН СИДРА"
-	description = "Прессы Рокхилла стонут под тяжестью плодов. Торговцы сбрасывают излишки по любым ценам."
+	description = "Прессы Женавы стонут под тяжестью плодов. Торговцы сбрасывают излишки по любым ценам."
 	announcement = "<font color='#5cb85c'>СЕЗОН СИДРА: Горы фруктов лежат у прессов. Продукция садов стоит гроши.</font>"
 	affected_goods = list(TRADE_GOOD_APPLE, TRADE_GOOD_PEAR, TRADE_GOOD_JACKSBERRY)
 	price_mod = 0.55
