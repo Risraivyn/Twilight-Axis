@@ -197,9 +197,9 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/orchard_locusts
-	name = "САРАНЧА В САДАХ"
-	description = "Рой саранчи объел сады Женавы дочиста. То немногое, что уцелело, продают по баснословным ценам."
-	announcement = "<font color='#c44'>САРАНЧА В САДАХ: Плодовые сады опустошены. Яблоки и ягоды теперь стоят целое состояние.</font>"
+	name = "ДОЛГОНОСИК ПОЕЛ УРОЖАЙ"
+	description = "Заражение долгоносиком в садах Генавы привело к потере урожая. То немногое, что уцелело, продают по баснословным ценам."
+	announcement = "<font color='#c44'>ДОЛГОНОСИК ПОЕЛ УРОЖАЙ: Плодовые сады опустошены. Яблоки и ягоды теперь стоят целое состояние.</font>"
 	affected_goods = list(TRADE_GOOD_APPLE, TRADE_GOOD_PEAR, TRADE_GOOD_JACKSBERRY)
 	price_mod = 4.25
 	event_type = ECON_EVENT_SHORTAGE
@@ -267,7 +267,7 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 
 /datum/economic_event/cidering_season
 	name = "СЕЗОН СИДРА"
-	description = "Прессы Женавы стонут под тяжестью плодов. Торговцы сбрасывают излишки по любым ценам."
+	description = "Прессы Генавы стонут под тяжестью плодов. Торговцы сбрасывают излишки по любым ценам."
 	announcement = "<font color='#5cb85c'>СЕЗОН СИДРА: Горы фруктов лежат у прессов. Продукция садов стоит гроши.</font>"
 	affected_goods = list(TRADE_GOOD_APPLE, TRADE_GOOD_PEAR, TRADE_GOOD_JACKSBERRY)
 	price_mod = 0.55
