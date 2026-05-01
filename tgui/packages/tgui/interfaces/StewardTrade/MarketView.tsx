@@ -76,7 +76,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
   return (
     <div>
       <div style={sectionHeaderStyle}>
-        Market &middot; auto-routed to best region
+        Рынок &middot; Автоматически направлено в лучший регион
       </div>
       <div
         style={{
@@ -208,7 +208,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
                   }
                   title={`Export ${activeGroup.label} surplus (stock over threshold) to best-paying regions.`}
                 >
-                  Export Surplus
+                  Экспортировать излишек
                 </button>
                 <button
                   type="button"
@@ -245,7 +245,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
                   }}
                   title={`Bulk-multiply ${activeGroup.label} buy prices. Flips affected entries to manual.`}
                 >
-                  Buy ×
+                  Купить ×
                 </button>
                 <button
                   type="button"
@@ -262,7 +262,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
                   }}
                   title={`Bulk-multiply ${activeGroup.label} sell prices. Flips affected entries to manual.`}
                 >
-                  Sell ×
+                  Продать ×
                 </button>
                 <button
                   type="button"

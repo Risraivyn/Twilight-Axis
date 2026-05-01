@@ -44,7 +44,7 @@ export const PetitionView = (props: { data: Data }) => {
 
   return (
     <div>
-      <div style={sectionHeaderStyle}>Petition the Trade Hall</div>
+      <div style={sectionHeaderStyle}>Подать петицию</div>
 
       <div
         style={{
@@ -144,7 +144,7 @@ const PetitionStatusStrip = (props: { data: Data }) => {
       }}
     >
       <div>
-        Pledge balance:{' '}
+        Остаток залога:{' '}
         <span style={{ color: SEAL_AMBER, fontWeight: 'bold' }}>
           {petition.pledge_balance}p
         </span>
@@ -243,7 +243,7 @@ const RegionPicker = (props: {
 
       {regionIds.length === 0 ? (
         <div style={{ color: INK_FAINT, fontStyle: 'italic' }}>
-          No regions configured.
+          Регионы не настроены.
         </div>
       ) : (
         regionIds.map((rid) => {
@@ -301,7 +301,7 @@ const RegionPicker = (props: {
                   disabled,
                 })}
               >
-                Petition
+                Петиция
               </button>
             </div>
           );
