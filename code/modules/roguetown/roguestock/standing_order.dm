@@ -22,12 +22,12 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 
 /// Called after region_id is set. Return the order's display name.
 /datum/standing_order/proc/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - STANDING ORDER"
+	return "[uppertext(region.name)] - ТОРГОВЫЙ ЗАКАЗ"
 
 /// Called after region_id is set. Return a flavor paragraph.
 /// Subtypes can define per-region overrides via a project_by_region list and fall back to generic.
 /datum/standing_order/proc/generate_description(datum/economic_region/region)
-	return "A standing order has been posted from [region.name]."
+	return "В регионе [region.name] выставлен новый торговый заказ"
 
 
 // ============================================================================
@@ -35,10 +35,10 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_rations
 	var/list/project_by_region = list(
-		TRADE_REGION_BLEAKCOAST = list("the admiralty", "the coastal garrison", "the navy quartermaster"),
-		TRADE_REGION_NORTHFORT = list("the border guard", "the northern garrison", "the tarichean watch"),
-		TRADE_REGION_HEARTFELT = list("the march guard", "the retinue", "the chapel almoners"),
-		TRADE_REGION_KINGSFIELD = list("a market town", "a village feast", "a local granary"),
+		TRADE_REGION_BLEAKCOAST = list("адмиралтейство", "береговой гарнизон", "военно-морской интендант"),
+		TRADE_REGION_NORTHFORT = list("пограничная стража", "северный гарнизон", "тарихейский дозор"),
+		TRADE_REGION_HEARTFELT = list("маршевая стража", "княжеская свита", "раздатчики милостыни"),
+		TRADE_REGION_KINGSFIELD = list("рыночный город", "деревенский пир", "местное зернохранилище"),
 	)
 
 /datum/standing_order/demand_rations/generate_item_mix()
@@ -51,13 +51,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_rations/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - RATIONS REQUISITION"
+	return "[uppertext(region.name)] - ПОСТАВКА ПРОВИЗИИ"
 
 /datum/standing_order/demand_rations/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] calls for provisions urgently."
-	return "Provisioners in [region.name] require rations to feed their charges."
+		return "[capitalize(pick(projects))] в регионе [region.name] срочно нуждается в провианте."
+	return "Снабженцы в регионе [region.name] запрашивают рационы для своих подопечных."
 
 
 // ============================================================================
@@ -65,10 +65,11 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_armaments
 	var/list/project_by_region = list(
-		TRADE_REGION_BLEAKCOAST = list("the admiralty", "the coastal garrison", "the navy armory"),
-		TRADE_REGION_NORTHFORT = list("the border guard", "the northern garrison", "the tarichean watch"),
-		TRADE_REGION_HEARTFELT = list("the march guard", "the retinue", "the garrison armory"),
+		TRADE_REGION_BLEAKCOAST = list("адмиралтейство", "береговой гарнизон", "флотский арсенал"),
+		TRADE_REGION_NORTHFORT = list("пограничная стража", "северный гарнизон", "тарихейский дозор"),
+		TRADE_REGION_HEARTFELT = list("маршевая стража", "княжеская свита", "гарнизонный арсенал"),
 	)
+
 
 /datum/standing_order/demand_armaments/generate_item_mix()
 	var/list/mix = list()
@@ -80,13 +81,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_armaments/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - ARMAMENT REQUISITION"
+	return "[uppertext(region.name)] - ПОСТАВКА ВООРУЖЕНИЯ"
 
 /datum/standing_order/demand_armaments/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] must be rearmed before the next campaign season."
-	return "The arms-masters of [region.name] require ingots and hide to outfit soldiers."
+		return "[capitalize(pick(projects))] в регионе [region.name] требует перевооружения перед следующим военным сезоном."
+	return "Оружейные мастера региона [region.name] запрашивают слитки и шкуры для экипировки солдат."
 
 
 // ============================================================================
@@ -94,8 +95,8 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_textile
 	var/list/project_by_region = list(
-		TRADE_REGION_KINGSFIELD = list("a local tailor", "a market stall", "a travelling merchant"),
-		TRADE_REGION_HEARTFELT = list("chapel vestments", "heraldic tabards", "banner commissions"),
+		TRADE_REGION_KINGSFIELD = list("местный портной", "рыночная лавка", "странствующий купец"),
+		TRADE_REGION_HEARTFELT = list("церковные облачения", "геральдические табарды", "изготовление знамен"),
 	)
 
 /datum/standing_order/demand_textile/generate_item_mix()
@@ -106,13 +107,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_textile/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - TAILORS' REQUISITION"
+	return "[uppertext(region.name)] - ЗАКАЗ ПОРТНЫХ"
 
 /datum/standing_order/demand_textile/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] requires bolts of cloth and fiber."
-	return "A tailors' guild in [region.name] is accepting commissions of cloth and fibers."
+		return "[capitalize(pick(projects))] в регионе [region.name] требует рулоны ткани и волокно."
+	return "Гильдия портных в регионе [region.name] принимает заказы на ткани и волокна."
 
 
 // ============================================================================
@@ -120,8 +121,8 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_smithing
 	var/list/project_by_region = list(
-		TRADE_REGION_DAFTSMARCH = list("the smiths' guild", "the foundry works", "the master smithy"),
-		TRADE_REGION_KINGSFIELD = list("a village smithy", "a farm-tool maker", "a local farrier"),
+		TRADE_REGION_DAFTSMARCH = list("гильдия кузнецов", "литейный цех", "мастерская кузнеца"),
+		TRADE_REGION_KINGSFIELD = list("деревенская кузница", "изготовитель сельхозинвентаря", "местный коваль"),
 	)
 
 /datum/standing_order/demand_smithing/generate_item_mix()
@@ -132,13 +133,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_smithing/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - SMITHY SUPPLY"
+	return "[uppertext(region.name)] - КУЗНЕЧНЫЕ ПОСТАВКИ"
 
 /datum/standing_order/demand_smithing/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] seeks ingots for the month's labor."
-	return "A smithy in [region.name] is ordering ingots for the month's labor."
+		return "[capitalize(pick(projects))] в регионе [region.name] запрашивает слитки для работ на месяц вперед."
+	return "Кузница в регионе [region.name] заказывает слитки для обеспечения работ на месяц вперед."
 
 
 // ============================================================================
@@ -146,15 +147,15 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_construction
 	var/list/project_by_region = list(
-		TRADE_REGION_BLEAKCOAST = list("the coastal garrison", "the harbor works"),
-		TRADE_REGION_NORTHFORT = list("the northern garrison", "the border watchtower"),
-		TRADE_REGION_HEARTFELT = list("the cathedral", "the garrison hall"),
-		TRADE_REGION_KINGSFIELD = list("a market town", "a local granary"),
-		TRADE_REGION_DAFTSMARCH = list("a mine shaft", "the foundry"),
-		TRADE_REGION_ROSAWOOD = list("the lumber mill", "a trade road"),
-		TRADE_REGION_ROCKHILL = list("a terraced wall", "the press house"),
-		TRADE_REGION_BLACKHOLT = list("the conclave tower", "an outer sanctum"),
-		TRADE_REGION_SALTWICK = list("the salt-house", "the wharves"),
+		TRADE_REGION_BLEAKCOAST = list("береговой гарнизон", "портовые работы"),
+		TRADE_REGION_NORTHFORT = list("северный гарнизон", "пограничная сторожевая башня"),
+		TRADE_REGION_HEARTFELT = list("кафедральный собор", "гарнизонная зала"),
+		TRADE_REGION_KINGSFIELD = list("рыночный город", "местное зернохранилище"),
+		TRADE_REGION_DAFTSMARCH = list("шахтный ствол", "литейный цех"),
+		TRADE_REGION_ROSAWOOD = list("лесопилка", "торговый тракт"),
+		TRADE_REGION_ROCKHILL = list("террасная стена", "давильня"),
+		TRADE_REGION_BLACKHOLT = list("башня конклава", "внешнее святилище"),
+		TRADE_REGION_SALTWICK = list("солеварня", "верфи"),
 	)
 
 /datum/standing_order/demand_construction/generate_item_mix()
@@ -167,13 +168,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_construction/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - CONSTRUCTION ORDER"
+	return "[uppertext(region.name)] - ЗАКАЗ НА СТРОИТЕЛЬСТВО"
 
 /datum/standing_order/demand_construction/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] requires construction materials urgently."
-	return "Builders in [region.name] require stone, timber, and hardware."
+		return "[capitalize(pick(projects))] в регионе [region.name] срочно требует строительные материалы."
+	return "Строителям в регионе [region.name] требуются камень, древесина и скобяные изделия."
 
 
 // ============================================================================
@@ -566,11 +567,11 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_alchemical
 	roll_weight = 3
 	var/list/project_by_region = list(
-		TRADE_REGION_HEARTFELT = list("the chapel infirmary", "the pilgrim hostel", "the garrison surgeon"),
-		TRADE_REGION_BLACKHOLT = list("the wizards' conclave", "the lexicarium", "the archmagi's household"),
-		TRADE_REGION_BLEAKCOAST = list("the admiralty surgeon", "the coastal garrison", "the navy apothecary"),
-		TRADE_REGION_NORTHFORT = list("the border surgeon", "the northern garrison", "the tarichean watch"),
-		TRADE_REGION_KINGSFIELD = list("a market apothecary", "a village healer"),
+		TRADE_REGION_HEARTFELT = list("часовенный лазарет", "странноприимный дом", "гарнизонный хирург"),
+		TRADE_REGION_BLACKHOLT = list("конклав волшебников", "лексикариум", "дом архимага"),
+		TRADE_REGION_BLEAKCOAST = list("хирург адмиралтейства", "береговой гарнизон", "флотский аптекарь"),
+		TRADE_REGION_NORTHFORT = list("пограничный хирург", "северный гарнизон", "тарихейский дозор"),
+		TRADE_REGION_KINGSFIELD = list("рыночный аптекарь", "деревенский целитель"),
 	)
 	// Mana lives in the premium pool only - keeping it in both used to let a premium roll
 	// overwrite the larger primary qty when the same id was picked twice.
@@ -598,13 +599,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_alchemical/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - APOTHECARY ORDER"
+	return "[uppertext(region.name)] - ЗАКАЗ АПОТЕКАРИЯ"
 
 /datum/standing_order/demand_alchemical/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] requires finished potions, to be left at the warehouse."
-	return "An apothecary at [region.name] will pay handsomely for finished potions, left at the warehouse."
+		return "[capitalize(pick(projects))] в регионе [region.name] требует готовые зелья; оставить на складе."
+	return "Аптекарь в регионе [region.name] щедро заплатит за готовые зелья, оставленные на складе."
 
 // ============================================================================
 // demand_alchemical_warband - elite buff-potion order for adventurers, the conclave,
@@ -643,7 +644,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_alchemical_warband/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - WARBAND DRAUGHTS"
+	return "[uppertext(region.name)] - ПРИПАСЫ БОЕВОГО ОТРЯДА"
 
 /datum/standing_order/demand_alchemical_warband/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
@@ -705,7 +706,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_birthday_gift/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - BIRTHDAY TRIBUTE"
+	return "[uppertext(region.name)] - ПОДАРОК НА ИМЕНИНЫ"
 
 /datum/standing_order/demand_birthday_gift/generate_description(datum/economic_region/region)
 	var/list/celebrants = celebrants_by_region[region.region_id]
@@ -743,7 +744,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_great_feast/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - THE GREAT FEAST"
+	return "[uppertext(region.name)] - ВЕЛИКИЙ ПИР"
 
 /datum/standing_order/demand_great_feast/generate_description(datum/economic_region/region)
 	if(prob(33))

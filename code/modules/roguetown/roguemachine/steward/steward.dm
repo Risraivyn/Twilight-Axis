@@ -133,7 +133,7 @@
 	contract.principal_due_on_day = GLOB.dayspassed + term
 	contract.total_due = FLOOR(amount * (1 + (contract.interest_rate * term)), 1)
 	playsound(src, 'sound/misc/coindispense.ogg', 60, FALSE, -1)
-	say("Bearer Loan Contract issued: [amount]m over [term] day\s, signed by [user.real_name].")
+	say("Выдан контракт на предъявительский займ: [amount]м на [term] дн., подписано [user.real_name].")
 	log_game("LOAN CONTRACT: [key_name(user)] drafted bearer loan contract - [amount]m over [term] days at [round(contract.interest_rate * 100)]%/day.")
 
 /obj/structure/roguemachine/steward/attackby(obj/item/P, mob/user, params)
@@ -187,7 +187,7 @@
 			return
 		var/amt = D.get_import_price()
 		if(!SStreasury.burn(SStreasury.discretionary_fund, amt, "imported [D.name]"))
-			say("Insufficient mammon.")
+			say("Недостаточно мамонов.")
 			return
 		SStreasury.total_import += amt
 		record_round_statistic(STATS_STOCKPILE_IMPORTS_VALUE, amt)
@@ -224,7 +224,7 @@
 		if(!X)
 			return
 		if(!has_fiscal_authority(usr))
-			say("Only the Steward, Clerk, or Ruler may levy fines.")
+			say("Только Стюард, Клерк или Правитель могут накладывать штрафы.")
 			playsound(src, 'sound/misc/machineno.ogg', 100, FALSE, -1)
 			return
 		for(var/mob/living/A in SStreasury.bank_accounts)
@@ -252,7 +252,7 @@
 		if(!usr.canUseTopic(src, BE_CLOSE) || locked)
 			return
 		if(world.time < residency_print_cooldown)
-			say("The machine is still warming its quill.")
+			say("Машина всё ещё заправляет перо чернилами.")
 			playsound(src, 'sound/misc/machineno.ogg', 100, FALSE, -1)
 			return
 		var/mob/living/carbon/human/H = usr
@@ -261,7 +261,7 @@
 		letter.issuer_year = CALENDAR_EPOCH_YEAR
 		residency_print_cooldown = world.time + 1 MINUTES
 		playsound(src, 'sound/misc/coindispense.ogg', 60, FALSE, -1)
-		say("Letter of Citizenry issued, signed by [H.real_name].")
+		say("Выдано Свидетельство о подданстве, подписанное [H.real_name].")
 	if(href_list["issueloan"])
 		issue_loan_dialog(usr)
 	if(href_list["setloanrate"])
@@ -299,7 +299,7 @@
 			if(HAS_TRAIT(H, TRAIT_DEBTOR))
 				debtors["[H.real_name]"] = H
 		if(!length(debtors))
-			say("No debtors currently marked.")
+			say("В списках должников сейчас пусто.")
 			return
 		var/pick = input(usr, "Clear defaulter mark from which debtor?", src) as null|anything in debtors
 		if(!pick)
@@ -898,7 +898,7 @@
 			contents += "<b><font color='#5cb85c'>CROWN REVENUE THIS WEEK</font></b>"
 			contents += "<table width='100%' cellspacing='0' cellpadding='2'>"
 			contents += "<tr><td>Rural Tax</td><td align='right'><font color='#5cb85c'>[SStreasury.total_rural_tax]m</font></td>"
-			contents += "<td>Fines</td><td align='right'><font color='#5cb85c'>[GLOB.azure_round_stats[STATS_FINES_INCOME]]m</font></td></tr>"
+			contents += "<td>Штрафы</td><td align='right'><font color='#5cb85c'>[GLOB.azure_round_stats[STATS_FINES_INCOME]]m</font></td></tr>"
 			contents += "<tr><td>Poll Tax</td><td align='right'><font color='#5cb85c'>[GLOB.azure_round_stats[STATS_POLL_TAX_COLLECTED]]m</font></td>"
 			contents += "<td>Deposit Tax</td><td align='right'><font color='#5cb85c'>[SStreasury.total_deposit_tax]m</font></td></tr>"
 			contents += "<tr><td>Contract Levy</td><td align='right'><font color='#5cb85c'>[GLOB.azure_round_stats[STATS_REVENUE_CONTRACT_LEVY]]m</font></td>"
@@ -923,8 +923,8 @@
 			contents += "<td>Headeater Levy</td><td align='right'><font color='#8f7a5a'>[exempt_headeater]m</font></td></tr>"
 			contents += "<tr><td>Import Tariff</td><td align='right'><font color='#8f7a5a'>[exempt_import]m</font></td>"
 			contents += "<td>Export Duty</td><td align='right'><font color='#8f7a5a'>[exempt_export]m</font></td></tr>"
-			contents += "<tr><td>Fines Waived</td><td align='right'><font color='#8f7a5a'>[exempt_fine]m</font></td>"
-			contents += "<td>Poll Tax</td><td align='right'><font color='#8f7a5a'>[exempt_poll]m</font></td></tr>"
+			contents += "<tr><td>Отмена Штрафа</td><td align='right'><font color='#8f7a5a'>[exempt_fine]m</font></td>"
+			contents += "<td>Подушный налог</td><td align='right'><font color='#8f7a5a'>[exempt_poll]m</font></td></tr>"
 			contents += "<tr><td><b>Total Forgone</b></td><td align='right'><b><font color='#8f7a5a'>[exempt_total]m</font></b></td>"
 			contents += "<td></td><td></td></tr>"
 			contents += "</table>"
@@ -944,7 +944,7 @@
 			// Expenses (two-column, red)
 			contents += "<b><font color='#d9534f'>EXPENSES THIS WEEK</font></b>"
 			contents += "<table width='100%' cellspacing='0' cellpadding='2'>"
-			contents += "<tr><td>Wages Paid</td><td align='right'><font color='#d9534f'>-[GLOB.azure_round_stats[STATS_WAGES_PAID]]m</font></td>"
+			contents += "<tr><td>Выплачено жалование</td><td align='right'><font color='#d9534f'>-[GLOB.azure_round_stats[STATS_WAGES_PAID]]m</font></td>"
 			contents += "<td>Treasury Transfers</td><td align='right'><font color='#d9534f'>-[GLOB.azure_round_stats[STATS_DIRECT_TREASURY_TRANSFERS]]m</font></td></tr>"
 			contents += "<tr><td>Stockpile Imports <font size='1'><i>(see Trade)</i></font></td><td align='right'><font color='#d9534f'>-[SStreasury.total_import]m</font></td>"
 			contents += "<td></td><td></td></tr>"
@@ -1023,7 +1023,7 @@
 			// Debt & Loans (two-column, orange for warnings)
 			contents += "<b><font color='#e07b39'>DEBT &amp; LOANS</font></b>"
 			contents += "<table width='100%' cellspacing='0' cellpadding='2'>"
-			contents += "<tr><td>Accounts in Arrears</td><td align='right'><font color='#e07b39'>[snap["in_arrears"]]</font></td>"
+			contents += "<tr><td>Счета с задолженностью</td><td align='right'><font color='#e07b39'>[snap["in_arrears"]]</font></td>"
 			contents += "<td>Accounts in Advance</td><td align='right'>[snap["in_advance"]]</td></tr>"
 			contents += "<tr><td>Default Debtors</td><td align='right'><font color='#d9534f'>[snap["debtor_count"]]</font></td>"
 			contents += "<td>Loans Outstanding</td><td align='right'>[snap["loans_outstanding"]] ([snap["loan_exposure"]]m)</td></tr>"

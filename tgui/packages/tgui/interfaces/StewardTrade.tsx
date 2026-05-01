@@ -46,7 +46,7 @@ export const StewardTrade = () => {
     >
       <Window.Content scrollable>
         <div style={pageStyle}>
-          <div style={titleStyle}>Market & Stockpile</div>
+          <div style={titleStyle}>Рынок и Склад</div>
           <div style={subtitleStyle}>
             Day {data.day} &middot; Crown's Purse:{' '}
             <span style={{ color: SEAL_AMBER, fontWeight: 'bold' }}>
@@ -104,7 +104,7 @@ export const StewardTrade = () => {
           {tab === 'market' && (
             <SequesteredOverlay
               active={!!data.sequestration?.active}
-              label="Market & Stockpile"
+              label="Рынок и Склад"
             >
               <MarketView data={data} onTrade={setTradeRequest} />
             </SequesteredOverlay>
@@ -120,7 +120,7 @@ export const StewardTrade = () => {
           {tab === 'auto_import' && (
             <SequesteredOverlay
               active={!!data.sequestration?.active}
-              label="Standing Imports"
+              label="Постоянный импорт"
             >
               <AutoImportView data={data} />
             </SequesteredOverlay>

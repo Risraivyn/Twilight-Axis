@@ -39,9 +39,9 @@ GLOBAL_LIST_INIT(economic_regions, init_economic_regions())
 
 /datum/economic_region/kingsfield
 	region_id = TRADE_REGION_KINGSFIELD
-	name = "Kingsfield"
-	subtitle = "The Royal Demesne, Heartland of Azuria"
-	description = "The royal demesne of the Duke of Azuria, and their most valuable possession besides Azure Peak itself. A stretch of land some ten miles across the south bank of River Azur, home to dozens of agricultural settlements, hamlets, and smaller market towns. Its lands are rich, and its people aplenty. The agricultural heartland of Azuria, producing most of its grain, meat, and dairy, imported into Azure Peak daily and re-exported for profit. Many of Azure Peak's residents keep estates here. The Duke, owning most of the land directly, claims a tithe of ten percent of all produce from the region, and at least a quarter on any land directly owned by the Crown, as is their perogative, making this region vital to the Crown's coffers."
+	name = "Кингсфилд"
+	subtitle = "Королевский Домен, Сердце Азурии"
+	description = "Королевские владения герцога Азурии и его самое ценное достояние после самого Лазурного Пика. Полоса земли в десять миль вдоль южного берега реки Азур, ставшая домом для десятков сельскохозяйственных поселений, деревень и рыночных городков. Земли здесь богаты, а людей — в избытке. Это житница Азурии, производящая большую часть зерна, мяса и молочных продуктов, которые ежедневно ввозятся в Лазурный Пик и перепродаются с выгодой. Многие жители столицы держат здесь свои поместья. Герцог, владея большей частью земли напрямую, претендует на десятину от всей продукции региона, и не менее четверти с земель, принадлежащих Короне, что делает этот регион жизненно важным для королевской казны."
 	threat_region_id = THREAT_REGION_AZURE_BASIN
 	produces = list(
 		TRADE_GOOD_GRAIN = TG_SUPPLY_LOCAL_GRAIN,
@@ -104,9 +104,9 @@ GLOBAL_LIST_INIT(economic_regions, init_economic_regions())
 
 /datum/economic_region/rosawood
 	region_id = TRADE_REGION_ROSAWOOD
-	name = "Rosawood"
-	subtitle = "The Elven Enclave, Lumber of the Cold Coast"
-	description = "The last vassal of Azuria still ruled by an elven lord with a majority elven population. An elven enclave on a peninsula jutting north of Mount Decapitation, alongside a narrow strip of infertile coastal woodland known as the Southern Rosawood. Access is largely by sea. Lumber is exported from the southern edge. The county is unusually, almost magically cold, its growing season barely three months a yil. Its inhabitants feed themselves on those three months of harvest, supplemented by fish from the northern sea, though it never produces or exports enough to supply Azuria. The overland route through the passes below Decapitation is passable, but slow, and fraught with rogue Black Oaks. And the elves prefer it that way. Some say, the beautiful white cloaks of the Rosawood Count, are woven in the same manner as those of the Black Oaks, notorious mercenaries that are barely tolerated the Crown. As for any allegations of collusion, the Count of Rosawood has always been quick to deny them, and the Crown has never found any evidence to the contrary."
+	name = "Розавуд"
+	subtitle = "Эльфийский анклав, Лес Холодного побережья"
+	description = "Последний вассал Азурии, которым всё ещё правит эльфийский лорд, и где эльфы составляют большинство населения. Эльфийский анклав на полуострове к северу от горы Декапитация, граничащий с узкой полосой бесплодных прибрежных лесов, известных как Южный Розавуд. Доступ сюда в основном осуществляется по морю. Лес экспортируется с южной окраины. В графстве необычно, почти магически холодно, а вегетационный период длится едва ли три месяца в году. Жители кормятся урожаем, собранным за эти три месяца, дополняя его рыбой из северного моря. Сухопутный путь через перевалы ниже Декапитации проходим, но медленен и опасен из-за разбойников «Черного Дуба». Сами эльфы предпочитают, чтобы так оно и оставалось. Поговаривают, что прекрасные белые плащи графа Розавуда сотканы так же, как и плащи наемников Черного Дуба, которых Корона едва терпит. Граф всегда поспешно отрицает любые обвинения в сговоре, и Корона так и не нашла доказательств обратного."
 	threat_region_id = THREAT_REGION_AZURE_GROVE
 	produces = list(
 		TRADE_GOOD_WOOD = TG_SUPPLY_CHEAP_RAW_MAT,
@@ -123,9 +123,9 @@ GLOBAL_LIST_INIT(economic_regions, init_economic_regions())
 
 /datum/economic_region/rockhill
 	region_id = TRADE_REGION_ROCKHILL
-	name = "Rockhill"
-	subtitle = "The Orchards, Vintners and Herbalists of the Ridge"
-	description = "A cluster of orchards and herb gardens to the north of Azuria, sheltered by a ridge that makes the climate there milder than it has any right to be. The many rolling hills of the county make for poor grain land but excellent orchard land. Rockhill wine and liquor are renowned throughout Azuria, and some are exported beyond. It is a quiet, quaint, agricultural county, dotted with noble estates. Rockhill apple brandy is the realm's most counterfeited drink. Every other inn from Bleakcoast to Heartfelt claims to serve it, but perhaps only a third of them actually do. The county is also known for its many country manor, with perhaps three quarter of the noble houses of the realm owning at least one in Rockhill."
+	name = "Рокхилл"
+	subtitle = "Сады, Виноделы и Травники Хребта"
+	description = "Скопление садов и аптекарских огородов к северу от Азурии, укрытое горным хребтом, который делает климат здесь гораздо мягче, чем должен быть. Холмистая местность графства плохо подходит для зерна, но идеальна для плодовых деревьев. Вина и настойки Рокхилла славятся по всей Азурии. Это тихое, причудливое сельскохозяйственное графство, усеянное дворянскими поместьями. Яблочный бренди Рокхилла — самый подделываемый напиток в королевстве. Каждая вторая таверна от Мрачного побережья до Хартфелта утверждает, что подает его, но, пожалуй, лишь треть говорит правду. Графство также известно своими загородными усадьбами: почти три четверти благородных домов королевства владеют здесь хотя бы одним поместьем."
 	threat_region_id = THREAT_REGION_MOUNT_DECAP
 	produces = list(
 		TRADE_GOOD_APPLE = TG_SUPPLY_LOCAL_FRUIT,
@@ -144,9 +144,10 @@ GLOBAL_LIST_INIT(economic_regions, init_economic_regions())
 
 /datum/economic_region/daftsmarch
 	region_id = TRADE_REGION_DAFTSMARCH
-	name = "Daftsmarch"
-	subtitle = "The Mining March, Ores of the Mount"
-	description = "The County of Daftsmarch is the heart of Azuria's mining industry, a long strip of land hugging the southern end of Mount Decapitation. It produces most of the raw ore and salt that Azuria depends on. The work pays well, and the veins are plentiful. But Daftsmarch sits uncomfortably close to the ruins of Tarichea, and the various denizens of the Underdark. The dangers posed by the drows and their ilk are a constant threat - many of them seeing Daftsmarch as a convenient source of slaves. But the ore vein are even richer - and the Crown is loathe to keep them up - sending adventurers, mercenaries and garrison alike to do battle with the Underdark's denizens and keep them at bay."
+	/datum/economic_region/daftsmarch
+	name = "Дафтсмарч"
+	subtitle = "Шахтерская Марка, Руды Гор"
+	description = "Графство Дафтсмарч — сердце горнодобывающей промышленности Азурии, длинная полоса земли, прилегающая к южному подножию горы Декапитация. Здесь добывается большая часть сырой руды и соли, от которых зависит королевство. Работа оплачивается хорошо, а жилы изобильны. Но Дафтсмарч расположен неуютно близко к руинам Тарихеи и различным обитателям Подземелья. Опасность, исходящая от дроу и им подобных — постоянная угроза; многие из них видят в Дафтсмарче удобный источник рабов. Но рудные жилы здесь слишком богаты, и Корона не желает их бросать, посылая авантюристов, наемников и гарнизон на битву с обитателями Подземелья, чтобы держать их в страхе."
 	threat_region_id = THREAT_REGION_UNDERDARK
 	produces = list(
 		TRADE_GOOD_IRON_ORE = TG_SUPPLY_IRON,
@@ -167,9 +168,9 @@ GLOBAL_LIST_INIT(economic_regions, init_economic_regions())
 
 /datum/economic_region/blackholt
 	region_id = TRADE_REGION_BLACKHOLT
-	name = "Blackholt"
-	subtitle = "The Bog's Edge, Huntsmarshal's Demesne"
-	description = "A settlement at the southern edge of the Terrorbog, part of the Royal Demesne, and the only part the Duke never tours or manages directly. Instead, management is assigned to a special courtier, the Huntsmarshal of Blackholt. It straddles the bog proper and the undrained marshland at its edge. The locals have learned to make a living off the bog's unusual, some say Psydon-blessed yields: silk from its moths, viscera from its inhabitants, and the rare Essence of Dendor that herbalists and mages pay handsomely for. Blackholt itself is a grim, functional place. Nobody moves there. People end up there."
+	name = "Блэкхолт"
+	subtitle = "Край Болот, Домен Охотничьего Маршала"
+	description = "Поселение на южной окраине Терробога, часть Королевского Домена. Это единственное место, которое Герцог никогда не посещает лично, поручая управление доверенному придворному — Охотничьему Маршалу Блэкхолта. Поселение раскинулось между самим болотом и неосушенными топями на его краю. Местные научились выживать за счет необычных, а по слухам — благословленных Сайдоном даров болота: шелка местных мотыльков, потрохов болотных тварей и редкой Эссенции Дендора, за которую травники и маги платят баснословные деньги. Блэкхолт — мрачное и функциональное место. Туда не переезжают добровольно. Там просто оказываются."
 	threat_region_id = THREAT_REGION_AZURE_GROVE
 	produces = list(
 		TRADE_GOOD_SILK = TG_SUPPLY_SILK,
@@ -186,9 +187,9 @@ GLOBAL_LIST_INIT(economic_regions, init_economic_regions())
 
 /datum/economic_region/saltwick
 	region_id = TRADE_REGION_SALTWICK
-	name = "Saltwick"
-	subtitle = "The Coastal Town, Fisheries of the Realm"
-	description = "A settlement southeast of Azure Peak, around a day's ride. Located along the Azurian coast, it was settled first by immigrants from Hammerhold and later by settlers from southern Gronn. The town is divided starkly into two parts: The curing houses and salt farms owned mostly by the town's dwarven and Hammerholdian settlers, while those of Gronnic descent makes up most of the fishermen and sailors. The two groups marry eachother rarely and argue often - but coexists somewhat harmoniously in the same town either way. Of course, Hammerholdian and Gronnmen are not the only inhabitants - many people down on their luck or seeking work also reside. Salt is imported from Daftsmarch, used to preserve the fish caught by local fishermen, and then exported throughout Azuria and Psydonia."
+	name = "Солтвик"
+	subtitle = "Прибрежный город, Рыбные промыслы Королевства"
+	description = "Поселение к юго-востоку от Лазурного Пика, примерно в дне езды. Расположенный на побережье, город был основан сначала выходцами из Хаммерхолда, а позже — переселенцами из южного Гронна. Город резко разделен на две части: коптильни и соляные фермы, принадлежащие в основном дворфам и выходцам из Хаммерхолда, в то время как потомки гроннцев составляют большинство рыбаков и моряков. Эти две группы редко вступают в браки и часто спорят, но живут в одном городе в относительной гармонии. Конечно, здесь живут не только они — в Солтвике много тех, кому не повезло в жизни, или кто просто ищет работу. Соль ввозится из Дафтсмарча, используется для консервации рыбы, пойманной местными рыбаками, а затем экспортируется по всей Азурии и Псайдонии."
 	threat_region_id = THREAT_REGION_AZUREAN_COAST
 	produces = list(
 		TRADE_GOOD_FISH_FILET = TG_SUPPLY_FISH_BULK,
@@ -214,9 +215,9 @@ GLOBAL_LIST_INIT(economic_regions, init_economic_regions())
 
 /datum/economic_region/bleakcoast
 	region_id = TRADE_REGION_BLEAKCOAST
-	name = "Bleakcoast"
-	subtitle = "The Bleakisles Seamarch, Pirate Archipelago"
-	description = "Also known as the Bleakisles Seamarch. A series of rocky outcrops said to have been created when Comet Syon impacted near the Terrorbog, radiating outward and hurling the islands from the sea itself. The archipelago numbers in the hundreds and makes navigation along all but a narrow stretch of Azuria's coast treacherous. What it lacks in fertile land it makes up for in the bounty of its seas. Schools of fish swarm in the shallow, rocky bottoms and swim as far as Azuria's coast, feeding thousands. But that bounty is not for Bleakisles inhabitants to enjoy. The isles are infested with pirates, the notorious Bleakisles Reavers, who prey on any merchant or fisherman that strays too far from shore. The Duchy maintains several garrisons to keep them in check, and has, once every two generations, undertaken a harrying of the isles, burning every non-military settlement and salting it. To no avail. Within a generation, the pirates always return, for trade is lucrative, and piracy even more so."
+	name = "Мрачное побережье"
+	subtitle = "Морская марка Мрачных островов, Пиратский архипелаг"
+	description = "Также известен как Морская марка Мрачных островов. Гряда скалистых выступов, которые, по преданию, возникли, когда комета Сайона упала рядом с Терробогом, вытолкнув острова из самого моря. Архипелаг насчитывает сотни островов, что делает навигацию вдоль побережья Азурии чрезвычайно опасной. То, чего островам не хватает в плодородии, они восполняют дарами моря. Косяки рыб в скалистых мелководьях кормят тысячи людей. Но эти богатства не для жителей островов. Острова кишат пиратами — печально известными Налетчиками Мрачных островов, которые охотятся на любого торговца или рыбака, рискнувшего отойти далеко от берега. Герцогство содержит здесь несколько гарнизонов, а раз в два поколения предпринимает разорение островов, сжигая и засыпая солью каждое невоенное поселение. Безрезультатно. Через поколение пираты всегда возвращаются, ибо торговля здесь прибыльна, а пиратство — еще прибыльнее."
 	threat_region_id = THREAT_REGION_AZUREAN_COAST
 	produces = list()
 	demands = list(
@@ -246,9 +247,9 @@ GLOBAL_LIST_INIT(economic_regions, init_economic_regions())
 
 /datum/economic_region/northfort
 	region_id = TRADE_REGION_NORTHFORT
-	name = "Northfort"
-	subtitle = "The Border Fort, Watch on the Northern Approach"
-	description = "A fortified castle at the northern approach into Azuria, the only direct overland route from the north. As economically unproductive as a fort can be, which is very. The crown feeds it because without it, the border between Grenzelhoft and Azuria becomes negotiable."
+	name = "Нортфорт"
+	subtitle = "Пограничный форт, Стража Северного пути"
+	description = "Укрепленный замок на северном подступе к Азурии, на единственном прямом сухопутном пути с севера. Настолько экономически бесполезен, насколько может быть бесполезен форт — то есть абсолютно. Корона кормит его только потому, что без него граница между Гренцельхофтом и Азурией станет предметом для обсуждения."
 	threat_region_id = THREAT_REGION_MOUNT_DECAP
 	produces = list()
 	demands = list(
@@ -280,9 +281,9 @@ GLOBAL_LIST_INIT(economic_regions, init_economic_regions())
 
 /datum/economic_region/heartfelt
 	region_id = TRADE_REGION_HEARTFELT
-	name = "Heartfelt"
-	subtitle = "The Borderland, Greatest Vassal of Azuria"
-	description = "The County of Heartfelt is Azuria's most powerful vassal, comprising nearly the entirety of the western borderland, bordering Otava, Grenzelhoft, Naledi, and Aavnr. The Count of Heartfelt has always been afforded considerable liberty in how they raise revenues and how many men they keep under arms, for if Heartfelt falls, Azuria's heartland would be exposed. Its defense is funded by a network of estates, holdings, and acres scattered across hundreds of pockets in Azuria outside Heartfelt proper, which the Count uses to purchase armaments and pay retinue alike. But any ruler of Azuria knows there is no greater threat to themselves than the self-professed greatest defender of Azuria."
+	name = "Хартфелт"
+	subtitle = "Пограничье, Величайший Вассал Азурии"
+	description = "Графство Хартфелт — самый могущественный вассал Азурии, занимающий почти всю западную границу. Графу Хартфелта всегда предоставлялась значительная свобода в сборе доходов и содержании армии, ибо если Хартфелт падет, сердце Азурии окажется беззащитным. Его оборона финансируется за счет сети поместий и угодий, разбросанных по всей Азурии за пределами самого графства. Но любой правитель Азурии знает, что для него нет большей угрозы, чем тот, кто называет себя величайшим защитником короны."
 	threat_region_id = THREAT_REGION_AZURE_GROVE
 	produces = list()
 	demands = list(
@@ -310,9 +311,9 @@ GLOBAL_LIST_INIT(economic_regions, init_economic_regions())
 
 /datum/economic_region/hagenwald
 	region_id = TRADE_REGION_HAGENWALD
-	name = "Hagenwald"
-	subtitle = "The Industrial Heart, Forges of the Coppiced Wood"
-	description = "The industrial heart of Azuria, sitting on the northern face of Mount Decapitation, where Daftsmarch's ore is taken by mules to be smelted, refined, and forged. Hagenwald produces nearly every ingot of iron, steel, copper, and tin the kingdom uses - without its furnaces, Azuria's smiths would be reduced to working scrap. The town's wealth is built on coppiced woodland that flanks it on three sides, cut and re-cut on a generational rotation so the fire never go out. Its workforce is half Grenzelhoftian by descent, drawn over the centuries by wages, and the streets are perpetually grey with soot. The Crown garrisons it quietly."
+	name = "Хагенвальд"
+	subtitle = "Промышленное сердце, Кузни Копписового леса"
+	description = "Промышленное сердце Азурии, расположенное на северном склоне горы Декапитация. Сюда на мулах доставляют руду из Дафтсмарча для плавки и ковки. Хагенвальд производит почти каждый слиток железа, стали, меди и олова, используемый в королевстве — без его печей кузнецы Азурии были бы вынуждены работать с ломом. Богатство города построено на лесах, окружающих его с трех сторон: лес вырубают и восстанавливают поколениями, чтобы огонь в печах никогда не гас. Половина рабочих — выходцы из Гренцельхофта, привлеченные высокими заработками, а улицы здесь вечно серы от сажи. Корона держит здесь скрытый гарнизон."
 	threat_region_id = THREAT_REGION_MOUNT_DECAP
 	produces = list(
 		TRADE_GOOD_IRON_INGOT = TG_SUPPLY_REFINED_INGOTS,
@@ -336,8 +337,8 @@ GLOBAL_LIST_INIT(economic_regions, init_economic_regions())
 /proc/build_regions_primer_html()
 	var/list/parts = list()
 	parts += "<details>"
-	parts += "<summary><strong><span style='font-size:130%'> REGIONS OF AZURIA </span></strong></summary>"
-	parts += "<strong><span style='font-size:115%'> THE INTERNAL VASSALS AND DEMESNES </span></strong>"
+	parts += "<summary><strong><span style='font-size:130%'> РЕГИОНЫ АЗУРИИ </span></strong></summary>"
+	parts += "<strong><span style='font-size:115%'> ВАССАЛЫ И ДОМЕНЫ </span></strong>"
 	parts += "<br><br>"
 	for(var/region_id in GLOB.economic_regions)
 		var/datum/economic_region/region = GLOB.economic_regions[region_id]

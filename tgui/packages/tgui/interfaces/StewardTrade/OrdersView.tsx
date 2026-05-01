@@ -23,11 +23,11 @@ export const OrdersView = (props: { data: Data }) => {
   return (
     <div>
       <div style={sectionHeaderStyle}>
-        Active Standing Orders ({count}/{order_pool_cap})
+        Активные заказы ({count}/{order_pool_cap})
       </div>
       {count === 0 ? (
         <div style={{ textAlign: 'center', fontStyle: 'italic', color: INK_SOFT }}>
-          No active orders. Check back tomorrow.
+          Нет активных заказов, проверьте завтра
         </div>
       ) : (
         active_orders.map((o) => {
@@ -52,16 +52,16 @@ export const OrdersView = (props: { data: Data }) => {
                   {o.name}
                 </span>
                 {!!o.region_blockaded && (
-                  <span style={badgeStyle(SEAL_RED)}>BLOCKADED</span>
+                  <span style={badgeStyle(SEAL_RED)}>БЛОКАДА</span>
                 )}
                 {!!o.is_equipment && (
-                  <span style={badgeStyle(SEAL_BLUE)}>WAREHOUSE</span>
+                  <span style={badgeStyle(SEAL_BLUE)}>СКЛАД</span>
                 )}
                 {isUrgent && !o.region_blockaded && !o.is_equipment && (
-                  <span style={badgeStyle(SEAL_RED_SOFT)}>URGENT</span>
+                  <span style={badgeStyle(SEAL_RED_SOFT)}>СРОЧНЫЙ</span>
                 )}
                 {!!o.petitioned && (
-                  <span style={badgeStyle('#a872c4')}>PETITIONED</span>
+                  <span style={badgeStyle('#a872c4')}>ПЕТИЦИЯ</span>
                 )}
               </div>
               {o.description && (

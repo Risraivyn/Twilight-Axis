@@ -35,43 +35,43 @@
 	var/urgent_rolled = diff["urgent_rolled"] || 0
 	var/day = diff["day"] || GLOB.dayspassed
 
-	var/body = "<center><b>STEWARD'S MORNING REPORT</b></center><br>"
-	body += "<center><i>Day [day]</i></center><br><hr>"
+	var/body = "<center><b>УТРЕННИЙ ОТЧЕТ СТЮАРДА</b></center><br>"
+	body += "<center><i>Дае [day]</i></center><br><hr>"
 
 	if(length(blockades_fired))
-		body += "<b>New blockades:</b><br>"
+		body += "<b>Новые блокады:</b><br>"
 		for(var/line in blockades_fired)
 			body += "&nbsp;&nbsp;- [line]<br>"
 		body += "<br>"
 	if(length(blockades_cleared))
-		body += "<b>Blockades lifted:</b><br>"
+		body += "<b>Блокады сняты:</b><br>"
 		for(var/line in blockades_cleared)
 			body += "&nbsp;&nbsp;- [line]<br>"
 		body += "<br>"
 	if(length(events_fired))
-		body += "<b>New economic events:</b><br>"
+		body += "<b>Новые экономические события:</b><br>"
 		for(var/line in events_fired)
 			body += "&nbsp;&nbsp;- [line]<br>"
 		body += "<br>"
 	if(length(events_expired))
-		body += "<b>Events returned to normal:</b><br>"
+		body += "<b>Ситуация нормализовалась:</b><br>"
 		for(var/line in events_expired)
 			body += "&nbsp;&nbsp;- [line]<br>"
 		body += "<br>"
 	if(banditry_total > 0)
-		body += "<b>Financial losses from banditry:</b> <font color='#c44'>-[banditry_total]m</font><br>"
+		body += "<b>Финансовые потери от бандитизма:</b> <font color='#c44'>-[banditry_total]m</font><br>"
 		for(var/line in banditry_lines)
 			body += "&nbsp;&nbsp;- [line]<br>"
 		if(banditry_debt_accrued > 0)
 			body += "<i>Treasury could not absorb the full hit. <font color='#c44'>[banditry_debt_accrued]m</font> accrued as banditry debt: future inflow shall be skimmed against it until paid. ([banditry_burned]m drawn from purse, [banditry_debt_accrued]m owed.)</i><br>"
 		body += "<br>"
 	if(orders_rolled)
-		body += "<b>Standing orders posted this morning:</b> [orders_rolled]"
+		body += "<b>Торговые заказы, выставленные этим утром:</b> [orders_rolled]"
 		if(urgent_rolled)
 			body += " ([urgent_rolled] urgent)"
 		body += "<br><br>"
 	if(!length(blockades_fired) && !length(blockades_cleared) && !length(events_fired) && !length(events_expired) && !orders_rolled && banditry_total <= 0)
-		body += "<i>The roads are quiet. No shipment was disturbed overnight.</i><br>"
+		body += "<i>На дорогах спокойно. За ночь ни один караван не был потревожен.</i><br>"
 
-	body += "<hr><center><i>Consult the Contract Ledger to commission a response.</i></center>"
+	body += "<hr><center><i>Обратитесь к Книге Контрактов, чтобы подготовить ответные меры.</i></center>"
 	return body

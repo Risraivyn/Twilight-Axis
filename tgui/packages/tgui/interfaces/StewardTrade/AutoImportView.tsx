@@ -48,7 +48,7 @@ export const AutoImportView = (props: { data: Data }) => {
 
   return (
     <div>
-      <div style={sectionHeaderStyle}>Standing Imports</div>
+      <div style={sectionHeaderStyle}>Постоянный импорт</div>
 
       <div style={cardStyle}>
         <div

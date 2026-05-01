@@ -21,8 +21,8 @@
 	discretionary_fund.balance += loan_amount
 	log_fund_entry(new /datum/treasury_entry("mint", null, discretionary_fund, loan_amount, "Arrears advance from the Azurian Trading Company"))
 	priority_announce(
-		"The Crown's coffers ran dry at payroll. The Burghers of Azuria, by their standing pledge, advance [loan_amount]m at no interest to cover the day's wages. Should the Crown fail again on the morrow, the realm enters sequestration.",
-		"THE BURGHERS LEND",
+		"Казна Короны опустела при выплате жалования. Горожане Азурии, верные своему Обету, ссужают [loan_amount]м без процентов на покрытие дневных выплат. Если Корона снова не справится завтрашним утром, королевство подвергнется секвестрации.",
+		"ССУДА ГОРОЖАН",
 		'sound/misc/royal_decree2.ogg',
 		"Captain",
 	)
@@ -57,8 +57,8 @@
 	override_trade_for_bankruptcy()
 
 	priority_announce(
-		"Following seizure of [atc_seizure_blurb()] against the Crown's outstanding obligations, the Azurian Trading Company - most blessed, most devout servant of Malum the Worker and Abyssor the Dreamer - has graciously advanced an interest-free reserve of [BANKRUPTCY_OPERATING_FLOOR]m in exchange for a debt of [new_debt]m to the Company. Until the debt is repaid in full, the Company holds the sequestered revenues of the realm and farms the customs and salt tolls in perpetuity; the stockpile and trade-engine pass to its hand, that the orderly operation of commerce may be assured for the common weal. Salaries stand suspended; all Charters but the Golden Bull are dissolved.",
-		"SEQUESTRATION DECLARED",
+		"Вслед за изъятием [atc_seizure_blurb()] в счёт невыполненных обязательств Короны, Азурианская Торговая Компания — благословеннейший и преданнейший слуга Малума Труженика и Абиссора Сновидца — милостиво предоставила беспроцентный резерв в [BANKRUPTCY_OPERATING_FLOOR]м в обмен на признание долга перед Компанией в размере [new_debt]м. До полной выплаты долга Компания удерживает изъятые доходы королевства и бессрочно принимает на откуп таможенные и соляные пошлины; склад и торговые механизмы переходят в её руки, дабы упорядоченная торговля была обеспечена ради общего блага. Выплата жалования приостановлена; все Хартии, кроме Золотой Буллы, аннулированы.",
+		"ОБЪЯВЛЕНА СЕКВЕСТРАЦИЯ",
 		'sound/misc/royal_decree.ogg',
 		"Captain",
 	)
@@ -73,8 +73,8 @@
 			if(atc_loan_arrears_consumed)
 				atc_loan_arrears_consumed = FALSE
 				priority_announce(
-					"The Crown's debt to the Azurian Trading Company is settled. The Burghers' grace stands restored.",
-					"ATC LOAN SETTLED",
+					"Долг Короны перед Азурианской Торговой Компанией полностью урегулирован. Льготный период Горожан восстановлен.",
+					"ЗАЙМ АТК ПОГАШЕН",
 					'sound/misc/royal_decree2.ogg',
 					"Captain",
 				)
@@ -89,8 +89,8 @@
 	treasury_state = TREASURY_NORMAL
 	atc_loan_arrears_consumed = FALSE
 	priority_announce(
-		"The Crown has settled its arrears with the Burghers. The realm is solvent once more.",
-		"THE BURGHERS PAID",
+		"Корона погасила задолженность перед Горожанами. Королевство вновь платежеспособно.",
+		"ДОЛГ ПЕРЕД ГОРОЖАНАМИ ПОГАШЕН",
 		'sound/misc/royal_decree2.ogg',
 		"Captain",
 	)
@@ -114,8 +114,8 @@
 	GLOB.azure_round_stats[STATS_TREASURY_DEBT_OUTSTANDING] = 0
 
 	priority_announce(
-		"The Azurian Trading Company releases the Crown's commerce. Wages resume on the morrow. The Lord may, by ancient prerogative, restore up to [BANKRUPTCY_CONCESSION_PICKS] of the suspended Charters at once; all others must wait the customary span between proclamations.",
-		"SEQUESTRATION LIFTED",
+		"Азурианская Торговая Компания возвращает управление торговлей Короне. Выплата жалования возобновится завтрашним утром. Правитель может, в силу своего старинного права, немедленно восстановить до [BANKRUPTCY_CONCESSION_PICKS] из приостановленных Хартий; всем прочим придется ждать положенного срока между указами.",
+		"СЕКВЕСТРАЦИЯ СНЯТА",
 		'sound/misc/royal_decree.ogg',
 		"Captain",
 	)
@@ -209,34 +209,34 @@
 /// Properties the Azurian Trading Company "seizes" against the Crown's debts on bankruptcy entry.
 /// Two or three are picked at random for the sequestration announcement. 
 GLOBAL_LIST_INIT(atc_seizure_inventory, list(
-	"the Lord's gilded bathing-tub",
-	"a brace of falcons from the royal mews",
-	"an illuminated psyalter bound in shagreen",
-	"the great Otavan tapestry depicting the Hunt of the Boar",
-	"two gilded saltcellars in the Etruscan fashion",
-	"three sealed coffers of the Crown's pearls",
-	"the household reliquary (less the relic)",
-	"a Naledian astrolabe with three missing pins",
-	"the Steward's reserve of saffron and cinnamon",
-	"an ivory chess-set, six pieces short",
-	"a brocaded canopy bed, taken down with great difficulty",
-	"the chapel's spare gilt candelabrum",
-	"the last Marshal's silver-mounted hunting-horn",
-	"a portrait of a long-forgotten ancestor, slashed by a disgruntled debtor",
-	"the Court Cupbearer's pewter inventory and the keys to it",
-	"a Lirvanic jewel-encrusted bathtub of indecent proportion",
-	"twelve casks of Bleakcoast firewine, marked for the Midwinter feast",
-	"a Kazengun lacquered wardrobe of indeterminate vintage",
-	"an Etruscan illuminated bestiary, water-damaged",
-	"a clutch of Heartfelt clockwork toys, ticking faintly",
-	"the menagerie's pet civet, of doubtful temperament",
-	"the great clock of the Crown, dismantled in three carts",
-	"twelve hundred yards of Naledian silk, the Crown's spare livery",
-	"the Crown's reserve of Saltwick anchovies, packed in oil",
-	"the Crown's emergency Kingsfield cheese reserve",
-	"two white stag heads, taxidermied from the last royal hunt",
-	"a crate of unknown white liquid of uncertain provenance, labeled 'CROWN ONLY - Not for Consumption'",
-	"a sealed crate marked PROPERTY OF THE LATE STEWARD",
+	"позолоченная купальня Лорда",
+	"пара соколов из королевского птичника",
+	"иллюминированный пси-алтырь в шагреневом переплете",
+	"великий отаванский гобелен с изображением «Охоты на вепря»",
+	"две позолоченные солонки в этрусском стиле",
+	"три опечатанных ларца с королевским жемчугом",
+	"домашний реликварий (без самих реликвий)",
+	"наледианская астролябия без трех штифтов",
+	"запас шафрана и корицы, принадлежащий Стюарду",
+	"шахматы из слоновой кости, без шести фигур",
+	"парчовая кровать с балдахином, разобранная с большим трудом",
+	"запасной позолоченный канделябр из часовни",
+	"охотничий рог последнего Маршала в серебряной оправе",
+	"портрет давно забытого предка, изрезанный недовольным должником",
+	"оловянная утварь придворного виночерпия и ключи от нее",
+	"лирванская инкрустированная самоцветами ванна непристойных размеров",
+	"двенадцать бочек огненного вина с Мрачного побережья, отложенных для праздника Середины зимы",
+	"казенгунский лакированный гардероб неопределенного возраста",
+	"этрусский иллюминированный бестиарий, подпорченный водой",
+	"горсть заводных игрушек из Хартфелта, едва слышно тикающих",
+	"ручная виверра из зверинца, весьма скверного нрава",
+	"великие королевские часы, разобранные и погруженные на три телеги",
+	"двенадцать сотен ярдов наледианского шелка для запасных ливрей Короны",
+	"королевский запас анчоусов из Солтвика в масле",
+	"королевский неприкосновенный запас сыра из Кингсфилда",
+	"две головы белых оленей, чучела с последней королевской охоты",
+	"ящик с неизвестной белой жидкостью сомнительного происхождения, помеченный «ТОЛЬКО ДЛЯ КОРОНЫ — не для употребления»",
+	"опечатанный ящик с пометкой «ИМУЩЕСТВО ПОКОЙНОГО СТЮАРДА»",
 ))
 
 /// Returns a semicolon-separated string of 2-3 randomly chosen seizures for the announcement.
@@ -275,11 +275,11 @@ GLOBAL_LIST_INIT(atc_seizure_inventory, list(
 
 /datum/controller/subsystem/treasury/proc/atc_loan_blocker_reason()
 	if(treasury_state == TREASURY_BANKRUPTCY)
-		return "The Company administers commerce. No further loans until sequestration lifts."
+		return "Компания управляет торговлей. Новые займы невозможны, пока секвестрация не будет снята."
 	if(GLOB.dayspassed >= ATC_LOAN_CLOSED_DAY)
-		return "The Guilds clerk is out of office. The loan window has closed for the week."
+		return "Клерк Гильдий отсутствует на месте. Окно выдачи займов закрыто до конца недели."
 	if(atc_loan_arrears_consumed)
-		return "A prior advance stands unpaid. The Company refuses a second loan until the first is settled."
+		return "Предыдущий аванс остаётся неоплаченным. Компания отказывает в повторном займе, пока первый не будет погашен."
 	return null
 
 /datum/controller/subsystem/treasury/proc/take_atc_loan(amount, mob/applicant)
@@ -298,8 +298,8 @@ GLOBAL_LIST_INIT(atc_seizure_inventory, list(
 	discretionary_fund.balance += amount
 	log_fund_entry(new /datum/treasury_entry("mint", null, discretionary_fund, amount, "ATC emergency loan (principal)"))
 	priority_announce(
-		"The Crown takes an advance of [amount]m from the Azurian Trading Company at the customary one-quarter interest, registering a debt of [debt_owed]m. The arrears grace stands forfeit; should the Crown miss its next payroll, the realm enters sequestration without warning.",
-		"THE CROWN BORROWS",
+		"Корона получает аванс в размере [amount]м от Азурианской Торговой Компании под привычный интерес в одну четверть, фиксируя за собой долг в [debt_owed]м. Льготный период по задолженностям аннулирован; если Корона пропустит следующую выплату жалования, в королевстве будет объявлена секвестрация без предупреждения",
+		"ЗАЙМ КОРОНЫ",
 		'sound/misc/royal_decree.ogg',
 		"Captain",
 	)

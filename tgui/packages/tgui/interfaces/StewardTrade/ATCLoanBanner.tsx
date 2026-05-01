@@ -40,18 +40,15 @@ export const ATCLoanBanner = (props: { atc_loan: AtcLoanState }) => {
           color: accent,
         }}
       >
-        Azurian Trading Company - Company Clerk's Bench
+        Азурианская Торговая Компания — Стойка Клерка
       </div>
       <div style={{ fontStyle: 'italic', color: INK, marginBottom: '6px' }}>
         {atc_loan.available ? (
           <>
-            The clerk receives applications for emergency loan of{' '}
-            <b>{atc_loan.min}m to {atc_loan.max}m</b> on the Company&apos;s
-            standing credit, at the customary{' '}
-            <b>{atc_loan.interest_pct}% interest</b> charged against the
-            principal. The arrears grace stands forfeit on draw - should the
-            Crown miss its next payroll, the realm enters sequestration without
-            warning. Window closes on Day {atc_loan.closed_day}.
+            Клерк принимает прошения о выдаче экстренного займа в размере от {atc_loan.min}м до {atc_loan.max}м под бессрочный кредит Компании, 
+            с обычным интересом в {atc_loan.interest_pct}%, начисляемым на основную сумму. Право на отсрочку платежа аннулируется при получении
+            средств — если Корона пропустит следующую выплату жалования, в королевстве будет объявлена секвестрация без предупреждения. 
+            Приём прошений заканчивается в День {atc_loan.closed_day}.
           </>
         ) : (
           <>{atc_loan.blocker || 'The clerk is unavailable.'}</>

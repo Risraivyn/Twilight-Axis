@@ -40,7 +40,7 @@ export const SequestrationBanner = (props: {
           marginBottom: '4px',
         }}
       >
-        SEQUESTRATION DECLARED
+        ОБЪЯВЛЕНО ИЗЪЯТИЕ ИМУЩЕСТВА
       </div>
       <div style={{ fontStyle: 'italic', fontVariant: 'normal' }}>
         Following the Crown&apos;s default, the Azurian Trading Company holds

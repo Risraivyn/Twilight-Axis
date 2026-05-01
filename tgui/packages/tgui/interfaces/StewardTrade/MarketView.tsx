@@ -89,11 +89,11 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
         }}
       >
         <div style={{ color: INK_SOFT, fontStyle: 'italic' }}>
-          Crown spread on held stockpile:{' '}
+        Маржа Короны на текущих запасах:{' '}
           <span style={{ color: SEAL_AMBER, fontWeight: 'bold' }}>
             {total_arbitrage_potential}m
           </span>{' '}
-          potential at current prices
+          потенциал при текущих ценах
         </div>
         <div style={{ display: 'flex', gap: '6px' }}>
           <button
@@ -111,7 +111,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
             }}
             title={`Surplus threshold: ${autoexport_percentage}%. Click to change.`}
           >
-            Threshold {autoexport_percentage}%
+            Порог {autoexport_percentage}%
           </button>
           <button
             type="button"
@@ -119,7 +119,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
             onClick={() => act('export_surplus_all')}
             title="Export every auto-priced entry's stock above the threshold to its best-paying region, capped at remaining daily demand. Manual-priced entries are skipped."
           >
-            Export Surplus
+            Экспорт излишков
           </button>
           <button
             type="button"
@@ -127,7 +127,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
             onClick={() => act('autoprice_all')}
             title="Reset every stockpile entry to automatic pricing (snaps to current market, ratchets engaged)."
           >
-            Auto-Price All
+            Авто-цена для всех
           </button>
           <button
             type="button"
@@ -135,7 +135,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
             onClick={() => act('autolimit_all')}
             title="Recompute every stockpile cap from total demand × pop × 2 days."
           >
-            Auto-Limit All
+            Авто-лимит для всех
           </button>
           <button
             type="button"
@@ -148,7 +148,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
             }}
             title="Bulk-multiply every buy price (Crown's bid). Flips affected entries to manual."
           >
-            Buy ×
+            Покупка ×
           </button>
           <button
             type="button"
@@ -161,7 +161,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
             }}
             title="Bulk-multiply every sell price (Crown's ask). Flips affected entries to manual."
           >
-            Sell ×
+            Продажа ×
           </button>
         </div>
       </div>
@@ -218,7 +218,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
                   }
                   title={`Reset all ${activeGroup.label} entries to automatic pricing.`}
                 >
-                  Auto-Price
+                  Авто-цена
                 </button>
                 <button
                   type="button"
@@ -228,7 +228,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
                   }
                   title={`Recompute all ${activeGroup.label} stockpile caps from demand.`}
                 >
-                  Auto-Limit
+                  Авто-Лимит
                 </button>
                 <button
                   type="button"
@@ -272,7 +272,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
                   }
                   title={`Accept deposits for all ${activeGroup.label}.`}
                 >
-                  Open All
+                  Открыть все
                 </button>
                 <button
                   type="button"
@@ -282,7 +282,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
                   }
                   title={`Reject deposits for all ${activeGroup.label}.`}
                 >
-                  Close All
+                  Закрыть все
                 </button>
               </div>
               {activeGroup.rows.map((row) => {
@@ -303,7 +303,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
                         <span style={badgeStyle(eventColor)}>{row.event_tag}</span>
                       )}
                       <span style={{ color: INK_FAINT, marginLeft: '8px', fontSize: '11px' }}>
-                        Stock: {row.stock}/{row.stock_limit}
+                      Запас: {row.stock}/{row.stock_limit}
                       </span>
                     </div>
                     <SideBlock
@@ -469,10 +469,10 @@ const RegionRow = (props: {
           </span>
         )}
       </span>
-      {!!region.is_blockaded && <span style={badgeStyle(SEAL_RED)}>BLOCKADED</span>}
+      {!!region.is_blockaded && <span style={badgeStyle(SEAL_RED)}>В БЛОКАДЕ</span>}
       {saturated && (
         <span style={badgeStyle(INK_FAINT)} title="No remaining capacity today - oversupply decay applies.">
-          SATURATED
+          НАСЫЩЕНО
         </span>
       )}
       <button
@@ -611,7 +611,7 @@ const StockpileStrip = (props: { row: MarketRow }) => {
         </button>
       </span>
       <span style={stripCellStyle}>
-        Limit:{' '}
+        Лимит:{' '}
         <button type="button" style={stripValueButtonStyle} onClick={editLimit}>
           {row.stock_limit}
         </button>

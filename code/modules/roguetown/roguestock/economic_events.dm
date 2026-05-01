@@ -43,65 +43,65 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 // ============================================================================
 
 /datum/economic_event/black_oak_rebellion
-	name = "BLACK OAK REBELLION"
-	description = "The Black Oaks have risen in Rosawood again - loggers found nailed to trees, woodcutters refuse to enter the deep groves without Crown escort."
-	announcement = "<font color='#c44'>BLACK OAK REBELLION: Rosawood's logging camps lie abandoned. Wood prices surge.</font>"
+	name = "ВОССТАНИЕ ЧЕРНОГО ДУБА"
+	description = "Черные Дубы снова восстали в Розвуде — лесорубов находят прибитыми к деревьям, а дровосеки отказываются входить в лесную чащу без эскорта Короны."
+	announcement = "<font color='#c44'>ВОССТАНИЕ ЧЕРНОГО ДУБА: Лесозаготовки Розвуда заброшены. Цены на древесину резко растут.</font>"
 	affected_goods = list(TRADE_GOOD_WOOD)
 	price_mod = 4.5
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/ironmongers_strike
-	name = "IRONMONGERS' STRIKE"
-	description = "The ironmongers' guild has walked out over unpaid commissions - smelters sit cold."
-	announcement = "<font color='#c44'>IRONMONGERS' STRIKE: Iron ore supply chokes. Smelted stock commands a premium.</font>"
+	name = "ЗАБАСТОВКА ЖЕЛЕЗНЯКОВ"
+	description = "Гильдия железняков прекратила работу из-за неоплаченных заказов — плавильные печи остыли."
+	announcement = "<font color='#c44'>ЗАБАСТОВКА ЖЕЛЕЗНЯКОВ: Поставки железной руды перекрыты. Готовый металл теперь в цене.</font>"
 	affected_goods = list(TRADE_GOOD_IRON_ORE, TRADE_GOOD_IRON_INGOT, TRADE_GOOD_STEEL_INGOT)
 	price_mod = 5.0
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/daftsmarch_cavein
-	name = "DAFTSMARCH CAVE-IN"
-	description = "A deep shaft collapse in Daftsmarch has shut mining operations across three veins."
-	announcement = "<font color='#c44'>DAFTSMARCH CAVE-IN: Mines shuttered. Iron, coal, stone, and smelted stock all grow scarce.</font>"
+	name = "ОБВАЛ В ДАФТСМАРЧЕ"
+	description = "Глубокий обвал шахты в Дафтсмарче парализовал добычу на трех основных жилах."
+	announcement = "<font color='#c44'>ОБВАЛ В ДАФТСМАРЧЕ: Шахты закрыты. Железо, уголь, камень и слитки становятся дефицитом.</font>"
 	affected_goods = list(TRADE_GOOD_IRON_ORE, TRADE_GOOD_COAL, TRADE_GOOD_STONE, TRADE_GOOD_IRON_INGOT, TRADE_GOOD_STEEL_INGOT)
 	price_mod = 3.75
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/wheat_blight
-	name = "WHEAT BLIGHT"
-	description = "A black rot has crept through the grain stores of the Kingsfield farmsteads."
-	announcement = "<font color='#c44'>WHEAT BLIGHT: Grain and oats rot in the silos. Bread prices soar.</font>"
+	name = "ПШЕНИЧНАЯ ГНИЛЬ"
+	description = "Черная гниль пробралась в зернохранилища фермерских хозяйств Кингсфилда."
+	announcement = "<font color='#c44'>ПШЕНИЧНАЯ ГНИЛЬ: Зерно и овес гниют в силосных ямах. Цены на хлеб взлетели.</font>"
 	affected_goods = list(TRADE_GOOD_GRAIN, TRADE_GOOD_OATS)
 	price_mod = 5.0
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/saltwick_storm
-	name = "SALTWICK STORM"
-	description = "A vicious gale has battered the Saltwick wharves - fishing fleets are grounded for days."
-	announcement = "<font color='#c44'>SALTWICK STORM: Fishing fleets grounded. Fresh and cured fish alike grow dear.</font>"
+	name = "ШТОРМ В СОЛТВИКЕ"
+	description = "Яростный шторм обрушился на верфи Солтвика — рыболовный флот пришвартован уже несколько дней."
+	announcement = "<font color='#c44'>ШТОРМ В СОЛТВИКЕ: Рыболовный флот заблокирован. Свежая и вяленая рыба сильно подорожали.</font>"
 	affected_goods = list(TRADE_GOOD_FISH_FILET, TRADE_GOOD_COD, TRADE_GOOD_SALMON, TRADE_GOOD_DRIED_FISH, TRADE_GOOD_FISH_MINCE)
 	price_mod = 4.5
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/fur_trapping_frost
-	name = "TRAPPERS' FROST"
-	description = "An unseasonal freeze has driven the game deep into the wilds - trappers return empty-handed."
-	announcement = "<font color='#c44'>TRAPPERS' FROST: Fur, hide, and worked leather supply dries up. Tanners panic.</font>"
+	name = "ЗАМОРОЗКИ ОХОТНИКОВ"
+	description = "Сезонные морозы загнали дичь глубоко в чащу — охотники возвращаются с пустыми руками."
+	announcement = "<font color='#c44'>ЗАМОРОЗКИ ОХОТНИКОВ: Поставки меха, шкур и выделанной кожи прекратились. Кожевники в панике.</font>"
 	affected_goods = list(TRADE_GOOD_FUR, TRADE_GOOD_HIDE, TRADE_GOOD_CURED_LEATHER)
 	price_mod = 4.0
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/cloth_smuggler_purge
-	name = "CLOTH SMUGGLER PURGE"
-	description = "A crown crackdown on black-market cloth has choked the legitimate supply as well."
-	announcement = "<font color='#c44'>CLOTH SMUGGLER PURGE: Cloth and fibers seized from wagons. Tailors despair.</font>"
+	name = "ОБЛАВА НА КОНТРАБАНДИСТОВ"
+	description = "Королевские репрессии против черного рынка тканей парализовали и легальные поставки."
+	announcement = "<font color='#c44'>ОБЛАВА НА КОНТРАБАНДИСТОВ: Ткани и волокно изымаются с телег. Портные в отчаянии.</font>"
 	affected_goods = list(TRADE_GOOD_CLOTH, TRADE_GOOD_FIBERS)
 	price_mod = 4.25
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/essence_scarcity
-	name = "ESSENCE SCARCITY"
-	description = "The essence harvests in the Terrorbog have faltered - arcane reagents grow dear."
-	announcement = "<font color='#c44'>ESSENCE SCARCITY: Dendor's essence and viscera run short. Wizards fume.</font>"
+	name = "ДЕФИЦИТ ЭССЕНЦИИ"
+	description = "Сбор эссенции в Терробоге провалился — алхимические реагенты становятся редкостью."
+	announcement = "<font color='#c44'>ДЕФИЦИТ ЭССЕНЦИИ: Запасы эссенции Дендора и потрохов истощены. Волшебники в ярости.</font>"
 	affected_goods = list(TRADE_GOOD_DENDOR_ESSENCE, TRADE_GOOD_VISCERA)
 	price_mod = 5.5
 	event_type = ECON_EVENT_SHORTAGE
@@ -112,41 +112,41 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 // ============================================================================
 
 /datum/economic_event/bumper_harvest
-	name = "BUMPER HARVEST"
-	description = "Kingsfield reports its finest grain harvest - granaries overflow."
-	announcement = "<font color='#5cb85c'>BUMPER HARVEST: Grain and oats flood the markets. Prices collapse.</font>"
+	name = "НЕБЫВАЛЫЙ УРОЖАЙ"
+	description = "Кингсфилд сообщает о лучшем урожае зерна в истории — амбары переполнены."
+	announcement = "<font color='#5cb85c'>НЕБЫВАЛЫЙ УРОЖАЙ: Зерно и овес наводнили рынок. Цены рухнули.</font>"
 	affected_goods = list(TRADE_GOOD_GRAIN, TRADE_GOOD_OATS)
 	price_mod = 0.55
 	event_type = ECON_EVENT_OVERSUPPLY
 
 /datum/economic_event/rosawood_overcut
-	name = "ROSAWOOD OVERCUT"
-	description = "Rosawood's lumber camps have exceeded their quotas - barges choke the river with timber."
-	announcement = "<font color='#5cb85c'>ROSAWOOD OVERCUT: Timber glut on the river. Wood prices slump.</font>"
+	name = "ПЕРЕИЗБЫТОК В РОЗВУДЕ"
+	description = "Лесозаготовительные лагеря Розвуда превысили все квоты — баржи на реке забиты древесиной."
+	announcement = "<font color='#5cb85c'>ПЕРЕИЗБЫТОК В РОЗВУДЕ: Избыток леса на реке. Цены на древесину поползли вниз.</font>"
 	affected_goods = list(TRADE_GOOD_WOOD)
 	price_mod = 0.6
 	event_type = ECON_EVENT_OVERSUPPLY
 
 /datum/economic_event/herring_swarm
-	name = "HERRING SWARM"
-	description = "A titanic shoal of fish has wandered into Saltwick waters - the nets come up full."
-	announcement = "<font color='#5cb85c'>HERRING SWARM: Saltwick nets bursting. Fresh and cured fish both sell for pennies.</font>"
+	name = "КОСЯКИ СЕЛЬДИ"
+	description = "Гигантские косяки рыбы зашли в воды Солтвика — сети поднимают полными."
+	announcement = "<font color='#5cb85c'>КОСЯКИ СЕЛЬДИ: Сети Солтвика рвутся от рыбы. Свежая и вяленая рыба продается за гроши.</font>"
 	affected_goods = list(TRADE_GOOD_FISH_FILET, TRADE_GOOD_DRIED_FISH, TRADE_GOOD_FISH_MINCE)
 	price_mod = 0.5
 	event_type = ECON_EVENT_OVERSUPPLY
 
 /datum/economic_event/unseasonal_fur
-	name = "UNSEASONAL FUR"
-	description = "Trappers report massive herds migrating through the borderlands - pelts pile in the warehouses."
-	announcement = "<font color='#5cb85c'>UNSEASONAL FUR: Pelts pile up in the warehouses. Furrier prices tumble.</font>"
+	name = "МЕХОВОЙ СЕЗОН"
+	description = "Охотники сообщают о массовой миграции стад через пограничные земли — склады завалены шкурами."
+	announcement = "<font color='#5cb85c'>МЕХОВОЙ СЕЗОН: Склады забиты шкурами. Цены на мех падают.</font>"
 	affected_goods = list(TRADE_GOOD_FUR)
 	price_mod = 0.65
 	event_type = ECON_EVENT_OVERSUPPLY
 
 /datum/economic_event/quarry_windfall
-	name = "QUARRY WINDFALL"
-	description = "A rich new seam has been struck at the Mount Decapitation quarries - carts roll in from dawn to dusk."
-	announcement = "<font color='#5cb85c'>QUARRY WINDFALL: Stone and coal flood the yards. Builders rejoice, quarrymen grumble.</font>"
+	name = "УДАЧА В КАМЕНОЛОМНЯХ"
+	description = "В каменоломнях горы Декапитация вскрыта богатая жила — телеги едут от заката до рассвета."
+	announcement = "<font color='#5cb85c'>УДАЧА В КАМЕНОЛОМНЯХ: Камень и уголь наводнили дворы. Строители ликуют, рабочие ворчат.</font>"
 	affected_goods = list(TRADE_GOOD_STONE, TRADE_GOOD_COAL)
 	price_mod = 0.7
 	event_type = ECON_EVENT_OVERSUPPLY
@@ -157,65 +157,65 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 // ============================================================================
 
 /datum/economic_event/murrain
-	name = "CATTLE MURRAIN"
-	description = "A wasting sickness has swept the herds of the Kingsfield pastures. Meat and dairy turn scarce."
-	announcement = "<font color='#c44'>CATTLE MURRAIN: Herds sicken across the pastures. Meat, dairy, and cured sausage all grow dear.</font>"
+	name = "СКОТСКИЙ МОР"
+	description = "Изнуряющая болезнь выкосила стада на пастбищах Кингсфилда. Мясо и молочные продукты становятся редкостью."
+	announcement = "<font color='#c44'>СКОТСКИЙ МОР: Болезнь косит стада на пастбищах. Мясо, молочные продукты и копченые колбасы сильно подорожали.</font>"
 	affected_goods = list(TRADE_GOOD_MEAT, TRADE_GOOD_BUTTER, TRADE_GOOD_CHEESE, TRADE_GOOD_SAUSAGE)
 	price_mod = 4.5
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/saltmine_flooding
-	name = "SALT-MINE FLOODING"
-	description = "Groundwater has broken through the Daftsmarch salt workings, drowning the lower galleries."
-	announcement = "<font color='#c44'>SALT-MINE FLOODING: The Daftsmarch galleries drown. Salt grows precious.</font>"
+	name = "ЗАТОПЛЕНИЕ СОЛЯНЫХ КОПЕЙ"
+	description = "Грунтовые воды прорвались в соляные выработки Дафтсмарча, затопив нижние галереи."
+	announcement = "<font color='#c44'>ЗАТОПЛЕНИЕ СОЛЯНЫХ КОПЕЙ: Галереи Дафтсмарча ушли под воду. Соль теперь на вес золота.</font>"
 	affected_goods = list(TRADE_GOOD_SALT)
 	price_mod = 5.0
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/copper_tin_embargo
-	name = "COPPER AND TIN EMBARGO"
-	description = "A foreign crown has barred the export of its copper and tin. Bronze-smiths scramble."
-	announcement = "<font color='#c44'>COPPER AND TIN EMBARGO: Foreign shipments halted. Ore and smelted ingots alike grow scarce.</font>"
+	name = "ЭМБАРГО НА МЕДЬ И ОЛОВО"
+	description = "Иноземная корона запретила экспорт меди и олова. Кузнецы, работающие с бронзой, в замешательстве."
+	announcement = "<font color='#c44'>ЭМБАРГО НА МЕДЬ И ОЛОВО: Зарубежные поставки прекращены. Руда и слитки одинаково дефицитны.</font>"
 	affected_goods = list(TRADE_GOOD_COPPER_ORE, TRADE_GOOD_TIN_ORE, TRADE_GOOD_COPPER_INGOT, TRADE_GOOD_TIN_INGOT)
 	price_mod = 4.25
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/tanners_plague
-	name = "TANNERS' PLAGUE"
-	description = "A skin-rotting sickness has forced the tanneries to dump half-cured hides for burning."
-	announcement = "<font color='#c44'>TANNERS' PLAGUE: Hides burned by the wagonload. Leather grows dear.</font>"
+	name = "ЧУМА КОЖЕВНИКОВ"
+	description = "Болезнь, разъедающая шкуры, вынудила кожевенные мастерские сжигать половину заготовок."
+	announcement = "<font color='#c44'>ЧУМА КОЖЕВНИКОВ: Шкуры сжигают целыми телегами. Изделия из кожи дорожают.</font>"
 	affected_goods = list(TRADE_GOOD_CURED_LEATHER, TRADE_GOOD_HIDE)
 	price_mod = 4.75
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/glass_furnace_failure
-	name = "GLASS FURNACE FAILURE"
-	description = "The great furnace at the glassworks has cracked. The craft has halted until it is rebuilt."
-	announcement = "<font color='#c44'>GLASS FURNACE FAILURE: The great glassworks go dark. Glass batch grows rare.</font>"
+	name = "ПОЛОМКА СТЕКЛОВАРЕННОЙ ПЕЧИ"
+	description = "Главная печь на стекольном заводе треснула. Производство остановлено до завершения ремонта."
+	announcement = "<font color='#c44'>ПОЛОМКА СТЕКЛОВАРЕННОЙ ПЕЧИ: Великие стекловарни гаснут. Стекольная шихта стала большой редкостью.</font>"
 	affected_goods = list(TRADE_GOOD_GLASS_BATCH)
 	price_mod = 4.75
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/orchard_locusts
-	name = "ORCHARD LOCUSTS"
-	description = "A swarm has stripped the Rockhill orchards bare. What little remains is sold at ransom."
-	announcement = "<font color='#c44'>ORCHARD LOCUSTS: The orchards stripped bare. Apples and berries grow costly.</font>"
+	name = "САРАНЧА В САДАХ"
+	description = "Рой саранчи объел сады Рокхилла дочиста. То немногое, что уцелело, продают по баснословным ценам."
+	announcement = "<font color='#c44'>САРАНЧА В САДАХ: Плодовые сады опустошены. Яблоки и ягоды теперь стоят целое состояние.</font>"
 	affected_goods = list(TRADE_GOOD_APPLE, TRADE_GOOD_PEAR, TRADE_GOOD_JACKSBERRY)
 	price_mod = 4.25
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/gem_cartel_squeeze
-	name = "GEM CARTEL SQUEEZE"
-	description = "The merchant houses have cornered the cut-stone market. Toper and gemerald prices jump overnight."
-	announcement = "<font color='#c44'>GEM CARTEL SQUEEZE: Merchants corner the gem market. Common gems grow dearer.</font>"
+	name = "МАХИНАЦИИ ЮВЕЛИРНОГО КАРТЕЛЯ"
+	description = "Торговые дома монополизировали рынок огранки. Цены на топеры и гемеральды взлетели за одну ночь."
+	announcement = "<font color='#c44'>МАХИНАЦИИ ЮВЕЛИРНОГО КАРТЕЛЯ: Торговцы захватили рынок самоцветов. Обычные камни резко подорожали.</font>"
 	affected_goods = list(TRADE_GOOD_TOPER, TRADE_GOOD_GEMERALD)
 	price_mod = 4.5
 	event_type = ECON_EVENT_SHORTAGE
 
 /datum/economic_event/silk_moth_collapse
-	name = "SILK MOTH COLLAPSE"
-	description = "Blackholt's spider-silk harvest has collapsed. Arachnological misfortune, the conclave says."
-	announcement = "<font color='#c44'>SILK MOTH COLLAPSE: Blackholt's silk harvest fails. Tailors grind their teeth.</font>"
+	name = "ГИБЕЛЬ ШЕЛКОПРЯДОВ"
+	description = "Сбор паучьего шелка в Блэкхолте сорван. Конклав называет это «арахнологическим несчастьем»."
+	announcement = "<font color='#c44'>ГИБЕЛЬ ШЕЛКОПРЯДОВ: Урожай шелка в Блэкхолте погиб. Портные скрежещут зубами.</font>"
 	affected_goods = list(TRADE_GOOD_SILK)
 	price_mod = 5.25
 	event_type = ECON_EVENT_SHORTAGE
@@ -226,49 +226,49 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 // ============================================================================
 
 /datum/economic_event/dairy_surplus
-	name = "DAIRY SURPLUS"
-	description = "A mild season has flooded the Kingsfield dairies with butter and cheese."
-	announcement = "<font color='#5cb85c'>DAIRY SURPLUS: Butter and cheese overflow the churns. Prices slump.</font>"
+	name = "МОЛОЧНЫЕ ИЗЛИШКИ"
+	description = "Благоприятный сезон переполнил маслобойни Кингсфилда маслом и сыром."
+	announcement = "<font color='#5cb85c'>МОЛОЧНЫЕ ИЗЛИШКИ: Масло и сыр льются рекой. Цены на молочные продукты падают.</font>"
 	affected_goods = list(TRADE_GOOD_BUTTER, TRADE_GOOD_CHEESE)
 	price_mod = 0.6
 	event_type = ECON_EVENT_OVERSUPPLY
 
 /datum/economic_event/foreign_pig_iron_glut
-	name = "FOREIGN PIG-IRON GLUT"
-	description = "A foreign crown has dumped its surplus ore on the open market. Wagons of pig-iron and copper roll in below cost."
-	announcement = "<font color='#5cb85c'>FOREIGN PIG-IRON GLUT: Foreign ore floods the yards. Daftsmarch miners grumble; smiths stockpile cheap.</font>"
+	name = "ЗАБУГОРНЫЙ ДЕМПИНГ"
+	description = "Иноземная корона выбросила излишки руды на открытый рынок. Телеги с чугуном и медью идут по ценам ниже себестоимости."
+	announcement = "<font color='#5cb85c'>ЗАБУГОРНЫЙ ДЕМПИНГ: Иностранная руда наводнила склады. Шахтеры Дафтсмарча негодуют; кузнецы закупаются за бесценок.</font>"
 	affected_goods = list(TRADE_GOOD_IRON_ORE, TRADE_GOOD_COPPER_ORE, TRADE_GOOD_TIN_ORE)
 	price_mod = 0.6
 	event_type = ECON_EVENT_OVERSUPPLY
 
 /datum/economic_event/salt_caravan
-	name = "SALT CARAVAN ARRIVES"
-	description = "A distant caravan has rolled in with wagons of salt - prices fall until the reserves clear."
-	announcement = "<font color='#5cb85c'>SALT CARAVAN ARRIVES: Wagons of salt reach the markets. Preservers cheer.</font>"
+	name = "СОЛЯНОЙ КАРАВАН"
+	description = "Далекий караван прибыл с возами соли — цены будут низкими, пока запасы не иссякнут."
+	announcement = "<font color='#5cb85c'>СОЛЯНОЙ КАРАВАН: Телеги с солью достигли рынков. Заготовщики ликуют.</font>"
 	affected_goods = list(TRADE_GOOD_SALT)
 	price_mod = 0.55
 	event_type = ECON_EVENT_OVERSUPPLY
 
 /datum/economic_event/cloth_fair
-	name = "CLOTH FAIR"
-	description = "The seasonal cloth fair has flooded the markets with bolts of fabric at cut-rate prices."
-	announcement = "<font color='#5cb85c'>CLOTH FAIR: Bolts of fabric flood the markets. Tailors rejoice.</font>"
+	name = "ЯРМАРКА ТКАНЕЙ"
+	description = "Сезонная ярмарка наводнила рынок рулонами ткани по бросовым ценам."
+	announcement = "<font color='#5cb85c'>ЯРМАРКА ТКАНЕЙ: Рулоны ткани заполнили прилавки. Портные празднуют.</font>"
 	affected_goods = list(TRADE_GOOD_CLOTH, TRADE_GOOD_FIBERS)
 	price_mod = 0.6
 	event_type = ECON_EVENT_OVERSUPPLY
 
 /datum/economic_event/fat_hog_season
-	name = "FAT HOG SEASON"
-	description = "The pig farmers have slaughtered early - pork and fat are cheap this week."
-	announcement = "<font color='#5cb85c'>FAT HOG SEASON: Pork, fat, and cured swine-meats all go cheap. Butchers work through the night.</font>"
+	name = "СЕЗОН ЖИРНЫХ БОРОВОВ"
+	description = "Свиноводы провели забой раньше срока — свинина и жир на этой неделе стоят дешево."
+	announcement = "<font color='#5cb85c'>СЕЗОН ЖИРНЫХ БОРОВОВ: Свинина, жир и копчености отдаются почти даром. Мясники работают всю ночь.</font>"
 	affected_goods = list(TRADE_GOOD_PORK, TRADE_GOOD_FAT, TRADE_GOOD_TALLOW, TRADE_GOOD_SAUSAGE, TRADE_GOOD_SALUMOI)
 	price_mod = 0.6
 	event_type = ECON_EVENT_OVERSUPPLY
 
 /datum/economic_event/cidering_season
-	name = "CIDERING SEASON"
-	description = "The Rockhill presses groan under a glut of fruit. Vendors dump the excess at any price."
-	announcement = "<font color='#5cb85c'>CIDERING SEASON: Fruit piles outside the presses. Orchard goods go cheap.</font>"
+	name = "СЕЗОН СИДРА"
+	description = "Прессы Рокхилла стонут под тяжестью плодов. Торговцы сбрасывают излишки по любым ценам."
+	announcement = "<font color='#5cb85c'>СЕЗОН СИДРА: Горы фруктов лежат у прессов. Продукция садов стоит гроши.</font>"
 	affected_goods = list(TRADE_GOOD_APPLE, TRADE_GOOD_PEAR, TRADE_GOOD_JACKSBERRY)
 	price_mod = 0.55
 	event_type = ECON_EVENT_OVERSUPPLY

@@ -49,7 +49,8 @@ const BLOCKADE_TYPE = 'Blockade Defense';
 const DISPATCH_DEBOUNCE_MS = 500;
 
 const COMMISSION_LABELS: Record<string, string> = {
-  'Blockade Defense': 'Clear Blockade',
+  'Blockade Defense': 'Снятие блокады',
+  'Recovery': 'Возврат груза',
 };
 
 const coin = (n: number) => `${n}m`;
@@ -148,8 +149,8 @@ const SubTabBar = (props: {
   historyCount: number;
 }) => {
   const tabs: { id: SubTab; label: string }[] = [
-    { id: 'compose', label: 'Commission' },
-    { id: 'history', label: `History (${props.historyCount})` },
+    { id: 'compose', label: 'Нанять' },
+    { id: 'history', label: `История (${props.historyCount})` },
   ];
   return (
     <div className="ContractLedger__InnkeeperSubTabBar">
@@ -318,7 +319,7 @@ const ComposeView = () => {
         Commission adventurers against the Realm's enemies.
       </div>
 
-      <FormRow label="Commission Type">
+      <FormRow label="Тип контракта">
         <select
           className="ContractLedger__InnkeeperSelect"
           value={type}
@@ -332,7 +333,7 @@ const ComposeView = () => {
         </select>
       </FormRow>
 
-      <FormRow label={isBlockade ? 'Blockaded Region' : 'Region'}>
+      <FormRow label={isBlockade ? 'Заблокированный регион' : 'Регион'}>
         <select
           className="ContractLedger__InnkeeperSelect"
           value={region}
@@ -342,11 +343,11 @@ const ComposeView = () => {
           <option value="">
             {regionsForType.length === 0
               ? isBlockade
-                ? 'No blockades are active.'
-                : 'No region will host this type'
+                ? 'Нет активных блокад.'
+                : 'Нет доступных регионов для данного типа'
               : isBlockade
-                ? '- pick a blockade -'
-                : '- pick a region -'}
+                ? '- Выбрать блокаду -'
+                : '- Выбрать регион -'}
           </option>
           {regionsForType.map((r) => {
             const mult = data.region_tp_multipliers?.[r];
@@ -400,7 +401,7 @@ const ComposeView = () => {
         </FormRow>
       )}
 
-      <FormRow label="Fund">
+      <FormRow label="Источник средств">
         <div className="ContractLedger__InnkeeperModeRow">
           <label>
             <input
@@ -410,7 +411,7 @@ const ComposeView = () => {
               disabled={!pledgeAvailable}
               onChange={() => setFunding('pledge')}
             />
-            &nbsp;Burgher Pledge ({coin(data.pledge_balance)})
+            &nbsp;Обет Горожан ({coin(data.pledge_balance)})
           </label>
           <label>
             <input
@@ -419,7 +420,7 @@ const ComposeView = () => {
               checked={funding === 'crown'}
               onChange={() => setFunding('crown')}
             />
-            &nbsp;Crown's Purse ({coin(data.crown_purse_balance)})
+            &nbsp;Казна Короны ({coin(data.crown_purse_balance)})
           </label>
           <label>
             <input
@@ -429,7 +430,7 @@ const ComposeView = () => {
               disabled={directivesRemaining <= 0}
               onChange={() => setFunding('directive')}
             />
-            &nbsp;Request ({directivesRemaining}/{data.directives_per_day ?? 0} left)
+            &nbsp;Запрос ({directivesRemaining}/{data.directives_per_day ?? 0} left)
           </label>
         </div>
       </FormRow>
@@ -443,24 +444,24 @@ const ComposeView = () => {
       )}
 
       {bonusPayEligible && (
-        <FormRow label="Bonus Pay">
+        <FormRow label="Премия">
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
             <BonusPayOption
               active={bonusPayLevel === 0}
               onClick={() => setBonusPayLevel(0)}
-              label="None"
+              label="Нет"
               sublabel="x1.0"
             />
             <BonusPayOption
               active={bonusPayLevel === 1}
               onClick={() => setBonusPayLevel(1)}
-              label="Light"
+              label="Малая"
               sublabel={`x${bonusLightMult}`}
             />
             <BonusPayOption
               active={bonusPayLevel === 2}
               onClick={() => setBonusPayLevel(2)}
-              label="Full"
+              label="Полная"
               sublabel={`x${bonusFullMult}`}
             />
           </div>
@@ -469,31 +470,31 @@ const ComposeView = () => {
 
       {!isBlockade && funding !== 'directive' && (
         <>
-          <FormRow label="Deliver As">
+          <FormRow label="Способ выдачи">
             <div className="ContractLedger__InnkeeperModeRow">
               <ModeRadio
                 value="board"
                 selected={mode}
                 onChange={setMode}
-                label="Post on public board"
+                label="Разместить на доске объявлений"
               />
               <ModeRadio
                 value="hands"
                 selected={mode}
                 onChange={setMode}
-                label="Put in my hands"
+                label="Выдать мне в руки"
               />
             </div>
           </FormRow>
 
-          <FormRow label="Levy Stamp">
+          <FormRow label="Гербовая печать">
             <label>
               <input
                 type="checkbox"
                 checked={levyExempt}
                 onChange={(e) => setLevyExempt(e.target.checked)}
               />
-              &nbsp;Stamp as LEVY EXEMPT (waive Crown's Contract Levy)
+              &nbsp;Поставить печать: ОСВОБОЖДЕНО ОТ СБОРА (Освободить от уплаты Налога)
             </label>
           </FormRow>
         </>
@@ -527,10 +528,10 @@ const ComposeView = () => {
           onClick={dispatch}
         >
           {funding === 'directive'
-            ? 'Submit Request'
+            ? 'Отправить Поручение'
             : isBlockade
-              ? `Print Writ (${coin(effectiveCost)})`
-              : `Commission (${coin(effectiveCost)})`}
+              ? `Печатать Грамоту (${coin(effectiveCost)})`
+              : `Комиссия (${coin(effectiveCost)})`}
         </button>
         {isBlockade && recallEntry?.recall_eligible && (
           <button
@@ -538,7 +539,7 @@ const ComposeView = () => {
             className="ContractLedger__SignButton"
             onClick={() => act('recall_blockade_writ', { region })}
           >
-            Recall Writ
+            Отозвать Грамоту
             {recallEntry.refund > 0 ? ` (refund ${coin(recallEntry.refund)})` : ''}
           </button>
         )}
@@ -561,10 +562,10 @@ export const StewardDefensePanel = () => {
     <div className="ContractLedger__Innkeeper">
       <div className="ContractLedger__InnkeeperHeader">
         <div className="ContractLedger__InnkeeperTitle">
-          By the Pledge of the Burghers&hellip;
+          По Обету Горожан…&hellip;
         </div>
         <div className="ContractLedger__InnkeeperBalance">
-          Burgher Pledge:&nbsp;<b>{coin(data.pledge_balance)}</b>
+          Обет Горожан:&nbsp;<b>{coin(data.pledge_balance)}</b>
           <span className="ContractLedger__InnkeeperBalanceFormula">
             {' '}
             (+{coin(data.pledge_refill_base)} base, +
