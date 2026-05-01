@@ -430,7 +430,7 @@ const ComposeView = () => {
               disabled={directivesRemaining <= 0}
               onChange={() => setFunding('directive')}
             />
-            &nbsp;Запрос ({directivesRemaining}/{data.directives_per_day ?? 0} left)
+            &nbsp;Запрос ({directivesRemaining}/{data.directives_per_day ?? 0} Осталось)
           </label>
         </div>
       </FormRow>
@@ -540,7 +540,7 @@ const ComposeView = () => {
             onClick={() => act('recall_blockade_writ', { region })}
           >
             Отозвать Грамоту
-            {recallEntry.refund > 0 ? ` (refund ${coin(recallEntry.refund)})` : ''}
+            {recallEntry.refund > 0 ? ` (возврат ${coin(recallEntry.refund)})` : ''}
           </button>
         )}
       </div>

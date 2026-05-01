@@ -196,7 +196,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_exotic/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - WIZARDS' REQUISITION"
+	return "[uppertext(region.name)] - МАГИЧЕСКИЙ ЗАКАЗ"
 
 /datum/standing_order/demand_exotic/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
@@ -224,7 +224,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_fishery/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - FISHMONGERS' ORDER"
+	return "[uppertext(region.name)] - ЗАКАЗ РЫБАКА"
 
 /datum/standing_order/demand_fishery/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
@@ -238,9 +238,9 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_orchard
 	var/list/project_by_region = list(
-		TRADE_REGION_ROCKHILL = list("the orchard-masters' hall", "the valley apothecary", "a cider pressing"),
-		TRADE_REGION_KINGSFIELD = list("a market preserver", "a village apothecary"),
-		TRADE_REGION_HEARTFELT = list("the chapel infirmary", "the garrison apothecary", "the pilgrim hostel"),
+		TRADE_REGION_ROCKHILL = list("гильдия садоводов", "долинный аптекарь", "сидровая давильня"),
+		TRADE_REGION_KINGSFIELD = list("рыночный заготовщик", "деревенский аптекарь"),
+		TRADE_REGION_HEARTFELT = list("лазарет часовни", "гарнизонный аптекарь", "странноприимный дом"),
 	)
 
 /datum/standing_order/demand_orchard/generate_item_mix()
@@ -253,14 +253,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_orchard/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - ORCHARD DEMAND"
+	return "[uppertext(region.name)] - ЗАКАЗ САДОВ"
 
 /datum/standing_order/demand_orchard/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] needs orchard produce and healing calendula."
-	return "A preserver or apothecary in [region.name] is buying orchard goods."
-
+		return "[capitalize(pick(projects))] в регионе [region.name] запрашивает садовую продукцию и лечебную календулу."
+	return "Заготовщик или аптекарь в регионе [region.name] закупает садовые товары."
 
 // ============================================================================
 // urgent - emergency requisition spawned by a shortage economic event.
@@ -271,16 +270,15 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	var/datum/weakref/source_event_ref
 
 /datum/standing_order/urgent/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - URGENT REQUISITION"
+	return "[uppertext(region.name)] -  СРОЧНЫЙ ЗАКАЗ"
 
 /datum/standing_order/urgent/generate_description(datum/economic_region/region)
-	var/list/buyers = list("Local notables", "A merchants' consortium", "The guild elders", "A desperate burgher", "Local magnates")
+	var/list/buyers = list("Местная знать", "Купеческий консорциум", "Старейшины гильдии", "Отчаявшийся горожанин", "Местные магнаты")
 	var/buyer = pick(buyers)
 	var/datum/economic_event/E = source_event_ref?.resolve()
 	if(E)
-		return "[region.name] is suffering from [E.name]. [buyer] are paying a premium to resolve the crisis."
-	return "[buyer] in [region.name] have declared an emergency requisition."
-
+		return "Регион [region.name] страдает от бедствия: «[E.name]». [buyer] готовы выплатить щедрую премию за помощь в разрешении этого кризиса."
+	return "[buyer] в регионе [region.name] объявили о чрезвычайном сборе ресурсов."
 
 // ============================================================================
 // demand_equipment_armaments - finished weapons for a garrison
@@ -288,10 +286,10 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_equipment_armaments
 	roll_weight = 3
 	var/list/project_by_region = list(
-		TRADE_REGION_BLEAKCOAST = list("the admiralty", "the coastal garrison", "the navy armory"),
-		TRADE_REGION_NORTHFORT = list("the border guard", "the northern garrison", "the tarichean watch"),
-		TRADE_REGION_HEARTFELT = list("the march guard", "the retinue", "the garrison armory"),
-		TRADE_REGION_KINGSFIELD = list("a market armsmaster", "a local armsmaster"),
+		TRADE_REGION_BLEAKCOAST = list("адмиралтейство", "береговой гарнизон", "флотский арсенал"),
+		TRADE_REGION_NORTHFORT = list("пограничная стража", "северный гарнизон", "тарихейский дозор"),
+		TRADE_REGION_HEARTFELT = list("маршевая стража", "княжеская свита", "гарнизонный арсенал"),
+		TRADE_REGION_KINGSFIELD = list("рыночный оружейник", "местный оружейник"),
 	)
 	var/list/one_ingot_pool = list(
 		TRADE_GOOD_STEEL_ARMING_SWORD,
@@ -324,13 +322,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_equipment_armaments/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - ARMS ORDER"
+	return "[uppertext(region.name)] - ОРУЖЕЙНЫЙ ЗАКАЗ"
 
 /datum/standing_order/demand_equipment_armaments/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] requires finished arms, to be left at the warehouse."
-	return "A garrison at [region.name] requires finished arms, to be left at the warehouse."
+		return "[capitalize(pick(projects))] в регионе [region.name] требует готовое оружие; доставить на склад."
+	return "Гарнизону в регионе [region.name] требуется готовое оружие; доставить на склад."
 
 
 // ============================================================================
@@ -340,10 +338,10 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_equipment_armor_heavy
 	roll_weight = 3
 	var/list/project_by_region = list(
-		TRADE_REGION_BLEAKCOAST = list("the admiralty", "the coastal garrison", "the navy armory"),
-		TRADE_REGION_NORTHFORT = list("the border guard", "the northern garrison", "the tarichean watch"),
-		TRADE_REGION_HEARTFELT = list("the march guard", "the retinue", "the garrison armory"),
-		TRADE_REGION_KINGSFIELD = list("a market armsmaster", "a knightly house"),
+		TRADE_REGION_BLEAKCOAST = list("адмиралтейство", "береговой гарнизон", "флотский арсенал"),
+		TRADE_REGION_NORTHFORT = list("пограничная стража", "северный гарнизон", "тарихейский дозор"),
+		TRADE_REGION_HEARTFELT = list("маршевая стража", "княжеская свита", "гарнизонный арсенал"),
+		TRADE_REGION_KINGSFIELD = list("рыночный оружейник", "рыцарский дом"),
 	)
 	var/list/chain_pool = list(
 		TRADE_GOOD_STEEL_CHAINMAIL,
@@ -385,13 +383,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_equipment_armor_heavy/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - HARNESS ORDER"
+	return "[uppertext(region.name)] - ЗАКАЗ НА ДОСПЕХИ"
 
 /datum/standing_order/demand_equipment_armor_heavy/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] requires finished plate harness, to be left at the warehouse."
-	return "A garrison at [region.name] requires finished plate harness, to be left at the warehouse."
+		return "[capitalize(pick(projects))] в регионе [region.name] требует готовый латный гарнитур; доставить на склад."
+	return "Гарнизону в регионе [region.name] требуется готовый латный гарнитур; доставить на склад."
 
 
 // ============================================================================
@@ -404,10 +402,10 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_equipment_armor_light
 	roll_weight = 3
 	var/list/project_by_region = list(
-		TRADE_REGION_BLEAKCOAST = list("the harbor watch", "the coastal levy", "the marines' company"),
-		TRADE_REGION_NORTHFORT = list("the watchcompany", "the border irregulars", "the keep's reservists"),
-		TRADE_REGION_HEARTFELT = list("the march company", "the chapel guard", "the count's footsergeants"),
-		TRADE_REGION_KINGSFIELD = list("a country muster", "a market company", "a yeomen's company"),
+		TRADE_REGION_BLEAKCOAST = list("портовая стража", "береговое ополчение", "рота морской пехоты"),
+		TRADE_REGION_NORTHFORT = list("дозорная рота", "пограничное ополчение", "резервисты цитадели"),
+		TRADE_REGION_HEARTFELT = list("маршевая рота", "стража часовни", "пешие сержанты графа"),
+		TRADE_REGION_KINGSFIELD = list("сельское ополчение", "рыночная рота", "отряд йоменов"),
 	)
 	var/list/body_pool = list(
 		TRADE_GOOD_PADDED_GAMBESON,
@@ -436,13 +434,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_equipment_armor_light/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - COMPANY TUNICS"
+	return "[uppertext(region.name)] - РОТНЫЕ ТУНИКИ"
 
 /datum/standing_order/demand_equipment_armor_light/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] requires sewn and boiled-leather kit, to be left at the warehouse."
-	return "A company at [region.name] requires sewn and boiled-leather kit, to be left at the warehouse."
+		return "[capitalize(pick(projects))] в регионе [region.name] требует шитое снаряжение и доспехи из вареной кожи; доставить на склад."
+	return "Роте в регионе [region.name] требуется шитое снаряжение и доспехи из вареной кожи; доставить на склад."
 
 
 // ============================================================================
@@ -461,7 +459,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_salt/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - SALT REQUISITION"
+	return "[uppertext(region.name)] - ЗАКАЗ СОЛИ"
 
 /datum/standing_order/demand_salt/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
@@ -487,7 +485,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_victualling_fleet/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - FLEET VICTUALLING"
+	return "[uppertext(region.name)] - ПРОВИЗИЯ ДЛЯ ФЛОТА"
 
 /datum/standing_order/demand_victualling_fleet/generate_description(datum/economic_region/region)
 	var/list/flavors = list(
@@ -521,7 +519,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_victualling_garrison/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - GARRISON VICTUALLING"
+	return "[uppertext(region.name)] - ПРОВИЗИЯ ДЛЯ ГАРНИЗОНА"
 
 /datum/standing_order/demand_victualling_garrison/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
@@ -548,7 +546,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_victualling_mines/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - MINERS' VICTUALLING"
+	return "[uppertext(region.name)] - ШАХТЕРНАЯ ПРОВИЗИЯ"
 
 /datum/standing_order/demand_victualling_mines/generate_description(datum/economic_region/region)
 	var/list/flavors = list(
@@ -783,7 +781,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_frontier_gear/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - FRONTIER GARRISON KIT"
+	return "[uppertext(region.name)] - ПОГРАНИЧНЫЙ НАБОР ГАРНИЗОНА"
 
 /datum/standing_order/demand_frontier_gear/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
@@ -820,7 +818,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_court_finery/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - COURT FINERY ORDER"
+	return "[uppertext(region.name)] - ЗНАТНЫЙ ЗАКАЗ УКРАШЕНИЙ"
 
 /datum/standing_order/demand_court_finery/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
@@ -851,7 +849,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_fine_joinery/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - JOINER'S COMMISSION"
+	return "[uppertext(region.name)] - КОМИССИЯ СТОЛЯРА"
 
 /datum/standing_order/demand_fine_joinery/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
@@ -884,7 +882,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_artificery/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - ARTIFICER'S WORKSHOP"
+	return "[uppertext(region.name)] - МАСТЕРСКАЯ РЕМЕСЛИНИКА"
 
 /datum/standing_order/demand_artificery/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
@@ -922,7 +920,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_jewelry/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - JEWELERS' COMMISSION"
+	return "[uppertext(region.name)] - ЮВЕЛИРНАЯ КОМИССИЯ"
 
 /datum/standing_order/demand_jewelry/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
@@ -937,9 +935,9 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_prosthetic_run
 	roll_weight = 2
 	var/list/project_by_region = list(
-		TRADE_REGION_HEARTFELT = list("the chapel infirmary", "the pilgrim hostel", "the wounded-house"),
-		TRADE_REGION_NORTHFORT = list("the border surgeon", "the garrison infirmary"),
-		TRADE_REGION_BLEAKCOAST = list("the admiralty surgeon", "the harbor wounded-house"),
+		TRADE_REGION_HEARTFELT = list("часовенный лазарет", "странноприимный дом", "дом раненых"),
+		TRADE_REGION_NORTHFORT = list("пограничный хирург", "гарнизонный лазарет"),
+		TRADE_REGION_BLEAKCOAST = list("хирург адмиралтейства", "портовый лазарет"),
 	)
 
 /datum/standing_order/demand_prosthetic_run/generate_item_mix()
@@ -954,13 +952,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_prosthetic_run/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - INFIRMARY'S ORDER"
+	return "[uppertext(region.name)] - ЗАКАЗ ЛАЗАРЕТА"
 
 /datum/standing_order/demand_prosthetic_run/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] tends many wounded - prosthetics and draughts are needed."
-	return "An infirmary at [region.name] tends to wounded soldiers and pilgrims."
+		return "[capitalize(pick(projects))] в регионе [region.name] принимает множество раненых — требуются протезы и лечебные снадобья."
+	return "Лазарет в регионе [region.name] оказывает помощь раненым солдатам и паломникам."
 
 
 // ============================================================================
@@ -969,9 +967,9 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_artificed_panoply
 	roll_weight = 1
 	var/list/project_by_region = list(
-		TRADE_REGION_KINGSFIELD = list("a duke's master-of-arms", "a knight-artificer's commission"),
-		TRADE_REGION_DAFTSMARCH = list("the foundry's signature contract", "a master smith's masterpiece"),
-		TRADE_REGION_HEARTFELT = list("the count's chosen retinue"),
+		TRADE_REGION_KINGSFIELD = list("оружейный мастер герцога", "заказ рыцаря-инженера"),
+		TRADE_REGION_DAFTSMARCH = list("образцовый контракт литейни", "шедевр мастера-кузнеца"),
+		TRADE_REGION_HEARTFELT = list("избранная свита графа"),
 	)
 
 /datum/standing_order/demand_artificed_panoply/generate_item_mix()
@@ -985,13 +983,13 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_artificed_panoply/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - ARTIFICED PANOPLY"
+	return "[uppertext(region.name)] - АРТЕФАКТНЫЙ ПАНОПЛИЙ"
 
 /datum/standing_order/demand_artificed_panoply/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] commissions a panoply of artificed plate. Masterwork pays masterwork's price."
-	return "A patron at [region.name] commissions a panoply of artificed plate."
+		return "[capitalize(pick(projects))] в регионе [region.name] заказывает паноплий из артефактных лат. За шедевр платят цену шедевра."
+	return "Покровитель в регионе [region.name] заказывает паноплий из артефактных лат. За шедевр платят цену шедевра."
 
 
 // ============================================================================
@@ -1032,7 +1030,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 	return mix
 
 /datum/standing_order/demand_tournament_supply/generate_name(datum/economic_region/region)
-	return "[uppertext(region.name)] - TOURNAMENT PROVISION"
+	return "[uppertext(region.name)] - СНАБЖЕНИЕ ТУРНИРА"
 
 /datum/standing_order/demand_tournament_supply/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]

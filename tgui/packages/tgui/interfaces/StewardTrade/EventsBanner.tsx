@@ -14,7 +14,7 @@ export const EventsBanner = (props: { events: EconomicEvent[] }) => {
   }
   return (
     <div style={{ marginBottom: '10px' }}>
-      <div style={sectionHeaderStyle}>Active Economic Events</div>
+      <div style={sectionHeaderStyle}>Активные экономические события</div>
       {props.events.map((e) => {
         const color = e.event_type === 'shortage' ? SEAL_RED : SEAL_GREEN;
         return (
