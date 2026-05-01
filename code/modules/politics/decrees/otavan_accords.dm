@@ -1,15 +1,15 @@
 /datum/decree/otavan_accords
 	id = DECREE_OTAVAN_ACCORDS
-	name = "The Otavan Accords"
+	name = "Отаванские соглашения"
 	category = DECREE_CATEGORY_NEW
-	mechanical_text = "Inquisition members pay no taxes."
-	flavor_text = {"These Otavan Accords, sworne in the name of the Ten and under the Almighty Allfather's watch, witnesseth that the Holy Otavan Inquisition, sworn servants of Psydon and emissaries of the Orthodoxy, shall keep vigil against heresy upon this land: to hunt the Archenemy's servants and the false gods, to stay their hand from subjects of Azuria untainted by heresy, to try only the common folk, and to never try a burgher nor a nobleman - for whose crimes they shall answer before the Church of the Ten.
+	mechanical_text = "Инквизиция освобождается от налогов."
+	flavor_text = {"Настоящие Отаванские соглашения, заключенные во имя Десяти Неделимых и под покровительством Всемогущего Всеотца, свидетельствуют о том, что Святая Отаванская Инквизиция, присяжные слуги Псайдона и посланники Отавики, наделяется правом и обязанностью охранять эту землю от ереси. Во исполнение сией миссии, Инквизиция обязуется преследовать слуг Архиврага и ложных богов, не поднимать руку на подданных Азурии, не запятнанных ересью, судить лишь простолюдинов и никогда не подвергать гонениям ни горожан, ни дворян, кроме как в случаях официальной санкции Короны.
 
-In exchange, as foreign adherents sanctioned by treaty, the Inquisition shall bear no tax nor levy, neither upon their persons nor upon the instruments of their office; nor shall the Crown hinder their holy duty, save by lawful cause shown before the Church of the Ten.
+Взамен, будучи признанными духовенством Отаванской Церкви Всеотца, Инквизиция освобождается от обложения налогами и сборами в отношении своих членов и инструментов их служения; и Корона не будет препятствовать их святому долгу, за исключением случая предъявления законных претензий перед Церковью Десяти.
 
-Yeven under the seal of the Crown, in witness of Psydon and the Ten."}
-	revoke_text = "The %RULER% has broken the Otavan Accords. The Inquisition is stripped of its treaty protections - and Otava shall not take such an insult lightly."
-	restore_text = "The %RULER% has affirmed the Otavan Accords. The Holy Otavan Inquisition resumes its duty to purge the land of heretics, free from the Crown's interference."
+Заверено печатью Короны, в присутствии Псайдона и его Десяти."}
+	revoke_text = "Правитель сиих земель нарушил Отаванские соглашения. Инквизиция лишается защиты, предусмотренной договором — и Отава не оставит такое оскорбление без ответа."
+    restore_text = "Правитель сиих земель возобновил Отаванские соглашения. Святая Отаванская Инквизиция возобновляет свою миссию по очищению земель от еретиков без какого-либо вмешательства Короны."
 
 /datum/decree/otavan_accords/roll_initial_year()
 	return CALENDAR_EPOCH_YEAR - rand(20, 60)
