@@ -78,7 +78,7 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 	name = "ШТОРМ В СОЛТВИКЕ"
 	description = "Яростный шторм обрушился на верфи Солтвика — рыболовный флот пришвартован уже несколько дней."
 	announcement = "<font color='#c44'>ШТОРМ В СОЛТВИКЕ: Рыболовный флот заблокирован. Свежая и вяленая рыба сильно подорожали.</font>"
-	affected_goods = list(TRADE_GOOD_FISH_FILET, TRADE_GOOD_COD, TRADE_GOOD_SALMON, TRADE_GOOD_DRIED_FISH, TRADE_GOOD_FISH_MINCE)
+	affected_goods = list(TRADE_GOOD_FISH_FILET, TRADE_GOOD_DRIED_FISH, TRADE_GOOD_FISH_MINCE)
 	price_mod = 4.5
 	event_type = ECON_EVENT_SHORTAGE
 
@@ -234,9 +234,9 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 	event_type = ECON_EVENT_OVERSUPPLY
 
 /datum/economic_event/foreign_pig_iron_glut
-	name = "ЗАБУГОРНЫЙ ДЕМПИНГ"
+	name = "ЗАБУГОРНАЯ МАХИНАЦИЯ"
 	description = "Иноземная корона выбросила излишки руды на открытый рынок. Телеги с чугуном и медью идут по ценам ниже себестоимости."
-	announcement = "<font color='#5cb85c'>ЗАБУГОРНЫЙ ДЕМПИНГ: Иностранная руда наводнила склады. Шахтеры Дафтсмарча негодуют; кузнецы закупаются за бесценок.</font>"
+	announcement = "<font color='#5cb85c'>ЗАБУГОРНАЯ МАХИНАЦИЯ: Иностранная руда наводнила склады. Шахтеры Дафтсмарча негодуют; кузнецы закупаются за бесценок.</font>"
 	affected_goods = list(TRADE_GOOD_IRON_ORE, TRADE_GOOD_COPPER_ORE, TRADE_GOOD_TIN_ORE)
 	price_mod = 0.6
 	event_type = ECON_EVENT_OVERSUPPLY
