@@ -55,10 +55,10 @@ export const PetitionView = (props: { data: Data }) => {
           lineHeight: '1.5em',
         }}
       >
-        Send envoys to a regional trade hall to commission a Standing Order of
-        your choosing. Costs Burgher Pledge. The hall takes a {petition_tax_pct}%
-        margin on petitioned orders &mdash; the price of certainty. The exact
-        item mix is still set by the hall.
+        Направьте послов в региональный торговый зал, чтобы разместить
+        Торговый заказ по вашему выбору. Расходует залог горожан. Зал взимает сбор в {petition_tax_pct}%
+        с таких заказов &mdash; такова цена уверенности. Точный список необходимых товаров
+        по-прежнему устанавливается самим залом.
       </div>
 
       <PetitionStatusStrip data={props.data} />
@@ -150,7 +150,7 @@ const PetitionStatusStrip = (props: { data: Data }) => {
         </span>
       </div>
       <div>
-        Petitions today:{' '}
+        Текущие Петиции:{' '}
         <span style={{ color: remainingColor, fontWeight: 'bold' }}>
           {remaining}
         </span>{' '}
@@ -189,7 +189,7 @@ const CategoryList = (props: {
               {c.label}
             </div>
             <div style={{ color: SEAL_AMBER, fontSize: '11px' }}>
-              {c.cost}p pledge
+              {c.cost}p залога
             </div>
           </div>
         );

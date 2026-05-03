@@ -9,25 +9,25 @@ export const TabBar = (props: {
   return (
     <div style={tabBarStyle}>
       <div style={tabStyle(tab === 'orders')} onClick={() => onSwitch('orders')}>
-        Standing Orders
+        Заказы Экспорта
       </div>
       <div style={tabStyle(tab === 'market')} onClick={() => onSwitch('market')}>
-        Market
+        Рынок
       </div>
       <div style={tabStyle(tab === 'regions')} onClick={() => onSwitch('regions')}>
-        Regions
+        Регионы
       </div>
       <div
         style={tabStyle(tab === 'auto_import')}
         onClick={() => onSwitch('auto_import')}
       >
-        Auto-Import
+        Авто-Иморт
       </div>
       <div
         style={tabStyle(tab === 'petition')}
         onClick={() => onSwitch('petition')}
       >
-        Petition
+        Петиции
       </div>
     </div>
   );

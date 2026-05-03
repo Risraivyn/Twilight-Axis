@@ -78,14 +78,14 @@ export const OrdersView = (props: { data: Data }) => {
               )}
               <div style={{ color: INK_SOFT, fontSize: '12px' }}>
                 {region_catalog[o.region_id]?.name ?? o.region_id} &middot;{' '}
-                {o.days_left}d left &middot; Payout:{' '}
+                {o.days_left}Д Осталось &middot; Выплата:{' '}
                 <span style={{ color: SEAL_AMBER, fontWeight: 'bold' }}>
                   {o.payout}m
                 </span>
               </div>
               <div style={{ marginTop: '4px' }}>
                 <span style={{ color: INK_FAINT, fontSize: '11px' }}>
-                  Items:{' '}
+                  Предметы:{' '}
                 </span>
                 {o.items.map((it, i) => {
                   const short = !o.is_equipment && it.have < it.needed;
@@ -134,7 +134,7 @@ const FulfillButton = (props: {
         disabled
         style={inkButtonStyle({ color: SEAL_RED, disabled: true })}
       >
-        Fulfill &mdash; road blockaded
+        Отправка &mdash; Блокада
       </button>
     );
   }
@@ -145,7 +145,7 @@ const FulfillButton = (props: {
         onClick={props.onFulfill}
         style={inkButtonStyle({ color: SEAL_BLUE })}
       >
-        Fulfill from Warehouse
+        Отправка со склада
       </button>
     );
   }
@@ -156,7 +156,7 @@ const FulfillButton = (props: {
         onClick={props.onFulfill}
         style={inkButtonStyle({ color: SEAL_GREEN })}
       >
-        Fulfill
+        Отправка
       </button>
     );
   }
@@ -168,7 +168,7 @@ const FulfillButton = (props: {
         title={`Settle short - ${o.partial_pct}% of value covered, paid at 85% of the delivered share. Missing: ${o.shortfall_text}`}
         style={inkButtonStyle({ color: SEAL_AMBER })}
       >
-        Fulfill Partial &mdash; {o.partial_pct}% ({o.partial_payout_preview}m)
+        Частичная отправка &mdash; {o.partial_pct}% ({o.partial_payout_preview}m)
       </button>
     );
   }
@@ -179,7 +179,7 @@ const FulfillButton = (props: {
       title={o.shortfall_text}
       style={inkButtonStyle({ disabled: true })}
     >
-      Fulfill &mdash; {o.shortfall_text || 'insufficient stock'}
+      Отправка &mdash; {o.shortfall_text || 'insufficient stock'}
     </button>
   );
 };

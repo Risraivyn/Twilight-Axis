@@ -35,10 +35,10 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_rations
 	var/list/project_by_region = list(
-		TRADE_REGION_BLEAKCOAST = list("a ship's company victualling", "a privateer's crew", "the harbor watch"),
-		TRADE_REGION_NORTHFORT = list("a frontier garrison", "a watch sergeant restocking", "a militia muster"),
-		TRADE_REGION_HEARTFELT = list("the count's retinue", "a roving warden party", "a local adventuring fellowship"),
-		TRADE_REGION_KINGSFIELD = list("a market town", "a village feast committee", "a granary keeper"),
+		TRADE_REGION_BLEAKCOAST = list("снабжение корабельной команды", "экипаж каперов", "портовая стража"),
+		TRADE_REGION_NORTHFORT = list("пограничный гарнизон", "сержант дозора (пополнение запасов)", "сбор ополчения"),
+		TRADE_REGION_HEARTFELT = list("свита графа", "отряд странствующих егерей", "местное братство авантюристов"),
+		TRADE_REGION_KINGSFIELD = list("рыночный город", "устроители деревенского пира", "смотритель зернохранилища"),
 	)
 
 /datum/standing_order/demand_rations/generate_item_mix()
@@ -65,9 +65,9 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_armaments
 	var/list/project_by_region = list(
-		TRADE_REGION_BLEAKCOAST = list("a galley's fighting men", "a corsair's company outfitting", "the harbor watch"),
-		TRADE_REGION_NORTHFORT = list("a frontier garrison", "a band of border irregulars", "a watch sergeant"),
-		TRADE_REGION_HEARTFELT = list("the count's retinue", "a local mercenary band", "a roving warden party"),
+		TRADE_REGION_BLEAKCOAST = list("бойцы с галеры", "снаряжение отряда корсаров", "портовая стража"),
+		TRADE_REGION_NORTHFORT = list("пограничный гарнизон", "отряд пограничного ополчения", "сержант дозора"),
+		TRADE_REGION_HEARTFELT = list("свита графа", "местный отряд наёмников", "группа странствующих егерей"),
 	)
 
 
@@ -95,8 +95,8 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_textile
 	var/list/project_by_region = list(
-		TRADE_REGION_KINGSFIELD = list("a local tailor", "a market stall", "a travelling merchant"),
-		TRADE_REGION_HEARTFELT = list("a banner-maker's commission", "a tabard-maker outfitting a retinue", "a name-day wardrobe order"),
+		TRADE_REGION_KINGSFIELD = list("местный портной", "рыночная лавка", "странствующий купец"),
+		TRADE_REGION_HEARTFELT = list("заказ знаменщика", "изготовление табард для свиты", "заказ праздничного платья к именинам"),
 	)
 
 /datum/standing_order/demand_textile/generate_item_mix()
@@ -121,8 +121,8 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_smithing
 	var/list/project_by_region = list(
-		TRADE_REGION_DAFTSMARCH = list("the smiths' guild", "the foundry works", "a master smith with a backlog"),
-		TRADE_REGION_KINGSFIELD = list("a village smithy", "a farm-tool maker", "a local farrier"),
+		TRADE_REGION_DAFTSMARCH = list("гильдия кузнецов", "литейные мастерские", "мастер-кузнец с горой заказов"),
+		TRADE_REGION_KINGSFIELD = list("деревенская кузница", "изготовитель сельхозинвентаря", "местный коваль"),
 	)
 
 /datum/standing_order/demand_smithing/generate_item_mix()
@@ -147,15 +147,15 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_construction
 	var/list/project_by_region = list(
-		TRADE_REGION_BLEAKCOAST = list("a harbor wall reinforcement", "a coastal garrison's repairs"),
-		TRADE_REGION_NORTHFORT = list("a frontier garrison expanding its keep", "a watchtower rebuild"),
-		TRADE_REGION_HEARTFELT = list("a cathedral renovation", "a count's hall expansion"),
-		TRADE_REGION_KINGSFIELD = list("a market town's roadworks", "a granary expansion"),
-		TRADE_REGION_DAFTSMARCH = list("a mine shaft reinforcement", "the foundry's expansion"),
-		TRADE_REGION_ROSAWOOD = list("a lumber mill rebuild", "a trade road repair"),
-		TRADE_REGION_ROCKHILL = list("a terraced wall rebuild", "a press house expansion"),
-		TRADE_REGION_BLACKHOLT = list("a tower rebuild after a working went wrong", "an outer sanctum rebuild"),
-		TRADE_REGION_SALTWICK = list("a salt-house rebuild", "wharf reinforcements"),
+		TRADE_REGION_BLEAKCOAST = list("укрепление портовой стены", "ремонт берегового гарнизона"),
+		TRADE_REGION_NORTHFORT = list("расширение цитадели пограничного гарнизона", "восстановление сторожевой башни"),
+		TRADE_REGION_HEARTFELT = list("реставрация собора", "расширение графской залы"),
+		TRADE_REGION_KINGSFIELD = list("дорожные работы в рыночном городе", "расширение зернохранилища"),
+		TRADE_REGION_DAFTSMARCH = list("укрепление шахтного ствола", "расширение литейной мастерской"),
+		TRADE_REGION_ROSAWOOD = list("восстановление лесопилки", "ремонт торгового тракта"),
+		TRADE_REGION_ROCKHILL = list("восстановление террасной стены", "расширение давильни"),
+		TRADE_REGION_BLACKHOLT = list("восстановление башни после неудачного эксперимента", "восстановление внешнего святилища"),
+		TRADE_REGION_SALTWICK = list("восстановление солеварни", "укрепление причалов"),
 	)
 
 /datum/standing_order/demand_construction/generate_item_mix()
@@ -182,8 +182,8 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_exotic
 	var/list/project_by_region = list(
-		TRADE_REGION_BLACKHOLT = list("a wizards' coven", "a hermit reagent-buyer", "an oddly pale aristocrat with academic interests"),
-		TRADE_REGION_ROSAWOOD = list("a druidic circle", "a forest hermit", "a wandering hedge witch"),
+		TRADE_REGION_BLACKHOLT = list("ковен чародеев", "отшельник, закупающий реагенты", "странно бледный аристократ с научными интересами"),
+		TRADE_REGION_ROSAWOOD = list("круг друидов", "лесной отшельник", "странствующая лесная ведьма"),
 	)
 
 /datum/standing_order/demand_exotic/generate_item_mix()
@@ -201,8 +201,8 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_exotic/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] requires exotic reagents without delay."
-	return "An arcane party in [region.name] is paying well for exotic reagents."
+		return "[capitalize(pick(projects))] в регионе [region.name] требует экзотические реагенты без малейшего промедления."
+	return "Тайное сообщество в регионе [region.name] щедро платит за экзотические реагенты."
 
 
 // ============================================================================
@@ -210,9 +210,9 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_fishery
 	var/list/project_by_region = list(
-		TRADE_REGION_SALTWICK = list("the fishmongers' guild", "a salt-curer with a backlog", "a wharf-side preserver"),
-		TRADE_REGION_BLEAKCOAST = list("a ship's company victualling", "a privateer's crew", "the harbor watch"),
-		TRADE_REGION_KINGSFIELD = list("a market fishmonger", "a village preserver", "a travelling fish-trader"),
+		TRADE_REGION_SALTWICK = list("гильдия рыботорговцев", "засольщик, заваленный заказами", "прибрежный заготовитель"),
+		TRADE_REGION_BLEAKCOAST = list("снабжение судовой команды", "экипаж каперов", "портовая стража"),
+		TRADE_REGION_KINGSFIELD = list("рыночный рыботорговец", "деревенский заготовщик", "странствующий торговец рыбой"),
 	)
 
 /datum/standing_order/demand_fishery/generate_item_mix()
@@ -227,8 +227,8 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_fishery/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] has laid in an order for fish and salt."
-	return "A fishmongers' shop in [region.name] is taking orders for fish and salt."
+		return "[capitalize(pick(projects))] в регионе [region.name] выставил заказ на поставку рыбы и соли."
+	return "Рыбная лавка в регионе [region.name] закупает рыбу и соль."
 
 
 // ============================================================================
@@ -236,9 +236,9 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_orchard
 	var/list/project_by_region = list(
-		TRADE_REGION_ROCKHILL = list("an orchard-master's harvest", "a valley apothecary", "a cider press"),
-		TRADE_REGION_KINGSFIELD = list("a market preserver", "a village apothecary", "a travelling herbalist"),
-		TRADE_REGION_HEARTFELT = list("a chapel almsgiving", "a garrison apothecary", "a hospitaller buying for the road"),
+		TRADE_REGION_ROCKHILL = list("урожай мастера садов", "долинный аптекарь", "сидровая давильня"),
+		TRADE_REGION_KINGSFIELD = list("рыночный заготовитель", "деревенский аптекарь", "странствующий травник"),
+		TRADE_REGION_HEARTFELT = list("раздача милостыни в часовне", "гарнизонный аптекарь", "госпитальер, закупающийся в дорогу"),
 	)
 
 /datum/standing_order/demand_orchard/generate_item_mix()
@@ -336,10 +336,10 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_equipment_armor_heavy
 	roll_weight = 3
 	var/list/project_by_region = list(
-		TRADE_REGION_BLEAKCOAST = list("a galley's fighting men", "a privateer captain outfitting", "a harbor watch armsmaster"),
-		TRADE_REGION_NORTHFORT = list("a frontier garrison", "a watch sergeant outfitting", "a relieved company restocking"),
-		TRADE_REGION_HEARTFELT = list("the count's retinue", "a local mercenary band", "a knightly house outfitting"),
-		TRADE_REGION_KINGSFIELD = list("a market armsmaster", "a knightly house", "a tournament-bound knight"),
+		TRADE_REGION_BLEAKCOAST = list("снаряжение капитана каперов", "ватага корсаров", "оружейник портовой стражи"),
+		TRADE_REGION_NORTHFORT = list("пограничный гарнизон", "сержант дозора, пополняющий снаряжение", "отряд пограничного ополчения"),
+		TRADE_REGION_HEARTFELT = list("свита графа", "местный отряд наёмников", "боевой отряд, собирающийся в поход"),
+		TRADE_REGION_KINGSFIELD = list("рыночный оружейник", "снаряжение странствующего рыцаря", "подпольный торговец оружием"),
 	)
 	var/list/chain_pool = list(
 		TRADE_GOOD_STEEL_CHAINMAIL,
@@ -400,10 +400,10 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_equipment_armor_light
 	roll_weight = 3
 	var/list/project_by_region = list(
-		TRADE_REGION_BLEAKCOAST = list("the harbor watch", "a coastal levy mustering", "a corsair's company outfitting"),
-		TRADE_REGION_NORTHFORT = list("a watch sergeant outfitting", "a band of border irregulars", "a frontier reservist call-up"),
-		TRADE_REGION_HEARTFELT = list("a roving warden party", "the count's footsergeants", "a local adventuring fellowship"),
-		TRADE_REGION_KINGSFIELD = list("a country muster", "a market company", "a yeoman captain outfitting"),
+		TRADE_REGION_BLEAKCOAST = list("портовая стража", "сбор берегового ополчения", "снаряжение ватаги корсаров"),
+		TRADE_REGION_NORTHFORT = list("сержант дозора, пополняющий снаряжение", "отряд пограничного ополчения", "призыв пограничных резервистов"),
+		TRADE_REGION_HEARTFELT = list("группа странствующих егерей", "пешие сержанты графа", "местное братство авантюристов"),
+		TRADE_REGION_KINGSFIELD = list("сельское ополчение", "рыночная рота", "снаряжение капитана йоменов"),
 	)
 	var/list/body_pool = list(
 		TRADE_GOOD_PADDED_GAMBESON,
@@ -447,8 +447,8 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 // ============================================================================
 /datum/standing_order/demand_salt
 	var/list/project_by_region = list(
-		TRADE_REGION_SALTWICK = list("a salt-curer's bulk order", "a curing-shed expansion", "the preservers' guild"),
-		TRADE_REGION_KINGSFIELD = list("a market preserver", "a village smokehouse", "a roadside chapmen restocking"),
+		TRADE_REGION_SALTWICK = list("оптовый заказ мастера засола", "расширение засолочного цеха", "гильдия заготовщиков"),
+		TRADE_REGION_KINGSFIELD = list("рыночный заготовщик", "деревенская коптильня", "пополнение запасов придорожных лоточников"),
 	)
 
 /datum/standing_order/demand_salt/generate_item_mix()
@@ -462,8 +462,8 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_salt/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] require salt in bulk for the preserving of flesh and fish."
-	return "Preservers in [region.name] require salt in bulk."
+		return "[capitalize(pick(projects))] в регионе [region.name] запрашивает соль в больших объёмах для заготовки мяса и рыбы."
+	return "Заготовители в регионе [region.name] нуждаются в крупных поставках соли."
 
 
 // ============================================================================
@@ -852,7 +852,7 @@ GLOBAL_LIST_EMPTY(standing_order_pool)
 /datum/standing_order/demand_fine_joinery/generate_description(datum/economic_region/region)
 	var/list/projects = project_by_region[region.region_id]
 	if(length(projects))
-		return "[capitalize(pick(projects))] at [region.name] requires joinery materials - wood, cloth, and iron."
+		return "[capitalize(pick(projects))] в [region.name] требует базовых материалов - дерево, ткань, и железо."
 	return "A joiner at [region.name] requires materials for fine furnishings."
 
 

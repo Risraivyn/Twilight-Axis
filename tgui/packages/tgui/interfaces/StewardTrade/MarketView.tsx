@@ -375,7 +375,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
                       </span>
                     </div>
                     <SideBlock
-                      side="import"
+                      side="Импорт"
                       label="Buy"
                       color={SEAL_BLUE}
                       regions={row.import_regions}
@@ -388,7 +388,7 @@ export const MarketView = (props: { data: Data; onTrade: OnTrade }) => {
                       onTrade={onTrade}
                     />
                     <SideBlock
-                      side="export"
+                      side="Экспорт"
                       label="Sell"
                       color={SEAL_GREEN}
                       regions={row.export_regions}
