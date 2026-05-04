@@ -509,7 +509,7 @@ const RegionRow = (props: {
   const { side, color, region, goodId, onTrade } = props;
   const regionName = region_catalog[region.region_id]?.name ?? region.region_id;
   const saturated = region.capacity_today <= 0;
-  const actionLabel = side === 'import' ? 'Import' : 'Export';
+  const actionLabel = side === 'import' ? 'Импорт' : 'Экспорт';
   const capacityColor = saturated
     ? INK_FAINT
     : side === 'import'
