@@ -12,7 +12,7 @@
 	restore_text = "Правитель сиих земель возобновил Отаванские соглашения. Святая Отаванская Инквизиция возобновляет свою миссию по очищению земель от еретиков без какого-либо вмешательства Короны."
 
 /datum/decree/otavan_accords/roll_initial_year()
-	return CALENDAR_EPOCH_YEAR - rand(20, 60)
+	return 1492 // Canonical year
 
 /datum/decree/otavan_accords/apply_exemption(mob/living/payer, tax_category)
 	if(!active)
