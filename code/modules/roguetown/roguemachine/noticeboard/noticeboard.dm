@@ -190,7 +190,7 @@
 			contents += "<div style='white-space:pre-wrap;margin-top:4px'>[D.get_display_flavor_text()]</div>"
 			contents += "</div><hr>"
 	else if(current_category == "Trade Orders")
-		contents += "<h2>Standing Trade Orders</h2>"
+		contents += "<h2>Торговые заказы</h2>"
 		contents += "<hr></center>"
 		var/orders_shown = 0
 		for(var/datum/standing_order/O as anything in GLOB.standing_order_pool)
@@ -203,13 +203,13 @@
 			var/is_urgent = istype(O, /datum/standing_order/urgent)
 			contents += "<div style='margin-bottom:10px'>"
 			if(is_urgent)
-				contents += "<font color='#c44'><b>URGENT</b></font> "
+				contents += "<font color='#c44'><b>СРОЧНЫЙ</b></font> "
 			if(region?.is_region_blockaded)
-				contents += "<font color='#c44'><b>BLOCKADED</b></font> "
+				contents += "<font color='#c44'><b>БЛОКАДА</b></font> "
 			if(SSeconomy.order_is_equipment(O))
-				contents += "<font color='#88c'><b>WAREHOUSE</b></font> "
+				contents += "<font color='#88c'><b>СКЛАД</b></font> "
 			if(O.petitioned)
-				contents += "<font color='#a872c4'><b>STEWARD'S PETITION</b></font> "
+				contents += "<font color='#a872c4'><b>ПЕТИЦИЯ СТЮАРДА</b></font> "
 			contents += "<b>[O.name]</b> &mdash; [region_name] &mdash; [days_left]d remaining<br>"
 			if(O.description)
 				contents += "<i>[O.description]</i><br>"

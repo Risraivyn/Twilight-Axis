@@ -885,7 +885,7 @@
 			contents += "<a href='?src=\ref[src];switchtab=[TAB_MAIN]'>\[Return\]</a><BR>"
 			var/list/snap = SStreasury.compute_fiscal_snapshot()
 			var/list/charters = SStreasury.compute_charter_states()
-			contents += "<center><b>Fiscal Ledger &mdash; Day [GLOB.dayspassed]</b></center>"
+			contents += "<center><b>Финансовая книга &mdash; День [GLOB.dayspassed]</b></center>"
 			contents += "<hr>"
 
 			// Balances (two-column)
@@ -900,7 +900,7 @@
 			contents += "</table><br>"
 
 			// Revenue (two-column, green) - only mammon that lands in Crown's Purse
-			contents += "<b><font color='#5cb85c'>CROWN REVENUE THIS WEEK</font></b>"
+			contents += "<b><font color='#5cb85c'>КОРОЛЕВСКИЙ ДОХОД НА ЭТОЙ НЕДЕЛЕ</font></b>"
 			contents += "<table width='100%' cellspacing='0' cellpadding='2'>"
 			contents += "<tr><td>Rural Tax</td><td align='right'><font color='#5cb85c'>[SStreasury.total_rural_tax]m</font></td>"
 			contents += "<td>Штрафы</td><td align='right'><font color='#5cb85c'>[GLOB.azure_round_stats[STATS_FINES_INCOME]]m</font></td></tr>"
@@ -922,7 +922,7 @@
 			var/exempt_fine = GLOB.azure_round_stats[STATS_EXEMPTED_FINE]
 			var/exempt_poll = GLOB.azure_round_stats[STATS_EXEMPTED_POLL_TAX]
 			var/exempt_total = exempt_contract + exempt_headeater + exempt_import + exempt_export + exempt_fine + exempt_poll
-			contents += "<b><font color='#8f7a5a'>FORGONE REVENUE (tax exempted)</font></b>"
+			contents += "<b><font color='#8f7a5a'>УПУЩЕННЫЙ ДОХОД (tax exempted)</font></b>"
 			contents += "<table width='100%' cellspacing='0' cellpadding='2'>"
 			contents += "<tr><td>Contract Levy</td><td align='right'><font color='#8f7a5a'>[exempt_contract]m</font></td>"
 			contents += "<td>Headeater Levy</td><td align='right'><font color='#8f7a5a'>[exempt_headeater]m</font></td></tr>"
@@ -974,7 +974,7 @@
 			contents += "</table><br>"
 
 			// Poll Tax Rates (two columns: category | m/day)
-			contents += "<b>POLL TAX RATES (daily)</b>"
+			contents += "<b>НАЛОГОВАЯ СТАВКА (daily)</b>"
 			contents += "<table width='100%' cellspacing='0' cellpadding='2'>"
 			var/datum/decree/golden = SStreasury.get_decree(DECREE_GOLDEN_BULL)
 			var/golden_active = golden?.active
@@ -1026,7 +1026,7 @@
 			contents += "</table><br>"
 
 			// Debt & Loans (two-column, orange for warnings)
-			contents += "<b><font color='#e07b39'>DEBT &amp; LOANS</font></b>"
+			contents += "<b><font color='#e07b39'>ДОЛГИ И ЗАЙМЫ</font></b>"
 			contents += "<table width='100%' cellspacing='0' cellpadding='2'>"
 			contents += "<tr><td>Счета с задолженностью</td><td align='right'><font color='#e07b39'>[snap["in_arrears"]]</font></td>"
 			contents += "<td>Accounts in Advance</td><td align='right'>[snap["in_advance"]]</td></tr>"
@@ -1035,7 +1035,7 @@
 			contents += "</table><br>"
 
 			// Contracts (three-column: Issued / Taken / Completed, by issuing authority)
-			contents += "<b>CONTRACTS THIS WEEK</b>"
+			contents += "<b>КОНТРАКТЫ НА ЭТОЙ НЕДЕЛЕ</b>"
 			contents += "<table width='100%' cellspacing='0' cellpadding='2'>"
 			contents += "<tr><td></td><td align='right'><b>Issued</b></td><td align='right'><b>Taken</b></td><td align='right'><b>Completed</b></td></tr>"
 			contents += "<tr><td>Guild</td>"
