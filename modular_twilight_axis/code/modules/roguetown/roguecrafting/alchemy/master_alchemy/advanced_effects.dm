@@ -37,14 +37,82 @@
 	taste_description = "the absolute void"
 	metabolization_rate = REAGENTS_METABOLISM * 0.3
 
-/datum/reagent/advanced/invisible/on_mob_life(mob/living/M)
-	M.alpha = 0
-	M.invisibility = 60
-	..()
+/datum/reagent/advanced/invisible/on_mob_add(mob/living/carbon/human/M)
+	if(!istype(M)) return
+	M.apply_status_effect(/datum/status_effect/void_stealth)
 
-/datum/reagent/advanced/invisible/on_mob_delete(mob/living/M)
-	M.alpha = 255
-	M.invisibility = 0
+/datum/reagent/advanced/invisible/on_mob_delete(mob/living/carbon/human/M)
+	if(!istype(M)) return
+	M.remove_status_effect(/datum/status_effect/void_stealth)
+
+/datum/status_effect/void_stealth
+	id = "void_stealth"
+	duration = -1
+	alert_type = /atom/movable/screen/alert/status_effect/buff/alch/void_stealth
+
+/datum/status_effect/void_stealth/on_apply()
+	var/mob/living/L = owner
+	if(!L) return FALSE
+
+	RegisterSignal(owner, COMSIG_MOB_BREAK_SNEAK, PROC_REF(handle_sneak_break))
+	START_PROCESSING(SSfastprocess, src)
+	
+	to_chat(L, span_purple("Вы чувствуете, как Пустота поселилась в вашей тени, готовая скрыть вас по первому требованию..."))
+	return ..()
+
+/datum/status_effect/void_stealth/on_remove()
+	var/mob/living/L = owner
+	STOP_PROCESSING(SSfastprocess, src)
+	
+	if(L)
+		UnregisterSignal(L, COMSIG_MOB_BREAK_SNEAK)
+		L.mob_timers[MT_INVISIBILITY] = world.time
+
+		L.update_sneak_invis(reset = TRUE)
+	return ..()
+
+/datum/status_effect/void_stealth/proc/handle_sneak_break(datum/source)
+	SIGNAL_HANDLER
+	var/mob/living/L = owner
+	if(!L) return 0
+
+	if(L.mob_timers[MT_FOUNDSNEAK] && (world.time < L.mob_timers[MT_FOUNDSNEAK] + 2 SECONDS))
+		return 0 
+
+	L.alpha = 0
+	L.rogue_sneaking = TRUE
+	return 1
+
+/datum/status_effect/void_stealth/process(delta_time)
+	var/mob/living/L = owner
+	if(!L || L.stat == DEAD) 
+		return
+
+	if(L.mob_timers[MT_FOUNDSNEAK])
+		if(world.time > L.mob_timers[MT_FOUNDSNEAK] + 2 SECONDS)
+			L.mob_timers[MT_FOUNDSNEAK] = 0
+			to_chat(L, span_notice("Ваша связь с Пустотой восстановилась. Вы снова можете уйти в тень."))
+
+	if(L.m_intent == MOVE_INTENT_SNEAK)
+		if(!L.rogue_sneaking && !L.mob_timers[MT_FOUNDSNEAK])
+			L.rogue_sneaking = TRUE
+
+			L.mob_timers[MT_INVISIBILITY] = world.time + 10 HOURS 
+
+			animate(L, alpha = 0, time = 15)
+			spawn(15) L.regenerate_icons()
+	else
+		if(L.rogue_sneaking)
+			L.rogue_sneaking = FALSE
+			L.mob_timers[MT_INVISIBILITY] = world.time
+			
+			animate(L, alpha = initial(L.alpha), time = 10)
+			spawn(10) L.regenerate_icons()
+
+/atom/movable/screen/alert/status_effect/buff/alch/void_stealth
+	name = "Объятия Пустоты"
+	desc = "Вы абсолютно невидимы. Ни свет, ни движение не могут выдать ваше присутствие."
+	icon_state = "buff"
 
 /datum/reagent/advanced/paralysis
 	name = "Spider's Kiss"

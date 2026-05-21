@@ -25,10 +25,10 @@
 	output_reagents = list(/datum/reagent/advanced/growth = ADVANCED_POTION_VOLUME_STANDARD)
 
 
-///datum/alch_cauldron_recipe/advanced/invisible
-//	name = "Void Ichor"
-//	skill_required = SKILL_LEVEL_APPRENTICE
-//	output_reagents = list(/datum/reagent/advanced/invisible = ADVANCED_POTION_VOLUME_STANDARD)
+/datum/alch_cauldron_recipe/advanced/invisible
+	name = "Void Ichor"
+	skill_required = SKILL_LEVEL_APPRENTICE
+	output_reagents = list(/datum/reagent/advanced/invisible = ADVANCED_POTION_VOLUME_STANDARD)
 
 
 ///datum/alch_cauldron_recipe/advanced/paralysis
