@@ -54,8 +54,7 @@
 	var/mob/living/L = owner
 	if(!L) return FALSE
 
-	L.toggle_rogmove_intent(MOVE_INTENT_SNEAK, silent = TRUE)
-
+	L.toggle_rogmove_intent(MOVE_INTENT_SNEAK)
 	L.mob_timers[MT_INVISIBILITY] = world.time + 10 MINUTES 
 	
 	RegisterSignal(owner, COMSIG_MOB_BREAK_SNEAK, PROC_REF(handle_sneak_break))
@@ -72,7 +71,7 @@
 	if(L)
 		UnregisterSignal(L, COMSIG_MOB_BREAK_SNEAK)
 		L.mob_timers[MT_INVISIBILITY] = world.time
-		L.toggle_rogmove_intent(MOVE_INTENT_WALK, silent = TRUE)
+		L.toggle_rogmove_intent(MOVE_INTENT_WALK)
 	return ..()
 
 /datum/status_effect/void_stealth/proc/handle_sneak_break(datum/source)
@@ -93,7 +92,7 @@
 		return
 
 	if(L.m_intent != MOVE_INTENT_SNEAK)
-		L.toggle_rogmove_intent(MOVE_INTENT_SNEAK, silent = TRUE)
+		L.toggle_rogmove_intent(MOVE_INTENT_SNEAK)
 
 	if(L.mob_timers[MT_FOUNDSNEAK])
 		if(world.time > L.mob_timers[MT_FOUNDSNEAK] + 2 SECONDS)
@@ -101,16 +100,14 @@
 			
 			L.mob_timers[MT_FOUNDSNEAK] = 0
 			L.mob_timers[MT_INVISIBILITY] = world.time + 10 MINUTES
-			
-			L.toggle_rogmove_intent(MOVE_INTENT_SNEAK, silent = TRUE)
+			L.toggle_rogmove_intent(MOVE_INTENT_SNEAK)
 
 	if(L.m_intent == MOVE_INTENT_SNEAK)
 		if(!L.rogue_sneaking && !L.mob_timers[MT_FOUNDSNEAK])
 			L.rogue_sneaking = TRUE
 			L.mob_timers[MT_INVISIBILITY] = world.time + 10 MINUTES 
 			
-			animate(L, alpha = 0, time = 15)
-
+			animate(L, alpha = 0, time = 15)		
 			addtimer(CALLBACK(L, TYPE_PROC_REF(/mob/living, regenerate_icons)), 1.5 SECONDS)
 	else
 		if(L.rogue_sneaking)
