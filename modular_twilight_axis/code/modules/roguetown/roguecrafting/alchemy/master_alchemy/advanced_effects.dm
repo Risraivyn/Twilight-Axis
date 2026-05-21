@@ -54,21 +54,25 @@
 	var/mob/living/L = owner
 	if(!L) return FALSE
 
+	L.toggle_rogmove_intent(MOVE_INTENT_SNEAK, silent = TRUE)
+
+	L.mob_timers[MT_INVISIBILITY] = world.time + 10 MINUTES 
+	
 	RegisterSignal(owner, COMSIG_MOB_BREAK_SNEAK, PROC_REF(handle_sneak_break))
-	START_PROCESSING(SSfastprocess, src)
+
+	START_PROCESSING(SSprocessing, src)
 	
 	to_chat(L, span_purple("Вы чувствуете, как Пустота поселилась в вашей тени, готовая скрыть вас по первому требованию..."))
 	return ..()
 
 /datum/status_effect/void_stealth/on_remove()
 	var/mob/living/L = owner
-	STOP_PROCESSING(SSfastprocess, src)
+	STOP_PROCESSING(SSprocessing, src)
 	
 	if(L)
 		UnregisterSignal(L, COMSIG_MOB_BREAK_SNEAK)
 		L.mob_timers[MT_INVISIBILITY] = world.time
-
-		L.update_sneak_invis(reset = TRUE)
+		L.toggle_rogmove_intent(MOVE_INTENT_WALK, silent = TRUE)
 	return ..()
 
 /datum/status_effect/void_stealth/proc/handle_sneak_break(datum/source)
@@ -81,33 +85,41 @@
 
 	L.alpha = 0
 	L.rogue_sneaking = TRUE
-	return 1
+	return 1 
 
 /datum/status_effect/void_stealth/process(delta_time)
 	var/mob/living/L = owner
 	if(!L || L.stat == DEAD) 
 		return
 
+	if(L.m_intent != MOVE_INTENT_SNEAK)
+		L.toggle_rogmove_intent(MOVE_INTENT_SNEAK, silent = TRUE)
+
 	if(L.mob_timers[MT_FOUNDSNEAK])
 		if(world.time > L.mob_timers[MT_FOUNDSNEAK] + 2 SECONDS)
-			L.mob_timers[MT_FOUNDSNEAK] = 0
 			to_chat(L, span_notice("Ваша связь с Пустотой восстановилась. Вы снова можете уйти в тень."))
+			
+			L.mob_timers[MT_FOUNDSNEAK] = 0
+			L.mob_timers[MT_INVISIBILITY] = world.time + 10 MINUTES
+			
+			L.toggle_rogmove_intent(MOVE_INTENT_SNEAK, silent = TRUE)
 
 	if(L.m_intent == MOVE_INTENT_SNEAK)
 		if(!L.rogue_sneaking && !L.mob_timers[MT_FOUNDSNEAK])
 			L.rogue_sneaking = TRUE
-
-			L.mob_timers[MT_INVISIBILITY] = world.time + 10 HOURS 
-
+			L.mob_timers[MT_INVISIBILITY] = world.time + 10 MINUTES 
+			
 			animate(L, alpha = 0, time = 15)
-			spawn(15) L.regenerate_icons()
+
+			addtimer(CALLBACK(L, TYPE_PROC_REF(/mob/living, regenerate_icons)), 1.5 SECONDS)
 	else
 		if(L.rogue_sneaking)
 			L.rogue_sneaking = FALSE
 			L.mob_timers[MT_INVISIBILITY] = world.time
 			
 			animate(L, alpha = initial(L.alpha), time = 10)
-			spawn(10) L.regenerate_icons()
+			
+			addtimer(CALLBACK(L, TYPE_PROC_REF(/mob/living, regenerate_icons)), 1 SECONDS)
 
 /atom/movable/screen/alert/status_effect/buff/alch/void_stealth
 	name = "Объятия Пустоты"
