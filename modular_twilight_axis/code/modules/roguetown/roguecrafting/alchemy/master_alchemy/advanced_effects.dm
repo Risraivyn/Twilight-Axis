@@ -165,15 +165,30 @@
 	description = "A crackling yellow liquid resembling captured lightning. It vibrates with intense, suppressed energy."
 	color = "#ffff00"
 	taste_description = "citric acid"
-	metabolization_rate = REAGENTS_METABOLISM * 0.2
+	metabolization_rate = REAGENTS_METABOLISM * 0.5
 
 /datum/reagent/advanced/speed/on_mob_add(mob/living/M)
-	M.add_movespeed_modifier("swift_feet", multiplicative_slowdown = -1.5)
+	if(!istype(M)) return
+	var/speed_bonus = volume * -0.05
+	speed_bonus = max(speed_bonus, -2.0)
 	M.AddComponent(/datum/component/after_image)
+	M.add_movespeed_modifier("swift_feet", TRUE, 0, NONE, TRUE, speed_bonus)
+
+/datum/reagent/advanced/speed/on_mob_life(mob/living/M)
+	if(!istype(M)) return ..()
+	var/speed_bonus = volume * -0.05
+	speed_bonus = max(speed_bonus, -2.0)
+	M.add_movespeed_modifier("swift_feet", TRUE, 0, NONE, TRUE, speed_bonus)
+	..()
+	return 1
 
 /datum/reagent/advanced/speed/on_mob_delete(mob/living/M)
-	M.remove_movespeed_modifier("swift_feet")
-	qdel(M.GetComponent(/datum/component/after_image))
+	if(!istype(M)) return
+	M.remove_movespeed_modifier("swift_feet", TRUE)
+	var/datum/component/after_image/AI = M.GetComponent(/datum/component/after_image)
+	if(AI)
+		qdel(AI)
+	..()
 
 /datum/reagent/advanced/elixir_of_life
 	name = "Elixir of Life"
