@@ -127,7 +127,7 @@
 	desc = "Deliciously crisp and fragrant. It's said that archers will sometimes \
 	place these crimson fruits atop another's head, in order to flaunt their accuracy \
 	with a longbow. A successful hit, and the crowd claps without harm; a mote's \
-	deviation, however, and someone's going to end up being hauled into the CHurch."
+	deviation, however, and someone's going to end up being hauled into the Church."
 	icon_state = "apple"
 	filling_color = "#FF4500"
 	bitesize = 3
@@ -383,7 +383,7 @@
 /obj/item/reagent_containers/food/snacks/grown/sugarcane
 	seed = /obj/item/seeds/sugarcane
 	name = "sugarcane"
-	desc = "A tall, leafy plant with a thick, fibrous stalk. It can be milled into sugar. Commonly eaten as a snack in part of the former Zhongese dynasty."
+	desc = "A tall, leafy plant with a thick, fibrous stalk. It can be milled into sugar. Commonly eaten as a snack in part of Lingyue."
 	icon_state = "sugarcane"
 	throwforce = 0
 	w_class = WEIGHT_CLASS_TINY

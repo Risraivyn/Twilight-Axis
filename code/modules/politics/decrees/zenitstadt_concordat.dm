@@ -23,6 +23,6 @@
 		return FALSE
 	if(payer.job in GLOB.church_positions)
 		return TRUE
-	if(HAS_TRAIT(payer, TRAIT_DECLARED_BENEFACTOR))
+	if(HAS_TRAIT(payer, TRAIT_AGENT_CHURCH))
 		return TRUE
 	return FALSE

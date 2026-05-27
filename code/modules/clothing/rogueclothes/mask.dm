@@ -430,6 +430,8 @@
 	desc = "Shattered jaws, chipped teeth, sunken metal - fit for a skull of the same. It snarls in mimicry of the Sinistar's visage."
 	icon_state = "graggarplatemask_heavy"
 	block2add = null
+	body_parts_covered = MOUTH|NOSE
+	flags_inv = HIDEFACE|HIDESNOUT
 
 /obj/item/clothing/mask/rogue/facemask/steel/graggar/ComponentInitialize()
 	AddComponent(/datum/component/cursed_item, TRAIT_HORDE, "ARMOR", "RENDERED ASUNDER")
@@ -457,14 +459,12 @@
 	name = "gold mask"
 	icon_state = "goldmask"
 	max_integrity = 150
-	sellprice = 100
 	smeltresult = /obj/item/ingot/gold
 
 /obj/item/clothing/mask/rogue/facemask/goldmaskc
 	name = "gold mask"
 	icon_state = "goldmaskc"
 	max_integrity = 150
-	sellprice = 100
 	smeltresult = /obj/item/ingot/gold
 
 /obj/item/clothing/mask/rogue/facemask/yoruku_oni
@@ -693,58 +693,44 @@
 	salvage_result = null
 
 /obj/item/clothing/mask/rogue/facemask/carved/jademask
-	name = "jade mask "
-	icon_state = "mask_jade"
-	desc = "A jade mask that both conceals and protects the face."
-	sellprice = 70
-
-/obj/item/clothing/mask/rogue/facemask/carved/jademask
 	name = "jade mask"
 	icon_state = "mask_jade"
 	desc = "A jade mask that both conceals and protects the face."
-	sellprice = 70
 
 /obj/item/clothing/mask/rogue/facemask/carved/turqmask
 	name = "cerulite mask"
 	icon_state = "mask_turq"
 	desc = "A cerulite mask that both conceals and protects the face."
-	sellprice = 95
 
 /obj/item/clothing/mask/rogue/facemask/carved/rosemask
 	name = "rosestone mask"
 	icon_state = "mask_rose"
 	desc = "A rosestone mask that both conceals and protects the face."
-	sellprice = 35
 
 /obj/item/clothing/mask/rogue/facemask/carved/shellmask
 	name = "shell mask"
 	icon_state = "mask_shell"
 	desc = "A shell mask that both conceals and protects the face."
-	sellprice = 30
 
 /obj/item/clothing/mask/rogue/facemask/carved/coralmask
 	name = "heartstone mask"
 	icon_state = "mask_coral"
 	desc = "An heartstone mask that both conceals and protects the face."
-	sellprice = 80
 
 /obj/item/clothing/mask/rogue/facemask/carved/ambermask
 	name = "amber mask"
 	icon_state = "mask_amber"
 	desc = "A amber mask that both conceals and protects the face."
-	sellprice = 70
 
 /obj/item/clothing/mask/rogue/facemask/carved/onyxamask
 	name = "onyxa mask"
 	icon_state = "mask_onyxa"
 	desc = "An onyxa mask that both conceals and protects the face."
-	sellprice = 50
 
 /obj/item/clothing/mask/rogue/facemask/carved/opalmask
 	name = "opal mask"
 	icon_state = "mask_opal"
 	desc = "An opal mask that both conceals and protects the face."
-	sellprice = 100
 
 /obj/item/clothing/mask/rogue/xylixmask
 	name = "jester mask"

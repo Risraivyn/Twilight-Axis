@@ -67,7 +67,6 @@
 	smelt_bar_num = 1
 	grid_height = 96
 	grid_width = 96
-	sellprice = 200
 	unenchantable = TRUE
 
 /obj/item/clothing/wrists/roguetown/bracers/gold/king
@@ -75,6 +74,7 @@
 	max_integrity = ARMOR_INT_SIDE_GOLDPLUS // Doubled integrity.
 	sellprice = 300
 	unenchantable = TRUE
+	no_loot_taint = TRUE
 
 /obj/item/clothing/wrists/roguetown/bracers/lirvas
 	name = "lirvasi pauldrons"
@@ -172,7 +172,6 @@
 	icon_state = "albracers"
 	armor = ARMOR_LEATHER
 	max_integrity = ARMOR_INT_SIDE_STEEL
-	sellprice = 10
 	salvage_amount = 1
 	salvage_result = /obj/item/natural/hide/cured
 	color = "#7f829d"
@@ -348,49 +347,41 @@
 	name = "jade bracelets"
 	desc = "A set of bracelets carved out of jade."
 	icon_state = "br_jade"
-	sellprice = 65
 
 /obj/item/clothing/wrists/roguetown/gem/turqbracelet
 	name = "cerulite bracelets"
 	desc = "A set of bracelets carved out of cerulite."
 	icon_state = "br_turq"
-	sellprice = 90
 
 /obj/item/clothing/wrists/roguetown/gem/onyxabracelet
 	name = "onyxa bracelets"
 	desc = "A set of bracelets carved out of onyxa."
 	icon_state = "br_onyxa"
-	sellprice = 45
 
 /obj/item/clothing/wrists/roguetown/gem/coralbracelet
 	name = "heartstone bracelets"
 	desc = "A set of bracelets carved out of heartstone."
 	icon_state = "br_coral"
-	sellprice = 75
 
 /obj/item/clothing/wrists/roguetown/gem/amberbracelet
 	name = "amber bracelets"
 	desc = "A set of bracelets carved out of amber."
 	icon_state = "br_amber"
-	sellprice = 65
 
 /obj/item/clothing/wrists/roguetown/gem/shellbracelet
 	name = "shell bracelets"
 	desc = "A set of bracelets carved out of shell."
 	icon_state = "br_shell"
-	sellprice = 25
 
 /obj/item/clothing/wrists/roguetown/gem/rosebracelet
 	name = "rosestone bracelets"
 	desc = "A set of bracelets carved out of rosestone."
 	icon_state = "br_rose"
-	sellprice = 30
 
 /obj/item/clothing/wrists/roguetown/gem/opalbracelet
 	name = "opal bracelets"
 	desc = "A set of bracelets carved out of opal."
 	icon_state = "br_opal"
-	sellprice = 95
 //
 
 /obj/item/clothing/wrists/roguetown/bracers/matthios
@@ -398,10 +389,12 @@
 	desc = "Away with you, vile beggar!"
 	color = "#ffc960"
 	smeltresult = /obj/item/ingot/component/matthios
+	unenchantable = TRUE
 
 /obj/item/clothing/wrists/roguetown/bracers/matthios/Initialize()
 	. = ..()
 	AddComponent(/datum/component/cursed_item, TRAIT_FREEMAN, "ARMOR")
+	add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = "#fff385", "alpha" = 120, "size" = 1)) //IS THIS TRVE?
 
 //
 
@@ -414,10 +407,16 @@
 	max_integrity = ARMOR_INT_SIDE_STEEL
 	armor_class = ARMOR_CLASS_MEDIUM
 	smeltresult = /obj/item/ingot/component/zizo
+	unenchantable = TRUE
 
 /obj/item/clothing/wrists/roguetown/bracers/zizo/Initialize()
 	. = ..()
 	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "ARMOR")
+	add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = "#5f1515", "alpha" = 120, "size" = 1)) //Cursed look.
+
+/obj/item/clothing/wrists/roguetown/bracers/zizo/heavy
+	name = "fused avantyne bracers"
+	desc = "Clasped yet practical, these avantyne wristguards are bound to the wearer forever. Once you have plunged deep into knowledge forbidden, there is no going back.."
 
 /obj/item/clothing/wrists/roguetown/bracers/zizo/heavy/Initialize()
 	. = ..()
@@ -435,10 +434,12 @@
 	desc = "Oh, to plunge hands into cold water; to play a melody upon an ivory-keyed piano; to watch steam rise from boiling, twisting entrails.."
 	color = "#ddc0a7"
 	smeltresult = /obj/item/ingot/component/graggar
+	unenchantable = TRUE
 
 /obj/item/clothing/wrists/roguetown/bracers/graggar/Initialize()
 	. = ..()
 	AddComponent(/datum/component/cursed_item, TRAIT_HORDE, "ARMOR", "RENDERED ASUNDER")
+	add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = "#1a146e", "alpha" = 120, "size" = 1)) //Cursed look.
 
 /obj/item/clothing/wrists/roguetown/bracers/graggar/heavy
 	name = "vicious wristguards"

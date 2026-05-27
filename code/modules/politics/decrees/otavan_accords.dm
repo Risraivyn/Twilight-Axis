@@ -2,8 +2,8 @@
 	id = DECREE_OTAVAN_ACCORDS
 	name = "Отаванские соглашения"
 	category = DECREE_CATEGORY_NEW
-	mechanical_text = "Инквизиция освобождается от налогов."
-	flavor_text = {"Настоящие Отаванские соглашения, заключенные во имя Десяти Неделимых и под покровительством Всемогущего Всеотца, свидетельствуют о том, что Святая Отаванская Инквизиция, верные слуги Псайдона и посланники Отавики, наделяется правом и обязанностью охранять эту землю от ереси. Во исполнение сией миссии, Инквизиция обязуется преследовать слуг Архиврага и ложных богов, не поднимать руку на подданных Азурии, не запятнанных ересью, судить лишь простолюдинов и никогда не подвергать гонениям ни горожан, ни дворян, кроме как в случаях официальной санкции Короны.
+	mechanical_text = "Inquisition members pay no taxes."
+	flavor_text = {"In the name of the Ten, under the Almighty Allfather's watch, be it known that the Holy Otavan Inquisition, sworn servants of Psydon and emissaries of the Orthodoxy, shall keep vigil against heresy athupon this land: to defend and protect the Duchy of Azuria from those who would do it harm, and to counsel and advise the leaders and peoples of the nation. The Inquisition is hereby granted the right to try foreigners, those sanctioned and outlawed by the Duchy for crimes of high heresy, or those who are handed over by order of Crown and Court. The Holy Inquisition is to be granted permission to aid in trials of citizenry alongside the lawful authorities of the land, save for the Nobility, who must be tried before the Crown.
 
 Взамен, будучи признанными духовенством Отаванской Церкви Всеотца, Инквизиция освобождается от обложения налогами и сборами в отношении своих членов и инструментов их служения; и Корона не будет препятствовать их святому долгу, за исключением случая предъявления законных претензий перед Церковью Десяти.
 

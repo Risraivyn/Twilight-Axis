@@ -32,6 +32,8 @@
 	var/hides_from_books = FALSE 
 	/// Whether this recipe will transmit a message in a 7x7 column around the source.
 	var/loud = FALSE
+	/// Whether this recipe will log for admins, use for structures and anything that can cause grief.
+	var/adminlog = FALSE
 	//crafting diff, every diff removes 25% chance to craft
 	var/required_tech_node = null // String ID of required tech node, or null if no tech required
 	var/tech_unlocked = TRUE // Set to TRUE when the required tech is unlocked
@@ -42,6 +44,7 @@
 	var/aliases = ""
 	var/list/cached_display_data
 	var/cached_category
+	var/display_category
 /*
 /datum/crafting_recipe/example
 	name = ""
@@ -59,7 +62,20 @@
 	data["name"] = name
 	data["ref"] = "[REF(src)]"
 	data["path"] = type
-	data["sellprice"] = sellprice
+	var/resolved_sellprice = sellprice
+	var/result_path
+	if(islist(result))
+		var/list/result_list = result
+		if(result_list.len)
+			result_path = result_list[1]
+	else if(ispath(result, /atom/movable))
+		result_path = result
+	if(!resolved_sellprice && result_path)
+		resolved_sellprice = initial(result_path:sellprice)
+		if(!resolved_sellprice && GLOB.derived_sellprices)
+			resolved_sellprice = GLOB.derived_sellprices[result_path] || lookup_derived_subtype_price(result_path)
+	data["sellprice"] = resolved_sellprice
+	data["has_item_quality"] = result_path && ispath(result_path, /obj/item) ? initial(result_path:has_item_quality) : FALSE
 	data["craftingdifficulty"] = skill_to_string(craftdiff)
 
 	var/req_text = ""
@@ -215,7 +231,7 @@
 				if(WLENGTH_GREAT)
 					html += "Great<br>"
 
-		if(bookweapon.has_altgrip_modes())
+		if(!ispath(bookweapon) && bookweapon.has_altgrip_modes())
 			html += "\n<b>GRIP: ALT-GRIP (RCLICK/HOTKEY(B)/CTRL+SCRLWHL)</b><br>"
 			var/list/alt_grip_lines = bookweapon.get_altgrip_lines(src, user)
 			if(length(alt_grip_lines))

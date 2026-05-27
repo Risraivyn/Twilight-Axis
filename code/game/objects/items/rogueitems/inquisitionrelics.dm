@@ -193,28 +193,24 @@
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(matthioslines))))
 						H.add_stress(/datum/stressevent/soulchurnerheretic)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/inhumen/zizo)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(zizolines))))
 						H.add_stress(/datum/stressevent/soulchurnerheretic)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/inhumen/graggar)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(graggarlines))))
 						H.add_stress(/datum/stressevent/soulchurnerheretic)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/inhumen/baotha)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(baothalines))))
 						H.add_stress(/datum/stressevent/soulchurnerheretic)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/divine/undivided)
@@ -227,70 +223,60 @@
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(astratanlines))))
 						H.add_stress(/datum/stressevent/soulchurner)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/divine/noc)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(noclines))))
 						H.add_stress(/datum/stressevent/soulchurner)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/divine/necra)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(necralines))))
 						H.add_stress(/datum/stressevent/soulchurner)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/divine/pestra)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(pestralines))))
 						H.add_stress(/datum/stressevent/soulchurner)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/divine/malum)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(malumlines))))
 						H.add_stress(/datum/stressevent/soulchurner)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/divine/dendor)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(dendorlines))))
 						H.add_stress(/datum/stressevent/soulchurner)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/divine/xylix)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(xylixlines))))
 						H.add_stress(/datum/stressevent/soulchurner)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/divine/eora)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(eoralines))))
 						H.add_stress(/datum/stressevent/soulchurner)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/divine/abyssor)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(abyssorlines))))
 						H.add_stress(/datum/stressevent/soulchurner)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 					if(/datum/patron/divine/ravox)
 						to_chat(H, (span_hypnophrase("Голос из песни зовёт тебя...")))
 						to_chat(H, (span_cultsmall(pick(ravoxlines))))
 						H.add_stress(/datum/stressevent/soulchurner)
-						H.apply_status_effect(/datum/status_effect/debuff/nekoldun)
 						if(!H.has_status_effect(/datum/status_effect/buff/churnernegative))
 							H.apply_status_effect(/datum/status_effect/buff/churnernegative)
 
@@ -394,8 +380,11 @@ Inquisitorial armory down here
 				M.update_inv_hands()
 			START_PROCESSING(SSobj, src)
 	else if(fuel <= 0 && user.used_intent.type == /datum/intent/weep)
-		to_chat(user, span_info("It is gone. You weep."))
-		user.emote("cry")
+		if(!HAS_TRAIT(user, TRAIT_NOMOOD))
+			to_chat(user, span_info("It is gone. You weep."))
+			user.emote("cry")
+		else
+			to_chat(user, span_info("It is gone. You feel nothing."))
 
 /obj/item/flashlight/flare/torch/lantern/psycenser/process()
 	if(on && next_smoke < world.time)
@@ -690,91 +679,6 @@ Inquisitorial armory down here
 	else
 		to_chat(user, span_warning("I don't know how to use this."))		
 
-/obj/item/inqarticles/tallowpot
-	name = "tallowpot"
-	desc = "A small metal pot meant for holding waxes or melted redtallow. Convenient for coating signet rings and making an imprint. The warmth of a torch, lamptern, or candle should be enough to melt the redtallow for stamping writs."
-	icon = 'icons/roguetown/items/misc.dmi'
-	icon_state = "tallowpot"
-	item_state = "tallowpot"
-	dropshrink = 0.9
-	throw_speed = 1
-	throw_range = 3
-	throwforce = 5
-	possible_item_intents = list(/datum/intent/use)
-	grid_height = 32
-	grid_width = 32
-	obj_flags = CAN_BE_HIT
-	experimental_inhand = TRUE
-	w_class = WEIGHT_CLASS_SMALL
-	intdamage_factor = 0
-	embedding = null
-	var/tallow
-	var/remaining
-	var/heatedup
-	var/messageshown = 1
-	sellprice = 15
-
-/obj/item/inqarticles/tallowpot/Initialize(mapload)
-	. = ..()
-	START_PROCESSING(SSobj, src)	// For making sure it melts.
-
-/obj/item/inqarticles/tallowpot/Destroy()
-	. = ..()
-	STOP_PROCESSING(SSobj, src)	
-
-/obj/item/inqarticles/tallowpot/process()
-	if(heatedup > 0)
-		heatedup -= 4
-		remaining = max(remaining - -20, 0)
-		messageshown = 0
-	else
-		if(tallow)
-			if(!messageshown)
-				visible_message(span_info("The redtallow in [src] hardens again."))
-				messageshown = 1
-			update_icon()
-	if(remaining == 0)
-		qdel(tallow)
-		tallow = initial(tallow)
-		update_icon()
-	
-/obj/item/inqarticles/tallowpot/attacked_by(obj/item/I, mob/living/user)
-	. = ..()
-	if(istype(I, /obj/item/reagent_containers/food/snacks/tallow/red))
-		if(!tallow)
-			var/obj/item/reagent_containers/food/snacks/tallow/red/Q = I
-			tallow = Q
-			user.transferItemToLoc(Q, src, TRUE)
-			remaining = 300
-			update_icon()
-		else
-			to_chat(user, span_info("The [src] already has redtallow in it."))
-
-	if(istype(I, /obj/item/flashlight/flare/torch/))		
-		heatedup = 28
-		visible_message(span_info("[user] warms [src] with [I]."))
-		update_icon()
-
-	if(istype(I, /obj/item/candle/)) //Could optimize this, probably. Allows candles to be used in lighting up the tallow, too.	Remove if torches and lampterns suddenly stop working for this.
-		heatedup = 28
-		visible_message(span_info("[user] warms [src] with [I]."))
-		update_icon()
-
-
-/obj/item/inqarticles/tallowpot/update_icon()
-	. = ..()	
-	if(tallow)
-		icon_state = "[initial(icon_state)]_filled"
-		if(heatedup)
-			icon_state = "[initial(icon_state)]_melted"
-	else
-		icon_state = "[initial(icon_state)]"
-
-/obj/item/inqarticles/tallowpot/get_mechanics_examine(mob/user)
-    . = ..()
-    . += span_info("Left click with a chunk of redtallow to fill it up.")
-    . += span_info("Once filled, left-clicking the tallowpot with a torch, lamptern, candle, or any other handheld source of heat will temporarily melt the redtallow inside.")
-
 /obj/item/rope/inqarticles/inquirycord
 	name = "inquiry cordage"
 	desc = "A length of thick leather inquiry cordage that has been dipped in both holy water and dye before being consecrated and spell-laced. Intended for apprehending foes and rethreading tools at the worst of times."
@@ -808,7 +712,7 @@ Inquisitorial armory down here
 			if("onbelt")
 				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
 
-
+/*		//TA-EDITSTART
 /obj/item/inqarticles/garrote // Do not give this item out freely to other classes. Do not subtype this item for other classes. This is intended purely as the Confessor's identifying sidegrade, and as a bonus for the Inspector INQ. I will be very sad if you disregard this comment. Thank you. - Yische.
 	name = "\proper seizing garrote" // It's nonlethal. It's so silly and fun.
 	desc = "A macabre instrument favored by the more clandestine of the Psydonian Silver Order; A length of thick leather inquiry cordage that has been dipped in both holy water and dye before being consecrated and spell-laced, held and threaded between two iron links. Perfect for apprehension."
@@ -1028,7 +932,7 @@ Inquisitorial armory down here
 		span_userdanger("[user] [pick("garrotes", "asphyxiates")] me!"), span_hear("I hear the sickening sound of cordage!"), COMBAT_MESSAGE_RANGE, user)
 		to_chat(user, span_danger("I [pick("garrote", "asphyxiate")] [C]!"))	
 		user.changeNext_move(CLICK_CD_RESIST)	//Stops spam for choking.	
-
+*/			//TA-EDITEND
 /obj/item/clothing/head/inqarticles/blackbag
 	name = "black bag"
 	desc = "A heavily spell-weaved padded sack intended to muffle the cries made within it. Due to the heaviness of the materials involved, application and removal of these is usually difficult for the untrained."

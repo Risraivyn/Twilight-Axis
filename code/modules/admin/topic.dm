@@ -629,6 +629,9 @@
 		browse_messages("watchlist entry", filter = TRUE)
 
 	else if(href_list["showmessageckey"])
+		var/rank_name = usr.client?.holder?.rank.name // TA EDIT
+		if(rank_name in list("Eventmin", "Coder", "Developer")) // TA EDIT
+			return // TA EDIT
 		if(!check_rights(R_BAN))
 			return
 		var/target = href_list["showmessageckey"]
@@ -642,6 +645,9 @@
 		browse_messages(target_ckey = target, linkless = TRUE)
 
 	else if(href_list["messageedits"])
+		var/rank_name = usr.client?.holder?.rank.name // TA EDIT
+		if(rank_name in list("Eventmin", "Coder", "Developer")) // TA EDIT
+			return // TA EDIT
 		if(!check_rights(R_BAN))
 			return
 		var/datum/DBQuery/query_get_message_edits = SSdbcore.NewQuery(
@@ -1433,6 +1439,12 @@
 									ADD_TRAIT(living_mob, TRAIT_DUST_LEAVE_HEAD, TRAIT_GENERIC)
 								if(href_list["dust_delete_gear"])
 									ADD_TRAIT(living_mob, TRAIT_DUST_DELETE_GEAR, TRAIT_GENERIC)
+							if(ishuman(O))
+								var/mob/living/carbon/human/spawned_human = O
+								spawned_human.taints_loot_on_death = !!href_list["taint_loot"]
+								if(!spawned_human.taints_loot_on_death)
+									for(var/obj/item/I in spawned_human.get_equipped_items(TRUE) + spawned_human.held_items)
+										I.unmark_as_looted()
 							if(where == "inhand" && isliving(usr) && isitem(O))
 								var/mob/living/L = usr
 								var/obj/item/I = O
@@ -1537,6 +1549,9 @@
 		show_player_panel(M)
 
 	else if(href_list["modtriumphs"])
+		var/rank_name = usr.client?.holder?.rank.name // TA EDIT
+		if(rank_name in list("Eventmin", "Coder", "Developer")) // TA EDIT
+			return // TA EDIT
 		if(!check_rights(R_BAN))
 			return
 		var/mob/M = locate(href_list["mob"]) in GLOB.mob_list
@@ -1544,6 +1559,9 @@
 		show_player_panel(M)
 
 	else if(href_list["modpq"])
+		var/rank_name = usr.client?.holder?.rank.name // TA EDIT
+		if(rank_name in list("Eventmin", "Coder", "Developer")) // TA EDIT
+			return // TA EDIT
 		if(!check_rights(R_BAN))
 			return
 		var/mob/M = locate(href_list["mob"]) in GLOB.mob_list
@@ -1639,6 +1657,9 @@
 				to_chat(C, "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message linkify\">Your PQ has been adjusted by [amt2change] by [usr.key] for reason: [raisin]</span></span>")
 				return
 	else if(href_list["showpq"])
+		var/rank_name = usr.client?.holder?.rank.name // TA EDIT
+		if(rank_name in list("Eventmin", "Coder", "Developer")) // TA EDIT
+			return // TA EDIT
 		if(!check_rights(R_BAN))
 			return
 		var/mob/M = locate(href_list["mob"]) in GLOB.mob_list

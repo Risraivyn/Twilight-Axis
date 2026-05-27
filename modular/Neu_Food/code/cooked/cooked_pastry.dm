@@ -116,23 +116,6 @@
 	eat_effect = null
 	foodtype = GRAIN | DAIRY
 
-/obj/item/reagent_containers/food/snacks/rogue/foodbase/halfcookie_raw/attackby(obj/item/I, mob/living/user, params)
-	var/found_table = locate(/obj/structure/table) in (loc)
-	update_cooktime(user)
-	if(istype(I, /obj/item/reagent_containers/food/snacks/chocolate/slice))
-		if(isturf(loc)&& (found_table))
-			playsound(get_turf(user), 'sound/foley/dropsound/food_drop.ogg', 40, TRUE, -1)
-			to_chat(user, span_notice("Finishing the chocolate-speckled cookiedough with more chocolate..."))
-			if(do_after(user,short_cooktime, target = src))
-				add_sleep_experience(user, /datum/skill/craft/cooking, user.STAINT)
-				new /obj/item/reagent_containers/food/snacks/rogue/foodbase/cookie_raw(loc)
-				qdel(I)
-				qdel(src)
-		else
-			to_chat(user, span_warning("You need to put [src] on a table to stuff it with chocolate!"))
-	else
-		return ..()
-
 /obj/item/reagent_containers/food/snacks/rogue/foodbase/cookie_raw
 	name = "slab of cookiedough"
 	desc = "Doughy, soft, and drenched in chocolate. Now that is acceptable, through-and-through! Time for a stint in the oven, first!"
@@ -171,13 +154,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/cookie/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -207,23 +190,6 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	eat_effect = null
 	foodtype = GRAIN | DAIRY
-
-/obj/item/reagent_containers/food/snacks/rogue/foodbase/halfcookied_raw/attackby(obj/item/I, mob/living/user, params)
-	var/found_table = locate(/obj/structure/table) in (loc)
-	update_cooktime(user)
-	if(istype(I, /obj/item/reagent_containers/food/snacks/dragee))
-		if(isturf(loc)&& (found_table))
-			playsound(get_turf(user), 'sound/foley/dropsound/food_drop.ogg', 40, TRUE, -1)
-			to_chat(user, span_notice("Finishing the dragée-speckled cookiedough with more dragée..."))
-			if(do_after(user,short_cooktime, target = src))
-				add_sleep_experience(user, /datum/skill/craft/cooking, user.STAINT)
-				new /obj/item/reagent_containers/food/snacks/rogue/foodbase/cookied_raw(loc)
-				qdel(I)
-				qdel(src)
-		else
-			to_chat(user, span_warning("You need to put [src] on a table to stuff it with dragée!"))
-	else
-		return ..()
 
 /obj/item/reagent_containers/food/snacks/rogue/foodbase/cookied_raw
 	name = "slab of dragéelidough"
@@ -263,13 +229,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/cookied/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -299,23 +265,6 @@
 	cooked_smell = /datum/pollutant/food/cookies_caramel
 	eat_effect = null
 	foodtype = GRAIN | DAIRY
-
-/obj/item/reagent_containers/food/snacks/rogue/foodbase/halfcookiec_raw/attackby(obj/item/I, mob/living/user, params)
-	var/found_table = locate(/obj/structure/table) in (loc)
-	update_cooktime(user)
-	if(istype(I, /obj/item/reagent_containers/food/snacks/caramel))
-		if(isturf(loc)&& (found_table))
-			playsound(get_turf(user), 'sound/foley/dropsound/food_drop.ogg', 40, TRUE, -1)
-			to_chat(user, span_notice("Finishing the caramel-speckled cookiedough with more caramel dropplings..."))
-			if(do_after(user,short_cooktime, target = src))
-				add_sleep_experience(user, /datum/skill/craft/cooking, user.STAINT)
-				new /obj/item/reagent_containers/food/snacks/rogue/foodbase/cookiec_raw(loc)
-				qdel(I)
-				qdel(src)
-		else
-			to_chat(user, span_warning("You need to put [src] on a table to stuff it with caramel!"))
-	else
-		return ..()
 
 /obj/item/reagent_containers/food/snacks/rogue/foodbase/cookiec_raw
 	name = "slab of carameliedough"
@@ -355,13 +304,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/cookiec/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -391,23 +340,6 @@
 	cooked_smell = /datum/pollutant/food/cookies_raisins
 	eat_effect = null
 	foodtype = GRAIN | DAIRY | FRUIT
-
-/obj/item/reagent_containers/food/snacks/rogue/foodbase/halfcookier_raw/attackby(obj/item/I, mob/living/user, params)
-	var/found_table = locate(/obj/structure/table) in (loc)
-	update_cooktime(user)
-	if(istype(I, /obj/item/reagent_containers/food/snacks/rogue/raisins))
-		if(isturf(loc)&& (found_table))
-			playsound(get_turf(user), 'sound/foley/dropsound/food_drop.ogg', 40, TRUE, -1)
-			to_chat(user, span_notice("Finishing the raisin-speckled cookiedough with more raisins..."))
-			if(do_after(user,short_cooktime, target = src))
-				add_sleep_experience(user, /datum/skill/craft/cooking, user.STAINT)
-				new /obj/item/reagent_containers/food/snacks/rogue/foodbase/cookier_raw(loc)
-				qdel(I)
-				qdel(src)
-		else
-			to_chat(user, span_warning("You need to put [src] on a table to stuff it with raisins!"))
-	else
-		return ..()
 
 /obj/item/reagent_containers/food/snacks/rogue/foodbase/cookier_raw
 	name = "slab of raelseinidough"
@@ -447,13 +379,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/cookier/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -575,13 +507,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/pumpkinloaf/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 1)
+		if(bitecount == 1 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 2)
+		if(bitecount == 2 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 5)
 			changefood(slice_path, eater)
@@ -738,34 +670,6 @@
 	rotprocess = SHELFLIFE_DECENT
 	eat_effect = /datum/status_effect/buff/snackbuff
 
-/obj/item/reagent_containers/food/snacks/rogue/muffin/attackby(obj/item/I, mob/living/user, params)
-	var/found_table = locate(/obj/structure/table) in (loc)
-	update_cooktime(user)
-	if(istype(I, /obj/item/reagent_containers/food/snacks/rogue/cheese))
-		if(isturf(loc)&& (found_table))
-			playsound(get_turf(user), 'sound/foley/dropsound/food_drop.ogg', 40, TRUE, -1)
-			to_chat(user, span_notice("You start to glaze the muffin with cheese..."))
-			if(do_after(user,long_cooktime, target = src))
-				add_sleep_experience(user, /datum/skill/craft/cooking, user.STAINT)
-				new /obj/item/reagent_containers/food/snacks/rogue/muffin/cheese(loc)
-				qdel(I)
-				qdel(src)
-		else
-			to_chat(user, span_warning("You need to put [src] on a table to roll it out!"))
-	if(istype(I, /obj/item/reagent_containers/food/snacks/rogue/honey))
-		if(isturf(loc)&& (found_table))
-			playsound(get_turf(user), 'sound/foley/dropsound/food_drop.ogg', 40, TRUE, -1)
-			to_chat(user, span_notice("You start to glaze the muffin with honey..."))
-			if(do_after(user,short_cooktime, target = src))
-				add_sleep_experience(user, /datum/skill/craft/cooking, user.STAINT)
-				new /obj/item/reagent_containers/food/snacks/rogue/muffin/honey(loc)
-				qdel(I)
-				qdel(src)
-		else
-			to_chat(user, span_warning("You need to put [src] on a table to prepare it!"))
-	else
-		return ..()
-
 /obj/item/reagent_containers/food/snacks/rogue/muffin/cheese
 	name = "raw cheese muffin"
 	desc = "A mushroom shaped treat for whole topped off with cheese. Still needs to be baked!"
@@ -832,23 +736,6 @@
 	bitesize = 3
 	eat_effect = /datum/status_effect/buff/snackbuff
 	rotprocess = SHELFLIFE_LONG
-
-/obj/item/reagent_containers/food/snacks/rogue/strudel/attackby(obj/item/I, mob/living/user, params)
-	var/found_table = locate(/obj/structure/table) in (loc)
-	update_cooktime(user)
-	if(istype(I,  /obj/item/reagent_containers/food/snacks/sugar))
-		if(isturf(loc)&& (found_table))
-			playsound(get_turf(user), 'sound/foley/dropsound/food_drop.ogg', 40, TRUE, -1)
-			to_chat(user, span_notice("You start to coat the strudel in sugar..."))
-			if(do_after(user,long_cooktime, target = src))
-				add_sleep_experience(user, /datum/skill/craft/cooking, user.STAINT)
-				new /obj/item/reagent_containers/food/snacks/rogue/strudel/sugar(loc)
-				qdel(I)
-				qdel(src)
-		else
-			to_chat(user, span_warning("You need to put [src] on a table to roll it out!"))
-	else
-		return ..()
 
 /obj/item/reagent_containers/food/snacks/rogue/strudel/sugar
 	name = "coated strudel"
@@ -969,13 +856,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/bookbread/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -994,23 +881,6 @@
 	dropshrink = 0.8
 	eat_effect = /datum/status_effect/buff/snackbuff
 	foodtype = GRAIN | DAIRY
-
-/obj/item/reagent_containers/food/snacks/rogue/bookbread_slice/attackby(obj/item/I, mob/living/user, params)
-	update_cooktime(user)
-	if(istype(I, /obj/item/reagent_containers/food/snacks/jamtallowslice))
-		playsound(get_turf(user), 'sound/foley/dropsound/food_drop.ogg', 50, TRUE, -1)
-		if(do_after(user,short_cooktime, target = src))
-			var/obj/item/reagent_containers/food/snacks/rogue/bookbread_slice_jamtallowed/sammich= new(get_turf(user))
-			user.put_in_hands(sammich)
-			qdel(I)
-			qdel(src)																		
-	if(istype(I, /obj/item/reagent_containers/food/snacks/marmaladeslice))
-		playsound(get_turf(user), 'sound/foley/dropsound/food_drop.ogg', 50, TRUE, -1)
-		if(do_after(user,short_cooktime, target = src))
-			var/obj/item/reagent_containers/food/snacks/rogue/bookbread_slice_marmaladed/sammich= new(get_turf(user))
-			user.put_in_hands(sammich)
-			qdel(I)
-			qdel(src)
 
 /obj/item/reagent_containers/food/snacks/rogue/bookbread_slice_jamtallowed
 	name = "slice of jamtallowed bookbread"
@@ -1071,13 +941,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/pearbookbread/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -1126,13 +996,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/plumbookbread/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -1181,13 +1051,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/lemonbookbread/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -1236,13 +1106,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/tangerinebookbread/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -1291,13 +1161,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/blackberrybookbread/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -1346,13 +1216,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/raspberrybookbread/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -1401,13 +1271,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/jackberrybookbread/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -1456,13 +1326,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/poisonberrybookbread/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)
@@ -1511,13 +1381,13 @@
 /obj/item/reagent_containers/food/snacks/rogue/chocolatebookbread/On_Consume(mob/living/eater)
 	..()
 	if(slices_num)
-		if(bitecount == 3)
+		if(bitecount == 3 && slices_num >= 5)
 			slices_num = 5
-		if(bitecount == 4)
+		if(bitecount == 4 && slices_num >= 4)
 			slices_num = 4
-		if(bitecount == 5)
+		if(bitecount == 5 && slices_num >= 3)
 			slices_num = 3
-		if(bitecount == 6)
+		if(bitecount == 6 && slices_num >= 2)
 			slices_num = 2
 		if(bitecount == 7)
 			changefood(slice_path, eater)

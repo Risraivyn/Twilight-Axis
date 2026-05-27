@@ -406,9 +406,8 @@ GLOBAL_LIST_EMPTY(confessors)
 #define FAMILY_FULL 3
 
 GLOBAL_LIST_EMPTY(head_bounties)
-GLOBAL_LIST_EMPTY(board_viewers)
-GLOBAL_LIST_EMPTY(noticeboard_posts)
-GLOBAL_LIST_EMPTY(premium_noticeboardposts)
+GLOBAL_LIST_EMPTY(noticeboard_notices)
+GLOBAL_LIST_EMPTY(noticeboard_listings)
 GLOBAL_LIST_EMPTY(job_respawn_delays)
 GLOBAL_LIST_EMPTY(round_join_times)
 
@@ -444,6 +443,7 @@ GLOBAL_LIST_EMPTY(round_join_times)
 #define CTAG_TRADER			"CAT_TRADER"		// Trader classes untethered from adventurer
 #define CTAG_LSKELETON		"CAT_LSKELETON"		// Lich Fortified Skeleton classes
 #define CTAG_NSKELETON		"CAT_NSKELETON"		// Necromancer Greater Skeleton classes
+#define CTAG_SSKELETON		"CAT_SSKELETON"		// Disposable Bad Omen Skeleton Classes
 #define CTAG_VAMPSERVANT	"CAT_VAMPSERVANT"	// Vampire lord bloodpool servant classes
 #define CTAG_VAMPGUARD		"CAT_VAMPGUARD"		// Vampire Lord bloodpool guard classes
 #define CTAG_VAMPSPAWN		"CAT_VAMPSPAWN"		// Vampire Lord bloodpool elite classes
