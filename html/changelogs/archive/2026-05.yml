@@ -1836,6 +1836,8 @@
       outburst for absolutely no reasoning than SOME coder forgot they accidentally
       left it in, COUGH, COUGH. AAAAAAAAAA-
 2026-05-27:
+  Ketrai:
+  - bugfix: stops players from getting rings x people on the server from royal puzzleboxes
   ToasterStrudes:
   - bugfix: Fixes the "Sofia's Vest" donator item
   WeNeedMorePhoron:
@@ -1909,6 +1911,8 @@
   - server: Fixed a hard delete with reach dummy introduced from a PR 3 months ago.
   - server: Disabled hard deletes in imitation of Vanderlin, which should alleviates
       some of our performance issues especially on highpop
+  desminus:
+  - rscadd: donor items for desminus
   radarseas:
   - rscadd: Added new HUD icon + Vlord uses their blood title.
   - image: added more HUD Icons and changed those of vampires to be much nicer on

@@ -510,6 +510,8 @@
 
 /datum/config_entry/flag/profile_clear_on_dump
 
+/datum/config_entry/flag/profile_emergency_dumps
+
 /datum/config_entry/number/profiler_interval
 	config_entry_value = 300 SECONDS
 

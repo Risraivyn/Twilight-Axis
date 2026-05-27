@@ -467,8 +467,9 @@
 /obj/structure/roguemachine/noticeboard/proc/sanitize_input(text, max_length, multiline = FALSE)
 	if(!text || text == "null")
 		return null
-	text = copytext(text, 1, max_length + 1)
 	text = trim(text)
-	if(!length(text))
+	if(!length_char(text))
 		return null
+	if(length_char(text) > max_length)
+		text = copytext_char(text, 1, max_length + 1)
 	return text

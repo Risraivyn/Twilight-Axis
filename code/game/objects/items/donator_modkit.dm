@@ -748,6 +748,18 @@
 	)
 	result_item = /obj/item/rogueweapon/example/nero_sylvandagger
 
+// Desminus
+/obj/item/enchantingkit/weapon/des_gaebolg
+	name = "'Gae Bolg' morphing elixer"
+	target_items = list(
+		/obj/item/rogueweapon/spear,
+		/obj/item/rogueweapon/spear/partizan,
+		/obj/item/rogueweapon/halberd,
+		/obj/item/rogueweapon/halberd/glaive,
+		/obj/item/rogueweapon/eaglebeak
+	)
+	result_item = /obj/item/rogueweapon/example/des_gaebolg
+
 /////////////////////////////
 // ! Triumph-Exc. Kits !   //
 /////////////////////////////
