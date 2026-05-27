@@ -106,7 +106,7 @@ export const Goldface = () => {
               style={tabStyle(activeTab === 'cultural')}
               onClick={() => setTab('cultural')}
             >
-              Cultural Stock
+              Товары с судов
             </div>
           )}
           {canSeeHarborTabs && (
@@ -114,7 +114,7 @@ export const Goldface = () => {
               style={tabStyle(activeTab === 'harbor')}
               onClick={() => setTab('harbor')}
             >
-              Harbor
+              Гавань
             </div>
           )}
           {canSeeMerchantTabs && (
@@ -122,7 +122,7 @@ export const Goldface = () => {
               style={tabStyle(activeTab === 'market')}
               onClick={() => setTab('market')}
             >
-              Market
+              Рынок
             </div>
           )}
           {canSeeMerchantTabs && (
@@ -130,7 +130,7 @@ export const Goldface = () => {
               style={tabStyle(activeTab === 'management')}
               onClick={() => setTab('management')}
             >
-              Management
+              Управление
             </div>
           )}
           {canSeeMerchantTabs && (
@@ -138,7 +138,7 @@ export const Goldface = () => {
               style={tabStyle(activeTab === 'ledger')}
               onClick={() => setTab('ledger')}
             >
-              Ledger
+              Книга учета
             </div>
           )}
         </div>

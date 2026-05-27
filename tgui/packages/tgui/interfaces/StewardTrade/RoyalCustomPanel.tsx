@@ -41,11 +41,11 @@ export const RoyalCustomPanel = () => {
             fontWeight: 'bold',
           }}
         >
-          Royal Custom Charter
+          Королевский таможенный устав
         </span>
         {!unlocked ? (
           <span style={{ color: INK_SOFT }}>
-            Locked - volume{' '}
+            Закрыто - набрано{' '}
             <b style={{ color: INK }}>{data.royal_custom_volume}m</b> of{' '}
             <b style={{ color: INK }}>{data.royal_custom_threshold}m</b>
           </span>
