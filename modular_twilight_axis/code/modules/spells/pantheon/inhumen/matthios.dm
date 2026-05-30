@@ -4,7 +4,7 @@
 #define WEIGHTOFCHAINS_GLOW "weight of chains glow"
 
 //T0
-
+/*
 /datum/action/cooldown/spell/freemans_tools
 	desc = "A simple prayer to the Free-God Matthios, for tools of liberation and struggle.<br><br>His will manifests in three forms: gutter-born arts of the freemen, gilded tools of blessed liberation, or by granting the bases of Malchem, a form of primordial alchemy so impossible it is oft mistaken for sorcery."
 	options = list(
@@ -179,7 +179,7 @@
 		// MIGHT be enough tools but this thing here lets anyone add anything as much as they want, have fun!
 		// I'll probably reuse this as a template for a Zizo Artificery miracle in the future.
 	)
-
+*/
 /obj/item/roguecoin/gold/matthios
 	desc = "A gold coin bearing a stylized portrait of Kaiser Alister II Grenzelhoft and the Cross of the Eleven. Minted by the Imperial Treasury, these coins can be found all across the Western Kingdoms."
 

@@ -31,7 +31,7 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 			limit_sum += D.stockpile_limit
 			limit_count++
 		saturation_target = limit_count > 0 ? max(1, round(limit_sum * ECON_EVENT_SATURATION_MULT / limit_count)) : 1
-	if(announcement)
+	if(announcement && !(SSeconomy?.daily_report_diff))
 		scom_announce(announcement)
 
 /datum/economic_event/proc/on_expire()
@@ -77,7 +77,15 @@ GLOBAL_LIST_EMPTY(active_economic_events)
 	if(SSeconomy)
 		SSeconomy.event_path_cooldowns[type] = GLOB.dayspassed + ECON_EVENT_REROLL_COOLDOWN_DAYS
 	record_round_statistic(STATS_SHORTAGES_ENDED, 1)
-	scom_announce("<font color='#5cb85c'>RELIEF: [name] eased by relief efforts. Prices return to normal.</font>")
+	var/list/diff = SSeconomy?.daily_report_diff
+	if(diff)
+		var/list/relieved = diff["events_relieved"]
+		if(!relieved)
+			relieved = list()
+			diff["events_relieved"] = relieved
+		relieved += name
+	else
+		scom_announce("<font color='#5cb85c'>RELIEF: [name] eased by relief efforts. Prices return to normal.</font>")
 
 /proc/credit_economic_event_saturation(good_id, units)
 	if(!good_id || units <= 0)

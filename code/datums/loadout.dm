@@ -1999,6 +1999,13 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	donatitem = TRUE
 	donat_tier = 2
 
+/datum/loadout_item/donator/arra_amdir
+	name = "Dontaor Kit - Amdir - Required: Greataxe"
+	category = list("Оружие", "Донат")
+	path = /obj/item/enchantingkit/weapon/arra_amdir
+	donatitem = TRUE
+	donat_tier = 2
+
 /datum/loadout_item/donator_dasfox/periapt
 	name = "Donator Item - Defiled Astratan Periapt"
 	path = /obj/item/clothing/neck/roguetown/psicross/astrata/dasfox
@@ -2658,6 +2665,13 @@ GLOBAL_LIST_EMPTY(loadout_items_by_category)
 	category = list("Плащи", "Донат")
 	path = /obj/item/clothing/cloak/duelcape
 	donatitem = TRUE
+
+/datum/loadout_item/donat/cloak_jinbaori
+	name = "Jinbaori"
+	category = list("Плащи", "Донат")
+	path = /obj/item/clothing/cloak/kazengun
+	donatitem = TRUE
+	donat_tier = 2
 
 // Маски
 
