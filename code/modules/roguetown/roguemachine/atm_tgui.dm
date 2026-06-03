@@ -63,6 +63,7 @@
 			"can_withdraw" = (V && V.can_withdraw(user)) ? TRUE : FALSE,
 			"can_view" = (V && V.can_view(user)) ? TRUE : FALSE,
 			"supports_loans" = V ? (V.supports_loans ? TRUE : FALSE) : TRUE,
+			"allow_zero_rate" = (V && (0 in V.allowed_rates())) ? TRUE : FALSE,
 			"authority_label" = V ? V.get_authority_label() : "",
 			"withdraw_rule" = V ? V.get_withdraw_rule_text() : "",
 			"has_patronage" = (V && !isnull(V.get_patronage_writ_path())) ? TRUE : FALSE,
@@ -185,6 +186,7 @@
 				"patrons" = roster_data,
 			)
 	data["patron_rosters"] = patron_rosters
+	data["ta_map"] = SSmapping.config.map_name //TA EDIT
 
 	return data
 
@@ -277,7 +279,9 @@
 		playsound(src, 'sound/misc/machineno.ogg', 100, FALSE, -1)
 		return
 	var/mod = 1
-	if(denom == "GOLD")
+	if(denom == "GOLD" && SSmapping.config.map_name == "Rockhill") //TA EDIT
+		mod = 14
+	else if(denom == "GOLD") //TA EDIT
 		mod = 10
 	else if(denom == "SILVER")
 		mod = 5

@@ -910,7 +910,7 @@ SUBSYSTEM_DEF(gamemode)
 	if(story_hardequal(storyteller_type))
 		misc += "Основные антагонисты выпадают с одинаковым шансом"
 	if(story_hardonly(storyteller_type))
-		misc += "Могут выпасть только гарантированные основные антагонисты"
+		misc += "Могут выпасть только гарантированные антагонисты"
 	var/blocked = story_names(story_block_types(storyteller_type))
 	if(length(blocked))
 		misc += "Заблокированные основные антагонисты: [story_ru_list(blocked)]"

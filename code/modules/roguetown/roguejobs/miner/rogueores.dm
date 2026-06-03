@@ -8,6 +8,15 @@
 	grid_width = 64
 	grid_height = 32
 
+/obj/item/rogueore/attack(mob/living/M, mob/user)
+	if(!user.cmode)
+		if(try_construct_consume(src, M, user))
+			return
+	else
+		return ..()
+		
+	return ..()
+
 /obj/item/rogueore/gold
 	name = "raw gold"
 	desc = "A clump of dirty lustrous nuggets!"
@@ -129,6 +138,7 @@
 	var/datum/anvil_recipe/currecipe
 	grid_width = 64
 	grid_height = 32
+	dropshrink = 0.8
 
 /obj/item/ingot/examine()
 	. += ..()
@@ -192,6 +202,12 @@
 		var/obj/machinery/anvil/A = loc
 		A.hingot = null
 		A.update_icon()
+
+/obj/item/ingot/attack(mob/living/M, mob/user)
+	if(!user.cmode)
+		if(try_construct_consume(src, M, user))
+			return
+	return ..()
 
 /obj/item/ingot/gold
 	name = "gold bar"
@@ -338,6 +354,12 @@
 /obj/item/ingot/aaslag/Initialize()
   ..()
   add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = GLOW_COLOR_FIRE, "alpha" = 50, "size" = 1))
+
+/obj/item/ingot/bsslag
+	name = "blacksteel-speckled slag"
+	desc = "A mass of smoldered blacksteel, rendered lame from the forge's heat. It has taken its secrets to the grave." 
+	icon_state = "oreada"
+	sellprice = 7
 
 //Anomalous Smeltings
 /obj/item/ingot/weeping

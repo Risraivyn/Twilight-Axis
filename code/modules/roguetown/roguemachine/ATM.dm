@@ -36,7 +36,7 @@
 				loc.visible_message(span_warning("The meister snaps onto [H]'s arm!"))
 				H.Stun(80)
 				H.apply_damage(50, BRUTE, def_zone)
-				H.emote("agony")
+				H.emote("superagony")
 				spawn(5)
 				say("Blueblood for the Freefolk!")
 				playsound(src, 'sound/vo/mobs/ghost/laugh (5).ogg', 100, TRUE)
@@ -127,7 +127,7 @@
 	. += span_smallnotice("Crown levies - Contract: [round(SStreasury.get_tax_rate(TAX_CATEGORY_CONTRACT_LEVY) * 100)]%, Headeater: [round(SStreasury.get_tax_rate(TAX_CATEGORY_HEADEATER_LEVY) * 100)]%, Import: [round(SStreasury.get_tax_rate(TAX_CATEGORY_IMPORT_TARIFF) * 100)]%, Export: [round(SStreasury.get_tax_rate(TAX_CATEGORY_EXPORT_DUTY) * 100)]%")
 	var/datum/decree/concordat = SStreasury.get_decree(DECREE_ZENITSTADT_CONCORDAT)
 	if(concordat?.active)
-		. += span_smallnotice("Concordat of Zenitstadt: [round(CONCORDAT_TITHE_RATE * 100)]% of every taxed transaction is tithed to the Church of Azuria, drawn from the Crown's share.")
+		. += span_smallnotice("The Twilight Concordat: [round(CONCORDAT_TITHE_RATE * 100)]% of every taxed transaction is tithed to the Church of Azuria, drawn from the Crown's share.") //TA EDIT
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/poll_category = SStreasury.get_poll_tax_category(H)
@@ -313,16 +313,16 @@
 			head.add_wound(/datum/wound/fracture)
 			head.update_disabled()
 			H.apply_damage(50, BRUTE, head)
-			H.emote("agony")
+			H.emote("superagony")
 		if("agony")
 			H.apply_damage(10, BRUTE, head)
-			H.emote("agony")
+			H.emote("agony", forced = TRUE)
 		if("whimper")
 			H.apply_damage(10, BRUTE, head)
-			H.emote("whimper")
+			H.emote("whimper", forced = TRUE)
 		if("cry")
 			H.apply_damage(10, BRUTE, head)
-			H.emote("cry")
+			H.emote("cry", forced = TRUE)
 		if("silence")
 			return
 		else
@@ -332,9 +332,9 @@
 	var/consequence = pick(slow_effects)
 	switch(consequence)
 		if("whimper")
-			H.emote("whimper")
+			H.emote("whimper", forced = TRUE)
 		if("cry")
-			H.emote("cry")
+			H.emote("cry", forced = TRUE)
 		if("silence")
 			return
 		else
