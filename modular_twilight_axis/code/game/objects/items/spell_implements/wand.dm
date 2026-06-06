@@ -75,7 +75,7 @@
 		"Boulder Strike"= /datum/action/cooldown/spell/projectile/boulder_strike
 	)
 	
-	var/choice = tgui_input_list(user, "Выберите заклинание для настройки палочки:", "Настройка палочки", spells)
+	var/choice = tgui_input_list(user, "Выберите заклинание для палочки:", "Заклинание палочки", spells)
 	if(!choice || !user.canUseTopic(src, be_close = TRUE))
 		return
 	
@@ -104,7 +104,7 @@
 
 		if(mana_reagent)
 			if(!loaded_spell_path)
-				to_chat(user, span_warning("[src] сначала необходимо настроить на заклинание!"))
+				to_chat(user, span_warning("[src] сначала необходимо выбрать заклинание!"))
 				return
 			if(mana_charges >= 100)
 				to_chat(user, span_warning("[src] уже полностью заряжена маной!"))
@@ -156,7 +156,7 @@
 
 /obj/item/rogueweapon/wand/proc/fire_wand_spell(atom/target, mob/living/user)
 	if(!loaded_spell_path)
-		to_chat(user, span_warning("[src] не настроена на заклинание! Нажмите на неё в руке, чтобы настроить."))
+		to_chat(user, span_warning("[src] не выбрано заклинание!"))
 		return FALSE
 
 	var/datum/action/cooldown/spell/projectile/S = loaded_spell_path
@@ -213,7 +213,7 @@
 	if(loaded_spell_path)
 		var/datum/action/cooldown/spell/projectile/S = loaded_spell_path
 		var/spell_name = initial(S.name)
-		. += span_notice("[src] настроена на заклинание <b>[spell_name]</b>.")
+		. += span_notice("[src] заклинание <b>[spell_name]</b>.")
 		. += span_notice("Заряд маны: <b>[mana_charges]/100 ед.</b>")
 	else
-		. += span_warning("[src] не настроена ни на одно заклинание.")
+		. += span_warning("[src]  не выбрано заклинание.")
