@@ -55,18 +55,7 @@
 	var/datum/action/cooldown/spell/projectile/loaded_spell_path = null
 	var/mana_charges = 0
 	COOLDOWN_DECLARE(wand_spell_cooldown)
-
-/obj/item/rogueweapon/wand/Initialize(mapload)
-	. = ..()
-	if(!possible_item_intents)
-		possible_item_intents = list()
-	possible_item_intents |= list(/datum/intent/shoot/wand, /datum/intent/arc/wand)
-
-/obj/item/rogueweapon/wand/equipped(mob/user, slot)
-	if(!possible_item_intents)
-		possible_item_intents = list()
-	possible_item_intents |= list(/datum/intent/shoot/wand, /datum/intent/arc/wand)
-	return ..()
+	possible_item_intents = list(/datum/intent/shoot/wand, /datum/intent/arc/wand, SPEAR_BASH)
 
 /obj/item/rogueweapon/wand/attack_self(mob/user)
 	if(twohands_required)
@@ -90,26 +79,28 @@
 	if(!choice || !user.canUseTopic(src, be_close = TRUE))
 		return
 	
-	var/selected_path = spells[choice]
+	var/datum/action/cooldown/spell/projectile/selected_path = spells[choice]
 	if(selected_path)
 		loaded_spell_path = selected_path
 		to_chat(user, span_notice("Вы настроили [src] на заклинание <b>[choice]</b>."))
-		var/datum/action/cooldown/spell/temp_spell = new selected_path(null)
-		attune_implement(temp_spell.spell_color, temp_spell.name)
-		qdel(temp_spell)
+		var/spell_color = initial(selected_path.spell_color)
+		var/spell_name = initial(selected_path.name)
+		attune_implement(spell_color, spell_name)
 		
 		update_icon()
+
+/obj/item/rogueweapon/wand/proc/get_mana_reagent(obj/item/reagent_containers/RC)
+	if(!RC || !RC.reagents || !RC.reagents.reagent_list)
+		return null
+	for(var/datum/reagent/R in RC.reagents.reagent_list)
+		if(findtext(lowertext(R.name), "mana"))
+			return R
+	return null
 
 /obj/item/rogueweapon/wand/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/reagent_containers))
 		var/obj/item/reagent_containers/RC = I
-
-		var/datum/reagent/mana_reagent = null
-		if(RC.reagents && RC.reagents.reagent_list)
-			for(var/datum/reagent/R in RC.reagents.reagent_list)
-				if(findtext(lowertext(R.name), "mana"))
-					mana_reagent = R
-					break
+		var/datum/reagent/mana_reagent = get_mana_reagent(RC)
 
 		if(mana_reagent)
 			if(!loaded_spell_path)
@@ -131,17 +122,12 @@
 
 			user.visible_message(span_notice("[user] начинает вливать зелье маны в [src]."), \
 								span_notice("Я начинаю вливать зелье маны в [src]."))
-			
-			if(do_after(user, 10, target = src))
+
+			if(do_after(user, 1 SECONDS, target = src))
 				if(!RC || QDELETED(RC) || !RC.reagents)
 					return
 				
-				mana_reagent = null
-				for(var/datum/reagent/R in RC.reagents.reagent_list)
-					if(findtext(lowertext(R.name), "mana"))
-						mana_reagent = R
-						break
-						
+				mana_reagent = get_mana_reagent(RC)
 				if(!mana_reagent)
 					return
 					
@@ -195,7 +181,7 @@
 	var/cd_time = initial(S.cooldown_time)
 	COOLDOWN_START(src, wand_spell_cooldown, cd_time)
 	var/proj_type = null
-	if(is_arced && S.projectile_type_arc)
+	if(is_arced && initial(S.projectile_type_arc))
 		proj_type = initial(S.projectile_type_arc)
 	else
 		proj_type = initial(S.projectile_type)
