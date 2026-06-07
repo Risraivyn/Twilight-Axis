@@ -50,9 +50,29 @@
 	if(mastermob && masteritem)
 		mastermob.visible_message(span_warning("[mastermob] направляет [masteritem], концентрируя ману по дуге!"))
 
+/datum/intent/proc/get_wand_chargetime(base_time)
+	if(!mastermob)
+		return base_time
+	
+	var/intel = mastermob.get_stat(STAT_INTELLIGENCE)
+	var/mult = 1
+	if(intel <= 9)
+		mult = 3
+	else if(intel >= 15)
+		mult = 1
+	else
+		mult = 1 + (15 - intel) * 0.333
+
+	return round(base_time * mult)
+
+/datum/intent/shoot/wand/get_chargetime()
+	return get_wand_chargetime(initial(chargetime))
+
+/datum/intent/arc/wand/get_chargetime()
+	return get_wand_chargetime(initial(chargetime))
 
 /obj/item/rogueweapon/wand
-	var/datum/action/cooldown/spell/projectile/loaded_spell_path = null
+	var/datum/action/cooldown/spell/loaded_spell_path = null
 	var/mana_charges = 0
 	COOLDOWN_DECLARE(wand_spell_cooldown)
 	possible_item_intents = list(/datum/intent/shoot/wand, /datum/intent/arc/wand, SPEAR_BASH)
@@ -63,26 +83,50 @@
 	choose_wand_spell(user)
 
 /obj/item/rogueweapon/wand/proc/choose_wand_spell(mob/user)
-	var/list/spells = list(
-		"Fireball" = /datum/action/cooldown/spell/projectile/fireball,
-		"Frost Bolt" = /datum/action/cooldown/spell/projectile/frost_bolt,
-		"Lightning Bolt" = /datum/action/cooldown/spell/projectile/lightning_bolt,
-		"Arcyne Bolt" = /datum/action/cooldown/spell/projectile/greater_arcyne_bolt,
-		"Arcyne lance"= /datum/action/cooldown/spell/projectile/arcyne_lance,
-		"Sawblade Volley"= /datum/action/cooldown/spell/projectile/sawblade_volley,
-		"Iron Tempest"= /datum/action/cooldown/spell/projectile/iron_tempest,
-		"Gravel Blast"= /datum/action/cooldown/spell/projectile/gravel_blast,
-		"Boulder Strike"= /datum/action/cooldown/spell/projectile/boulder_strike
-	)
+	var/list/spells = list()
 	
+	switch(implement_tier)
+		if(IMPLEMENT_TIER_LESSER)
+			spells = list(
+				"Lesse Arcyne Bolt" = /datum/action/cooldown/spell/projectile/arc_bolt,
+				"Mending" = /datum/action/cooldown/spell/mending,
+				"Create Campfire" = /datum/action/cooldown/spell/create_campfire,
+				"Blink" = /datum/action/cooldown/spell/blink,
+				"Heal" = /datum/action/cooldown/spell/miracle/heal
+			)
+		if(IMPLEMENT_TIER_GREATER)
+			spells = list(
+				"Fireball" = /datum/action/cooldown/spell/projectile/fireball,
+				"Lightning Bolt" = /datum/action/cooldown/spell/projectile/lightning_bolt,
+				"Boulder Strike" = /datum/action/cooldown/spell/projectile/boulder_strike,
+				"Sawblade Volley" = /datum/action/cooldown/spell/projectile/sawblade_volley,
+				"Arcyne Bolt" = /datum/action/cooldown/spell/projectile/greater_arcyne_bolt
+			)
+		if(IMPLEMENT_TIER_GRAND)
+			spells = list(
+				"Thunderstrike" = /datum/action/cooldown/spell/greater_thunderstrike,
+				"Meteor Strike" = /datum/action/cooldown/spell/meteor_strike,
+				"Mass Crush" = /datum/action/cooldown/spell/mass_crush,
+				"Greater Fireball" = /datum/action/cooldown/spell/projectile/fireball/greater,
+				"Arcyne Barrage" = /datum/action/cooldown/spell/projectile/arcyne_barrage,
+				"Blade Dance" = /datum/action/cooldown/spell/blade_dance,
+				"Frozen Mist" = /datum/action/cooldown/spell/frozen_mist,
+				"Arcyne Fortress" = /datum/action/cooldown/spell/arcyne_fortress
+			)
+
+	if(!length(spells))
+		return
+
 	var/choice = tgui_input_list(user, "Выберите заклинание для палочки:", "Заклинание палочки", spells)
 	if(!choice || !user.canUseTopic(src, be_close = TRUE))
 		return
-	
-	var/datum/action/cooldown/spell/projectile/selected_path = spells[choice]
+
+	var/datum/action/cooldown/spell/selected_path = spells[choice]
 	if(selected_path)
 		loaded_spell_path = selected_path
-		to_chat(user, span_notice("Вы настроили [src] на заклинание <b>[choice]</b>."))
+		mana_charges = 0
+		to_chat(user, span_notice("Вы зачаровали [src] на заклинание <b>[choice]</b>."))
+
 		var/spell_color = initial(selected_path.spell_color)
 		var/spell_name = initial(selected_path.name)
 		attune_implement(spell_color, spell_name)
@@ -117,7 +161,6 @@
 			var/final_transfer = min(transfer_amount, space_left)
 
 			if(final_transfer <= 0)
-				to_chat(user, span_warning("Палочка полностью заряжена или в сосуде не осталось маны!"))
 				return
 
 			user.visible_message(span_notice("[user] начинает вливать зелье маны в [src]."), \
@@ -159,9 +202,25 @@
 		to_chat(user, span_warning("[src] не выбрано заклинание!"))
 		return FALSE
 
-	var/datum/action/cooldown/spell/projectile/S = loaded_spell_path
+	var/datum/action/cooldown/spell/S = loaded_spell_path
 	var/is_arced = istype(user.used_intent, /datum/intent/arc/wand)
-	var/mana_cost = 10
+	var/magic_skill = user.get_skill_level(/datum/skill/magic/arcane)
+	var/mana_cost = 50
+	if(magic_skill > 0)
+		for(var/i in 1 to magic_skill)
+			mana_cost = round(mana_cost / 2)
+	mana_cost = max(1, mana_cost) 
+
+	var/tier_cost = 0
+	switch(implement_tier)
+		if(IMPLEMENT_TIER_LESSER)
+			tier_cost = 5
+		if(IMPLEMENT_TIER_GREATER)
+			tier_cost = 10
+		if(IMPLEMENT_TIER_GRAND)
+			tier_cost = 30
+			
+	mana_cost += tier_cost
 
 	if(mana_charges < mana_cost)
 		to_chat(user, span_warning("В [src] недостаточно маны! Требуется: [mana_cost] ед."))
@@ -180,29 +239,25 @@
 
 	var/cd_time = initial(S.cooldown_time)
 	COOLDOWN_START(src, wand_spell_cooldown, cd_time)
-	var/proj_type = null
-	if(is_arced && initial(S.projectile_type_arc))
-		proj_type = initial(S.projectile_type_arc)
-	else
-		proj_type = initial(S.projectile_type)
+	var/datum/action/cooldown/spell/temp_spell = new loaded_spell_path()
+	temp_spell.owner = user
 
-	if(!proj_type)
-		proj_type = /obj/projectile/magic/spell/wand_bolt
+	if(istype(temp_spell, /datum/action/cooldown/spell/projectile))
+		var/datum/action/cooldown/spell/projectile/proj_spell = temp_spell
+		if(is_arced && initial(proj_spell.projectile_type_arc))
+			proj_spell.projectile_type = initial(proj_spell.projectile_type_arc)
 
-	var/obj/projectile/BB = new proj_type(get_turf(user))
-	BB.firer = user
-	BB.fired_from = src
-	BB.preparePixelProjectile(target, user)
-	var/magic_skill = user.get_skill_level(/datum/skill/magic/arcane)
-	BB.damage += magic_skill * 4
-	BB.accuracy += magic_skill * 3
+	temp_spell.spell_feedback(user)
 
-	var/spell_sound = initial(S.sound)
-	if(spell_sound)
-		playsound(user, spell_sound, 60, TRUE)
-	else
-		playsound(user, 'sound/magic/whiteflame.ogg', 60, TRUE)
-	BB.fire()
+	var/cast_success = temp_spell.cast(target)
+
+	if(cast_success == FALSE)
+		qdel(temp_spell)
+		mana_charges += mana_cost
+		wand_spell_cooldown = 0
+		return FALSE
+
+	QDEL_IN(temp_spell, 30 SECONDS)
 
 	update_icon()
 	user.changeNext_move(CLICK_CD_RANGE)
@@ -211,9 +266,27 @@
 /obj/item/rogueweapon/wand/examine(mob/user)
 	. = ..()
 	if(loaded_spell_path)
-		var/datum/action/cooldown/spell/projectile/S = loaded_spell_path
+		var/datum/action/cooldown/spell/S = loaded_spell_path
 		var/spell_name = initial(S.name)
 		. += span_notice("[src] заклинание <b>[spell_name]</b>.")
 		. += span_notice("Заряд маны: <b>[mana_charges]/100 ед.</b>")
+		
+		var/magic_skill = user.get_skill_level(/datum/skill/magic/arcane)
+		var/mana_cost = 50
+		if(magic_skill > 0)
+			for(var/i in 1 to magic_skill)
+				mana_cost = round(mana_cost / 2)
+		mana_cost = max(1, mana_cost)
+		
+		var/tier_cost = 0
+		switch(implement_tier)
+			if(IMPLEMENT_TIER_LESSER)
+				tier_cost = 5
+			if(IMPLEMENT_TIER_GREATER)
+				tier_cost = 10
+			if(IMPLEMENT_TIER_GRAND)
+				tier_cost = 20
+				
+		. += span_info("Расход маны за выстрел: <b>[mana_cost + tier_cost] ед.</b>")
 	else
 		. += span_warning("[src]  не выбрано заклинание.")
