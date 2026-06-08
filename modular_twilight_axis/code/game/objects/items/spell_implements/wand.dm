@@ -83,8 +83,10 @@
 	choose_wand_spell(user)
 
 /obj/item/rogueweapon/wand/proc/choose_wand_spell(mob/user)
+	if(!user.mind || !length(user.mind.major_aspects))
+		to_chat(user, span_warning("Этот инструмент отвергает меня... Только те, кто овладел высшей магией, могут использовать его!"))
+		return
 	var/list/spells = list()
-	
 	switch(implement_tier)
 		if(IMPLEMENT_TIER_LESSER)
 			spells = list(
@@ -104,14 +106,12 @@
 			)
 		if(IMPLEMENT_TIER_GRAND)
 			spells = list(
-				"Thunderstrike" = /datum/action/cooldown/spell/greater_thunderstrike,
-				"Meteor Strike" = /datum/action/cooldown/spell/meteor_strike,
-				"Mass Crush" = /datum/action/cooldown/spell/mass_crush,
-				"Greater Fireball" = /datum/action/cooldown/spell/projectile/fireball/greater,
-				"Arcyne Barrage" = /datum/action/cooldown/spell/projectile/arcyne_barrage,
-				"Blade Dance" = /datum/action/cooldown/spell/blade_dance,
-				"Frozen Mist" = /datum/action/cooldown/spell/frozen_mist,
-				"Arcyne Fortress" = /datum/action/cooldown/spell/arcyne_fortress
+				"Giant Rock" = /datum/action/cooldown/spell/projectile/giantrock,
+				"Arcane Mortar" = /datum/action/cooldown/spell/ballistic_mortar,
+				"Cataclysmic Meteor" = /datum/action/cooldown/spell/grand_meteor,
+				"Snowball" =/datum/action/cooldown/spell/projectile/snowball_toss,
+				"Icicle Spear" =/datum/action/cooldown/spell/projectile/icicle_spear,
+				"Swap Places" = /datum/action/cooldown/spell/swap
 			)
 
 	if(!length(spells))
@@ -197,13 +197,10 @@
 	if(istype(user.used_intent, /datum/intent/shoot/wand) || istype(user.used_intent, /datum/intent/arc/wand))
 		fire_wand_spell(target, user)
 
-/obj/item/rogueweapon/wand/proc/fire_wand_spell(atom/target, mob/living/user)
-	if(!loaded_spell_path)
-		to_chat(user, span_warning("[src] не выбрано заклинание!"))
-		return FALSE
+/obj/item/rogueweapon/wand/proc/get_spell_mana_cost(mob/living/user)
+	if(!user)
+		return 50
 
-	var/datum/action/cooldown/spell/S = loaded_spell_path
-	var/is_arced = istype(user.used_intent, /datum/intent/arc/wand)
 	var/magic_skill = user.get_skill_level(/datum/skill/magic/arcane)
 	var/mana_cost = 50
 	if(magic_skill > 0)
@@ -218,9 +215,23 @@
 		if(IMPLEMENT_TIER_GREATER)
 			tier_cost = 10
 		if(IMPLEMENT_TIER_GRAND)
-			tier_cost = 30
+			tier_cost = 20
 			
-	mana_cost += tier_cost
+	return mana_cost + tier_cost
+
+/obj/item/rogueweapon/wand/proc/fire_wand_spell(atom/target, mob/living/user)
+	if(!user.mind || !length(user.mind.major_aspects))
+		to_chat(user, span_warning("[src] гаснет в моих руках... Я должен овладеть высшей магией, чтобы направить эти чары!"))
+		return FALSE
+
+	if(!loaded_spell_path)
+		to_chat(user, span_warning("[src] не выбрано заклинание!"))
+		return FALSE
+
+	var/datum/action/cooldown/spell/S = loaded_spell_path
+	var/is_arced = istype(user.used_intent, /datum/intent/arc/wand)
+	var/magic_skill = user.get_skill_level(/datum/skill/magic/arcane)
+	var/mana_cost = get_spell_mana_cost(user)
 
 	if(mana_charges < mana_cost)
 		to_chat(user, span_warning("В [src] недостаточно маны! Требуется: [mana_cost] ед."))
@@ -266,27 +277,12 @@
 /obj/item/rogueweapon/wand/examine(mob/user)
 	. = ..()
 	if(loaded_spell_path)
-		var/datum/action/cooldown/spell/S = loaded_spell_path
+		var/datum/action/cooldown/spell/projectile/S = loaded_spell_path
 		var/spell_name = initial(S.name)
 		. += span_notice("[src] заклинание <b>[spell_name]</b>.")
 		. += span_notice("Заряд маны: <b>[mana_charges]/100 ед.</b>")
-		
-		var/magic_skill = user.get_skill_level(/datum/skill/magic/arcane)
-		var/mana_cost = 50
-		if(magic_skill > 0)
-			for(var/i in 1 to magic_skill)
-				mana_cost = round(mana_cost / 2)
-		mana_cost = max(1, mana_cost)
-		
-		var/tier_cost = 0
-		switch(implement_tier)
-			if(IMPLEMENT_TIER_LESSER)
-				tier_cost = 5
-			if(IMPLEMENT_TIER_GREATER)
-				tier_cost = 10
-			if(IMPLEMENT_TIER_GRAND)
-				tier_cost = 20
-				
-		. += span_info("Расход маны за выстрел: <b>[mana_cost + tier_cost] ед.</b>")
+
+		var/mana_cost = get_spell_mana_cost(user)
+		. += span_info("Расход маны за выстрел: <b>[mana_cost] ед.</b>")
 	else
-		. += span_warning("[src]  не выбрано заклинание.")
+		. += span_warning("[src] не выбрано заклинание.")

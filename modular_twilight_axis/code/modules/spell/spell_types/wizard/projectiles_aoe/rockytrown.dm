@@ -1,28 +1,31 @@
-/obj/effect/proc_holder/spell/invoked/projectile/giantrock
+/datum/action/cooldown/spell/projectile/giantrock
+	button_icon = 'icons/mob/actions/mage_geomancy.dmi'
 	name = "Giant Rock"
-	desc = "Flying piece of stone. "
-	clothes_req = FALSE
-	projectile_type = /obj/projectile/giantrock
-	overlay_state = "meteor_storm"
-	sound = list('sound/magic/xylix_slip_fail.ogg')
-	active = FALSE
-	releasedrain = 20
-	chargedrain = 3
-	chargetime = 30
-	recharge_time = 30 SECONDS
-	human_req = TRUE
-	warnie = "spellwarning"
-	no_early_release = TRUE
-	movement_interrupt = FALSE
-	spell_tier = 3
-	invocations = list("SAXUM!")
-	invocation_type = "shout"
-	glow_color = GLOW_COLOR_ARCANE
+	desc = "Flying piece of stone."
+	button_icon_state = "meteor_storm"
+	sound = 'sound/magic/xylix_slip_fail.ogg'
+	spell_color = GLOW_COLOR_EARTHEN
 	glow_intensity = GLOW_INTENSITY_LOW
-	charging_slowdown = 3
-	chargedloop = /datum/looping_sound/invokegen
+
+	projectile_type = /obj/projectile/giantrock
+	cast_range = 7
+
+	primary_resource_type = SPELL_COST_STAMINA
+	primary_resource_cost = 30
+
+	invocations = list("SAXUM!")
+	invocation_type = INVOCATION_SHOUT
+
+	charge_required = TRUE
+	charge_time = 3 SECONDS
+	charge_drain = 1
+	charge_slowdown = 3
+	charge_sound = 'sound/magic/charging.ogg'
+	cooldown_time = 30 SECONDS
+
 	associated_skill = /datum/skill/magic/arcane
-	cost = 6
+	spell_tier = 3
+	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN | SPELL_REQUIRES_SAME_Z
 
 /obj/projectile/giantrock
 	name = "elemental rock"

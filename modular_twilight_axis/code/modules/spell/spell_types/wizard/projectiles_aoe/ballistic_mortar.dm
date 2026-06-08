@@ -3,31 +3,45 @@
 #define PI 3.14159
 #endif
 
-/obj/effect/proc_holder/spell/invoked/ballistic_mortar
+/datum/action/cooldown/spell/ballistic_mortar
+	button_icon = 'icons/mob/actions/mage_pyromancy.dmi'
 	name = "Arcane Mortar"
 	desc = "Launches a fireball upwards at high speed."
-	overlay_state = "fireball"
-	releasedrain = 20
-	chargetime = 0 
-	cost = 10
-	var/prepare_time = 200 
-	recharge_time = 60 SECONDS
-	range = 35 
-	selection_type = "range"
-	warnie = "spellwarning"
+	button_icon_state = "fireball"
+	sound = 'sound/magic/whiteflame.ogg'
+	spell_color = GLOW_COLOR_FIRE
+	glow_intensity = GLOW_INTENSITY_MEDIUM
+
+	click_to_activate = TRUE
+	cast_range = 35
+
+	primary_resource_type = SPELL_COST_STAMINA
+	primary_resource_cost = 40
+
+	invocation_type = INVOCATION_NONE
+
+	charge_required = FALSE
+	cooldown_time = 60 SECONDS
+
 	associated_skill = /datum/skill/magic/arcane
 	spell_tier = 3
-	movement_interrupt = TRUE
-	xp_gain = TRUE
+	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN | SPELL_REQUIRES_SAME_Z
 
-/obj/effect/proc_holder/spell/invoked/ballistic_mortar/cast(list/targets, mob/living/carbon/human/user = usr)
-	var/turf/T = get_turf(targets[1])
-	if(!T) return FALSE
+	var/prepare_time = 200 
+
+/datum/action/cooldown/spell/ballistic_mortar/cast(atom/cast_on)
+	. = ..()
+	var/mob/living/carbon/human/user = owner
+	if(!istype(user))
+		return FALSE
+
+	var/turf/T = get_turf(cast_on)
+	if(!T) 
+		return FALSE
 
 	var/azimuth = Get_Angle(user, T)
 	var/in_dist = input(user, "Enter Target Distance (0-50 tiles):", "Ballistics", 0) as num|null
 	if(isnull(in_dist) || user.stat != CONSCIOUS)
-		revert_cast()
 		return FALSE
 	var/user_distance = clamp(in_dist, 0, 50)
 
@@ -91,7 +105,6 @@
 		user.visible_message(span_danger("<b>[user]'s ritual collapses!</b>"))
 		do_sparks(5, TRUE, user)
 		qdel(AUR)
-		revert_cast()
 		return FALSE
 
 	qdel(AUR)
@@ -107,6 +120,29 @@
 	user.visible_message("<span class='userdanger'><font size=5><b>[user] RELEASES THE ARCANE CHARGE!</b></font></span>")
 	perform_ballistic_launch(user, azimuth, user_distance)
 	return TRUE
+
+/datum/action/cooldown/spell/ballistic_mortar/proc/perform_ballistic_launch(mob/living/carbon/human/user, azimuth, distance)
+	var/turf/origin = get_turf(user)
+	
+	var/flight_height = get_free_z_height(user)
+
+	var/obj/effect/temp_visual/fireball_anim/LA = new(origin)
+	animate(LA, pixel_z = 450, alpha = 0, time = 10, easing = SINE_EASING)
+	playsound(user, 'modular_twilight_axis/awful_artillery/sound/launch.ogg', 100, TRUE)
+
+	var/dx = round(distance * sin(azimuth))
+	var/dy = round(distance * cos(azimuth))
+	var/turf/target_turf = locate(origin.x + dx, origin.y + dy, origin.z)
+	if(!target_turf)
+		target_turf = get_ranged_target_turf(origin, azimuth, distance)
+
+	var/obj/item/artillery_shell/magic_fireball/S = new(target_turf)
+	S.safe_z = origin.z
+	
+	S.stored_flight_height = flight_height
+
+	var/air_time = 10 + round(distance * 0.6)
+	addtimer(CALLBACK(S, TYPE_PROC_REF(/obj/item/artillery_shell/magic_fireball, start_impact_sequence)), air_time)
 
 /obj/effect/proc_holder/spell/invoked/ballistic_mortar/proc/perform_ballistic_launch(mob/living/carbon/human/user, azimuth, distance)
 	var/turf/origin = get_turf(user)

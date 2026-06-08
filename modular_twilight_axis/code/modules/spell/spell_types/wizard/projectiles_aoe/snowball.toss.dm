@@ -1,24 +1,37 @@
-/obj/effect/proc_holder/spell/invoked/projectile/snowball_toss
+/datum/action/cooldown/spell/projectile/snowball_toss
+	button_icon = 'modular_twilight_axis/icons/mob/actions/roguespells.dmi'
 	name = "Frost Sphere"
-	desc = "Запускает магический снежный шар. При попадании накладывает 2 стака обморожения и отбрасывает цель."
-	school = "evocation"
-	invocations = list("GLACIES PILLA!")
-	invocation_type = "shout"
-	projectile_type = /obj/projectile/magic/frost_sphere
-	cost = 4
-	spell_tier = 2
-	releasedrain = 20
-	chargetime = 20
-	recharge_time = 21 SECONDS
-	action_icon = 'modular_twilight_axis/icons/mob/actions/roguespells.dmi'
-	overlay_state = "pulse1" 
-	glow_color = "#00ffff"
-	associated_skill = /datum/skill/magic/arcane
-	chargedloop = /datum/looping_sound/invokegen
+	desc = "Запускает магический снежный шар. При попадании наносит урон и накладывает 2 стака обморожения."
+	button_icon_state = "pulse1"
+	spell_color = "#00ffff"
+	glow_intensity = GLOW_INTENSITY_LOW
 
-/obj/effect/proc_holder/spell/invoked/projectile/snowball_toss/cast(list/targets, mob/user)
-	user.visible_message(span_warning("<b>[user]</b> throws a massive lump of ice and snow!"))
-	return ..()
+	projectile_type = /obj/projectile/magic/frost_sphere
+	cast_range = 7
+
+	primary_resource_type = SPELL_COST_STAMINA
+	primary_resource_cost = 5
+
+	invocations = list("GLACIES CUSPIS!")
+	invocation_type = INVOCATION_SHOUT
+
+	charge_required = TRUE
+	charge_time = 0.8 SECONDS
+	charge_drain = 1
+	charge_slowdown = CHARGING_SLOWDOWN_SMALL
+	charge_sound = 'sound/magic/charging.ogg'
+	cooldown_time = 21 SECONDS
+
+	associated_skill = /datum/skill/magic/arcane
+	spell_tier = 2
+	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN | SPELL_REQUIRES_SAME_Z
+
+/datum/action/cooldown/spell/projectile/snowball_toss/cast(atom/cast_on)
+	. = ..()
+	var/mob/living/caster = owner
+	if(caster)
+		caster.visible_message(span_warning("<b>[caster]</b> throws a massive lump of ice and snow!"))
+	return TRUE
 
 
 /obj/projectile/magic/frost_sphere
@@ -44,8 +57,7 @@
 		if(!L.anti_magic_check())
 			
 			L.apply_status_effect(/datum/status_effect/stacking/hypothermia, 2)
-			
-			
+
 			var/push_dir = get_dir(firer, L)
 			if(push_dir)
 				

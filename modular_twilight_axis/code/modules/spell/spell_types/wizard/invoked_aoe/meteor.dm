@@ -1,33 +1,45 @@
-/obj/effect/proc_holder/spell/invoked/grand_meteor
+/datum/action/cooldown/spell/grand_meteor
+	button_icon = 'icons/mob/actions/mage_geomancy.dmi'
 	name = "Cataclysmic Meteor"
 	desc = "Summons a massive meteor. High destruction, high cost."
-	overlay_state = "meteor_storm"
-	cost = 10
-	spell_tier = 3
-	chargedrain = 2
-	releasedrain = 80
-	chargetime = 25
-	recharge_time = 60 SECONDS               
-	selection_type = "range"
-	invocations = list("Anborno!")
-	invocation_type = "shout"
-	no_early_release = TRUE
-	movement_interrupt = TRUE
-	gesture_required = TRUE
-	xp_gain = TRUE
-	glow_color = GLOW_COLOR_ARCANE
+	button_icon_state = "meteor_storm"
+	sound = 'sound/magic/meteorstorm.ogg'
+	spell_color = GLOW_COLOR_EARTHEN
 	glow_intensity = GLOW_INTENSITY_LOW
+
+	click_to_activate = TRUE
+	cast_range = 7
+
+	primary_resource_type = SPELL_COST_STAMINA
+	primary_resource_cost = 40
+
+	invocations = list("Anborno!")
+	invocation_type = INVOCATION_SHOUT
+
+	charge_required = TRUE
+	charge_time = 2.5 SECONDS
+	charge_drain = 2
+	charge_slowdown = CHARGING_SLOWDOWN_HEAVY
+	charge_sound = 'sound/magic/charging.ogg'
+	cooldown_time = 60 SECONDS
+
 	associated_skill = /datum/skill/magic/arcane
-	chargedloop = /datum/looping_sound/invokegen
-	warnie = "spellwarning"
+	spell_tier = 3
+	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN | SPELL_REQUIRES_SAME_Z
 
-/obj/effect/proc_holder/spell/invoked/grand_meteor/cast(list/targets, mob/user = usr)
-	var/turf/T = get_turf(targets[1])
-	if(!T) return
+/datum/action/cooldown/spell/grand_meteor/cast(atom/cast_on)
+	. = ..()
+	var/mob/living/carbon/human/H = owner
+	if(!istype(H))
+		return FALSE
 
-	if(!(T in view(user)))
-		to_chat(user, span_warning("I aimed incorrectly and my concentration was knocked down!"))
-		return
+	var/turf/T = get_turf(cast_on)
+	if(!T)
+		return FALSE
+
+	if(!(T in view(H)))
+		to_chat(H, span_warning("I aimed incorrectly and my concentration was knocked down!"))
+		return FALSE
 	
 	T.visible_message(span_boldwarning("A massive shadow covers the area..."))
 	new /obj/effect/temp_visual/target/massive(T)

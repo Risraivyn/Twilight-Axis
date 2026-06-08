@@ -1,23 +1,35 @@
-/obj/effect/proc_holder/spell/invoked/projectile/icicle_spear
+/datum/action/cooldown/spell/projectile/icicle_spear
+	button_icon = 'modular_twilight_axis/icons/mob/actions/roguespells.dmi'
 	name = "Icicle Spear"
 	desc = "Стреляет магической сосулькой, которая вонзается в плоть врага, нанося постоянный урон и замораживая его изнутри."
-	school = "evocation"
-	invocations = list("GLACIES CUSPIS!")
-	invocation_type = "shout"
-	projectile_type = /obj/projectile/magic/icicle_spike
-	cost = 6
-	spell_tier = 2
-	releasedrain = 30
-	chargetime =  20
-	recharge_time = 35 SECONDS
-	action_icon = 'modular_twilight_axis/icons/mob/actions/roguespells.dmi'
-	overlay_state = "flight"
-	glow_color = "#e0f7ff"
-	chargedloop = /datum/looping_sound/invokegen
-	associated_skill = /datum/skill/magic/arcane
+	button_icon_state = "flight"
+	sound = 'sound/spellbooks/icicle.ogg'
+	spell_color = "#e0f7ff"
+	glow_intensity = GLOW_INTENSITY_LOW
 
-/obj/effect/proc_holder/spell/invoked/projectile/icicle_spear/cast(list/targets, mob/user)
-	user.visible_message(span_warning("<b>[user]</b> Frost products with a long, sharp spike!"))
+	projectile_type = /obj/projectile/magic/icicle_spike
+	cast_range = 7
+
+	primary_resource_type = SPELL_COST_STAMINA
+	primary_resource_cost = 25
+
+	invocations = list("GLACIES CUSPIS!")
+	invocation_type = INVOCATION_SHOUT
+
+	charge_required = TRUE
+	charge_time = 2 SECONDS
+	charge_drain = 1
+	charge_slowdown = CHARGING_SLOWDOWN_MEDIUM
+	charge_sound = 'sound/magic/charging.ogg'
+	cooldown_time = 35 SECONDS
+
+	associated_skill = /datum/skill/magic/arcane
+	spell_tier = 2
+	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN | SPELL_REQUIRES_SAME_Z
+
+/datum/action/cooldown/spell/projectile/icicle_spear/cast(atom/cast_on)
+	if(owner)
+		owner.visible_message(span_warning("<b>[owner]</b> Frost products with a long, sharp spike!"))
 	return ..()
 
 /obj/item/magic_icicle
