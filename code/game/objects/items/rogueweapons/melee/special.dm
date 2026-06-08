@@ -1415,9 +1415,9 @@
 		ADD_TRAIT(user, TRAIT_IGNOREDAMAGESLOWDOWN, TRAIT_GENERIC)
 		if(HAS_TRAIT(user, TRAIT_STANDARD_BEARER))
 			to_chat(user, span_suppradio("<small>It remains ready for your word. You need only ask.</small>"))
-			user.verbs |= /mob/proc/standard_position
-			user.verbs |= /mob/proc/standard_rally
-	if((user.job == "Vanguard"))
+			add_verb(user, /mob/proc/standard_position)
+			add_verb(user, /mob/proc/standard_rally)
+	else if(user.job == "Vanguard")
 		to_chat(user, span_suppradio("The standard's runes pulse, accepting me as its <b>master</b>."))
 		user.change_stat(STATKEY_LCK, 3)
 		user.change_stat(STATKEY_PER, 2)
@@ -1425,7 +1425,7 @@
 		ADD_TRAIT(user, TRAIT_IGNOREDAMAGESLOWDOWN, TRAIT_GENERIC)
 		if(HAS_TRAIT(user, TRAIT_STANDARD_BEARER))
 			to_chat(user, span_suppradio("<small>It remains ready for your word. You need only ask.</small>"))
-			user.verbs |= /mob/proc/standard_position_vanguard
+			add_verb(user, /mob/proc/standard_position_vanguard)
 	else
 		to_chat(user, span_suicide("The standard's runes pulse, rejecting me as its <b>master</b>."))
 
@@ -1442,9 +1442,9 @@
 		REMOVE_TRAIT(user, TRAIT_IGNOREDAMAGESLOWDOWN, TRAIT_GENERIC)
 		if(HAS_TRAIT(user, TRAIT_STANDARD_BEARER))
 			to_chat(user, span_monkeyhive("<small>You feel ill. Was that a mistake?</small>"))
-			user.verbs -= /mob/proc/standard_position
-			user.verbs -= /mob/proc/standard_rally
-	if((user.job == "Vanguard"))
+			remove_verb(user, /mob/proc/standard_position)
+			remove_verb(user, /mob/proc/standard_rally)
+	else if(user.job == "Vanguard")
 		to_chat(user, span_monkeyhive("The standard's runes pulse, rhythmically, as if sad to see you release your control."))
 		user.change_stat(STATKEY_LCK, -3)
 		user.change_stat(STATKEY_PER, -2)
@@ -1452,7 +1452,7 @@
 		REMOVE_TRAIT(user, TRAIT_IGNOREDAMAGESLOWDOWN, TRAIT_GENERIC)
 		if(HAS_TRAIT(user, TRAIT_STANDARD_BEARER))
 			to_chat(user, span_monkeyhive("<small>You feel ill. Was that a mistake?</small>"))
-			user.verbs -= /mob/proc/standard_position_vanguard
+			remove_verb(user, /mob/proc/standard_position_vanguard)
 	else
 		to_chat(user, span_suicide("The standard's runes pulse, as if sighing in relief once I let go."))
 

@@ -72,7 +72,7 @@
 #endif
 
 /mob/living/carbon/human/Initialize()
-	verbs += /mob/living/proc/lay_down
+	add_verb(src, /mob/living/proc/lay_down)
 	icon_state = "" //Remove the inherent human icon that is visible on the map editor. We're rendering ourselves limb by limb, having it still be there results in a bug where the basic human icon appears below as south in all directions and generally looks nasty.
 
 	//initialize limbs first
@@ -135,6 +135,15 @@
 	create_dna(src)
 	randomize_human(src)
 	dna.initialize_dna()
+
+/mob/living/carbon/human/get_status_tab_items()
+	. = ..()
+	if(devotion)
+		. += "DEVOTION: [devotion.devotion]/[devotion.max_devotion]"
+	if(mind)
+		var/datum/antagonist/vampire/vampire_datum = mind.has_antag_datum(/datum/antagonist/vampire)
+		if(vampire_datum)
+			. += "VITAE: [bloodpool]"
 
 /mob/living/carbon/human/Destroy()
 	if(SScity_assembly?.is_alderman(src))
