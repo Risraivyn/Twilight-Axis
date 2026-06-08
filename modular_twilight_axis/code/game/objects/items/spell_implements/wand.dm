@@ -230,7 +230,6 @@
 
 	var/datum/action/cooldown/spell/S = loaded_spell_path
 	var/is_arced = istype(user.used_intent, /datum/intent/arc/wand)
-	var/magic_skill = user.get_skill_level(/datum/skill/magic/arcane)
 	var/mana_cost = get_spell_mana_cost(user)
 
 	if(mana_charges < mana_cost)
