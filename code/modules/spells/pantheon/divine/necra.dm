@@ -325,11 +325,10 @@ var/global/mob/_corpse_sort_ref = null
 		var/is_deadite = FALSE
 		var/is_skeleton_valid = FALSE
 
-		if(!is_dead)
-			if(C.mind && C.mind.has_antag_datum(/datum/antagonist/zombie))
-				is_deadite = TRUE
-			else if(istype(C, /mob/living/carbon/human/species/skeleton) && !(C.mobility_flags & MOBILITY_STAND))
-				is_skeleton_valid = TRUE
+		if(C.mind && C.mind.has_antag_datum(/datum/antagonist/zombie))
+			is_deadite = TRUE
+		if(istype(C, /mob/living/carbon/human/species/skeleton) && !(C.mobility_flags & MOBILITY_STAND))
+			is_skeleton_valid = TRUE
 
 		if(!is_dead && !is_deadite && !is_skeleton_valid)
 			continue

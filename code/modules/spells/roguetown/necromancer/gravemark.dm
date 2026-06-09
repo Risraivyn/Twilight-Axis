@@ -32,7 +32,7 @@
 			if(M == owner)
 				continue
 
-			if(faction_tag in M.faction)
+			if(M.faction && (faction_tag in M.faction))
 				allies += M.real_name
 
 		if(!length(allies))
