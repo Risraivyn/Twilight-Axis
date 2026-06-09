@@ -242,9 +242,12 @@ GLOBAL_VAR_INIT(underworld_strands, 0)
 	src.forceMove(T)
 
 /mob/living/proc/get_adventurer_latejoin_turf()
-	var/list/candidates = list()
+	if(!length(GLOB.adventurerlate_landmarks))
+		return null
 
-	for(var/obj/effect/landmark/start/adventurerlate/L in GLOB.landmarks_list)
+	var/list/candidates = list()
+	
+	for(var/obj/effect/landmark/start/adventurerlate/L in GLOB.adventurerlate_landmarks)
 		if(L.loc && isturf(L.loc))
 			candidates += L.loc
 

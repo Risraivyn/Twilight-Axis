@@ -313,22 +313,25 @@ var/global/mob/_corpse_sort_ref = null
 	var/list/departed = list()
 	var/list/forsaken = list()
 
-	for(var/mob/living/carbon/C in GLOB.mob_list)
+	for(var/mob/living/carbon/C in GLOB.mob_living_list)
 		if(!C || QDELETED(C))
+			continue
+
+		if(C.burialrited)
 			continue
 
 		// --- corpse logic ---
 		var/is_dead = (C.stat == DEAD)
 		var/is_deadite = FALSE
-		if(C.mind)
-			is_deadite = C.mind.has_antag_datum(/datum/antagonist/zombie)
+		var/is_skeleton_valid = FALSE
 
-		var/is_skeleton = istype(C, /mob/living/carbon/human/species/skeleton)
-		var/is_skeleton_valid = (is_skeleton && !(C.mobility_flags & MOBILITY_STAND))
-		var/no_burialrites = !C.burialrited
+		if(!is_dead)
+			if(C.mind && C.mind.has_antag_datum(/datum/antagonist/zombie))
+				is_deadite = TRUE
+			else if(istype(C, /mob/living/carbon/human/species/skeleton) && !(C.mobility_flags & MOBILITY_STAND))
+				is_skeleton_valid = TRUE
 
-		var/is_corpse = ((is_dead || is_deadite || is_skeleton_valid) && no_burialrites)
-		if(!is_corpse)
+		if(!is_dead && !is_deadite && !is_skeleton_valid)
 			continue
 
 		// --- classification ---
@@ -355,7 +358,19 @@ var/global/mob/_corpse_sort_ref = null
 		var/fuhgeddaboutit = (time_dead > 45 MINUTES)
 		var/same_z = (C.z == user.z)
 
-		// --- name ---
+		// --- pick list ---
+		var/list/target_list = null
+
+		if(is_earthbound)
+			target_list = earthbound
+		else if(is_departed && !fuhgeddaboutit)
+			target_list = departed
+		else if(is_forsaken && !fuhgeddaboutit && same_z)
+			target_list = forsaken
+
+		if(!target_list)
+			continue
+
 		var/corpse_name
 
 		if(time_dead < 5 MINUTES)
@@ -371,7 +386,6 @@ var/global/mob/_corpse_sort_ref = null
 
 		if(istype(C, /mob/living/carbon/human))
 			var/list/d_list = C.get_mob_descriptors()
-
 			var/trait_desc = ""
 			var/stature_desc = ""
 
@@ -395,19 +409,6 @@ var/global/mob/_corpse_sort_ref = null
 			corpse_name += " (☣︎)"
 		else if(is_skeleton_valid)
 			corpse_name += " (☠)"
-
-		// --- pick list ---
-		var/list/target_list = null
-
-		if(is_earthbound)
-			target_list = earthbound
-		else if(is_departed && !fuhgeddaboutit)
-			target_list = departed
-		else if(is_forsaken && !fuhgeddaboutit && same_z)
-			target_list = forsaken
-
-		if(!target_list)
-			continue
 
 		// --- unique key ---
 		var/list_key = corpse_name

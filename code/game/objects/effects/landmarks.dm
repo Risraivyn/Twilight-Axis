@@ -83,6 +83,14 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	jobspawn_override = list("Pilgrim", "Adventurer", "Migrant", "Trader")
 	delete_after_roundstart = FALSE
 
+/obj/effect/landmark/start/adventurerlate/Initialize()
+	. = ..()
+	GLOB.adventurerlate_landmarks += src
+
+/obj/effect/landmark/start/adventurerlate/Destroy()
+	GLOB.adventurerlate_landmarks -= src
+	return ..()
+
 /obj/effect/landmark/start/mercenarylate
 	name = "Mercenarylate"
 	icon_state = "arrow"
@@ -596,6 +604,7 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark/start/new_player)
 	name = "safe zone"
 
 GLOBAL_LIST_EMPTY(travel_tile_locations)
+GLOBAL_LIST_EMPTY(adventurerlate_landmarks)
 
 /obj/effect/landmark/travel_tile_location
 	name = "travel tile location"

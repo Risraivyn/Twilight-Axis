@@ -12,7 +12,6 @@
 	primary_resource_type = SPELL_COST_NONE
 	self_cast_possible = TRUE
 	has_visual_effects = FALSE
-	has_visual_effects = FALSE
 	sound = null
 	zizo_spell = TRUE
 
@@ -26,20 +25,15 @@
 
 	var/faction_tag = "[owner.real_name]_faction"
 
-	// Self-cast = list current allies
 	if(target == owner)
 		var/list/allies = list()
 
-		for(var/mob/living/M in world)
+		for(var/mob/living/M in GLOB.mob_living_list)
 			if(M == owner)
 				continue
 
-			if(M.mind?.current)
-				if(faction_tag in M.mind.current.faction)
-					allies += M.real_name
-			else if(istype(M, /mob/living/simple_animal))
-				if(faction_tag in M.faction)
-					allies += M.name
+			if(faction_tag in M.faction)
+				allies += M.real_name
 
 		if(!length(allies))
 			to_chat(owner, span_notice("You have declared no allies among the living or dead."))
@@ -48,13 +42,8 @@
 
 		return TRUE
 
-	var/list/faction_list
-
-	if(target.mind?.current)
-		faction_list = target.mind.current.faction
-	else if(istype(target, /mob/living/simple_animal))
-		faction_list = target.faction
-	else
+	var/list/faction_list = target.faction
+	if(!faction_list)
 		return FALSE
 
 	. = ..()
