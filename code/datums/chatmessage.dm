@@ -212,7 +212,7 @@
   * * message_mode - Bitflags relating to the mode of the message
   */
 /mob/proc/create_chat_message(atom/movable/speaker, datum/language/message_language, raw_message, list/spans = list(), message_mode)
-	if(!client)
+	if(!client || !speaker)
 		return
 
 	if(client.prefs && !client.prefs.chat_on_map)

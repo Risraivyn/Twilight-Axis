@@ -65,7 +65,8 @@
 
 	if(tracked_clients)
 		for(var/client/C in tracked_clients)
-			C.images -= bar
+			if(C)
+				C.images -= bar
 		tracked_clients = null
 
 	if(bar)
