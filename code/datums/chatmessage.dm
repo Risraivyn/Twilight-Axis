@@ -212,6 +212,12 @@
   * * message_mode - Bitflags relating to the mode of the message
   */
 /mob/proc/create_chat_message(atom/movable/speaker, datum/language/message_language, raw_message, list/spans = list(), message_mode)
+	if(!client)
+		return
+
+	if(client.prefs && !client.prefs.chat_on_map)
+		return
+
 	// Ensure the list we are using, if present, is a copy so we don't modify the list provided to us
 	spans = spans ? spans.Copy() : list()
 

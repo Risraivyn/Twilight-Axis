@@ -52,6 +52,7 @@
 /datum/progressbar/Destroy()
 	if(last_progress != goal)
 		bar.icon_state = "[bar.icon_state]_fail"
+
 	for(var/I in user.progressbars[bar.loc])
 		var/datum/progressbar/P = I
 		if(P != src && P.listindex > listindex)
@@ -62,15 +63,17 @@
 	if(!bars.len)
 		LAZYREMOVE(user.progressbars, bar.loc)
 
-	animate(bar, alpha = 0, time = PROGRESSBAR_ANIMATION_TIME)
-	addtimer(CALLBACK(src, PROC_REF(remove_from_client)), PROGRESSBAR_ANIMATION_TIME, TIMER_CLIENT_TIME)
-	QDEL_IN(bar, PROGRESSBAR_ANIMATION_TIME * 2) //for garbage collection safety
-	. = ..()
+	if(tracked_clients)
+		for(var/client/C in tracked_clients)
+			C.images -= bar
+		tracked_clients = null
 
-/datum/progressbar/proc/remove_from_client()
-	for(var/client/C in tracked_clients)
-		C.images -= bar
-	tracked_clients = null
+	if(bar)
+		qdel(bar)
+		bar = null
+
+	user = null
+	return ..()
 
 #undef PROGRESSBAR_ANIMATION_TIME
 #undef PROGRESSBAR_HEIGHT
