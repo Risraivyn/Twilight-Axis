@@ -52,8 +52,7 @@
 	if(!workbench_enchantments)
 		workbench_enchantments = list()
 		for(var/path in subtypesof(/datum/magic_item/workbench))
-			var/datum/magic_item/workbench/W = path
-			if(initial(W.abstract_type) == path)
+			if(initial(path:abstract_type) == path)
 				continue
 			workbench_enchantments += path
 
@@ -399,9 +398,7 @@
 
 		if(can_enchant)
 			for(var/path in workbench_enchantments)
-				var/datum/magic_item/workbench/W = path
-				
-				if(!istype(enchant_slot, initial(W.compatible_type)))
+				if(!istype(enchant_slot, initial(path:compatible_type)))
 					continue
 
 				var/is_compat = TRUE
@@ -410,12 +407,12 @@
 					is_compat = FALSE
 
 				avail_enchants += list(list(
-					"name" = initial(W.name),
-					"desc" = initial(W.description),
-					"cost" = initial(W.cost),
+					"name" = initial(path:name),
+					"desc" = initial(path:description),
+					"cost" = initial(path:cost),
 					"ref" = "[path]",
-					"icon" = initial(W.icon_name),
-					"tier" = initial(W.tier),
+					"icon" = initial(path:icon_name),
+					"tier" = initial(path:tier),
 					"compatible" = is_compat
 				))
 	data["enchant_recipes"] = avail_enchants
@@ -608,7 +605,7 @@
 		if("do_enchant")
 			var/enchant_path_str = params["recipe_ref"]
 			var/path = text2path(enchant_path_str)
-			if(!path)
+			if(!path || !(path in workbench_enchantments))
 				return TRUE
 
 			if(!enchant_slot)
@@ -624,12 +621,7 @@
 				to_chat(usr, span_warning("Этот предмет наполнен странной проклятой магией и не подлежит зачарованию."))
 				return TRUE
 
-			var/cost = 100
-			for(var/p in workbench_enchantments)
-				if(p == path)
-					cost = initial(p:cost)
-					break
-
+			var/cost = initial(path:cost)
 			if(lux_charges < cost)
 				to_chat(usr, span_warning("Недостаточно зарядов Люкса!"))
 				return TRUE

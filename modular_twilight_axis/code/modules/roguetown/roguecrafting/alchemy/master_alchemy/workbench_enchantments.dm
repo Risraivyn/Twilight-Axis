@@ -120,17 +120,23 @@
 	..()
 	if(slot == ITEM_SLOT_HANDS)
 		return
+	if(!ishuman(user))
+		return
 	if(active_item)
 		return
 	active_item = TRUE
-	ADD_TRAIT(user, TRAIT_SLEUTH, "[type]")
-	user.adjust_skillrank(/datum/skill/misc/tracking, 2, TRUE)
-	to_chat(user, span_notice("Надев [i], вы начинаете подмечать малейшие детали окружения, скрытые от глаз обывателей."))
+	var/mob/living/carbon/human/H = user
+	ADD_TRAIT(H, TRAIT_SLEUTH, "[type]")
+	H.adjust_skillrank(/datum/skill/misc/tracking, 2, TRUE)
+	to_chat(H, span_notice("Надев [i], вы начинаете подмечать малейшие детали окружения, скрытые от глаз обывателей."))
 
 /datum/magic_item/workbench/sleuth_insight/on_drop(obj/item/i, mob/living/user)
 	..()
+	if(!ishuman(user))
+		return
 	if(active_item)
 		active_item = FALSE
-		REMOVE_TRAIT(user, TRAIT_SLEUTH, "[type]")
-		user.adjust_skillrank(/datum/skill/misc/tracking, -2, TRUE)
-		to_chat(user, span_notice("Ваше обостренное внимание к деталям ослабевает."))
+		var/mob/living/carbon/human/H = user
+		REMOVE_TRAIT(H, TRAIT_SLEUTH, "[type]")
+		H.adjust_skillrank(/datum/skill/misc/tracking, -2, TRUE)
+		to_chat(H, span_notice("Ваше обостренное внимание к деталям ослабевает."))
