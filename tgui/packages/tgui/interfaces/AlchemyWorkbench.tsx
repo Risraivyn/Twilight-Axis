@@ -90,13 +90,15 @@ type Data = {
   pill_mix_total: number;
   flour_count: number;
   lux_tank: { charges: number; max: number } | null;
-  transmute_item: { name: string; image: string } | null;
-  transmute_recipes: { 
+  enchant_item: { name: string; image: string } | null;
+  enchant_recipes: { 
     name: string; 
+    desc: string;
     cost: number; 
     ref: string;
-    icon: string; 
-    category: string
+    icon: string;
+    tier: number;
+    compatible: BooleanLike;
   }[];
 };
 
@@ -113,7 +115,7 @@ export const AlchemyWorkbench = (props) => {
           <Stack.Item>
             <Tabs>
               {data.upgrade_lvl >= 4 && (
-                <Tabs.Tab selected={tab === 'transmutation'} onClick={() => setTab('transmutation')}>Трансмутация</Tabs.Tab>
+                <Tabs.Tab selected={tab === 'enchanting'} onClick={() => setTab('enchanting')}>Зачарование</Tabs.Tab>
               )}
               {data.upgrade_lvl >= 3 && (
                 <Tabs.Tab selected={tab === 'workstation'} onClick={() => setTab('workstation')}>Инфузия</Tabs.Tab>
@@ -151,7 +153,7 @@ export const AlchemyWorkbench = (props) => {
             {tab === 'workstation' && <WorkstationTab />}
             {tab === 'crafting' && <CraftingTab />}
             {tab === 'grimoire' && <GrimoireTab />}
-            {tab === 'transmutation' && <TransmutationTab />}
+            {tab === 'enchanting' && <EnchantingTab />}
             {tab === 'lab' && <LaboratoryTab />}
           </Stack.Item>
         </Stack>
@@ -452,20 +454,25 @@ const GridPreview = ({ icons }: { icons: (string | null)[] }) => (
   </Box>
 );
 
-const TransmutationTab = () => {
+const EnchantingTab = () => {
   const { act, data } = useBackend<Data>();
   const [selecting, setSelecting] = useState(false);
+  const [tierFilter, setTierFilter] = useState<number>(0);
+
+  const filteredEnchants = data.enchant_recipes?.filter(
+    (r) => tierFilter === 0 || r.tier === tierFilter
+  ) || [];
 
   return (
-    <Section title="Трансмутация Материи" fill scrollable>
+    <Section title="Рунный Стол Зачарования" fill scrollable>
       <Stack vertical fill>
         <Stack.Item>
-          <Box p={1} style={{ border: '1px solid #00ffcc', borderRadius: '4px', backgroundColor: 'rgba(0, 255, 204, 0.05)' }}>
+          <Box p={1} style={{ border: '1px solid #a29bfe', borderRadius: '4px', backgroundColor: 'rgba(162, 155, 254, 0.05)' }}>
             <Stack align="center">
-              <Icon name="bolt" color="teal" size={2} mr={1} />
+              <Icon name="bolt" color="purple" size={2} mr={1} />
               <Stack.Item grow>
-                <Box bold color="teal" fontSize="1.1em">Накопитель Энергии</Box>
-                <ProgressBar value={data.lux_tank?.charges || 0} maxValue={data.lux_tank?.max || 1000} color="teal" mt={0.5} />
+                <Box bold color="purple" fontSize="1.1em">Энергия Люкса</Box>
+                <ProgressBar value={data.lux_tank?.charges || 0} maxValue={data.lux_tank?.max || 1000} color="purple" mt={0.5} />
                 <Stack justify="space-between" mt={0.5} align="center">
                   <Box fontSize="0.9em" color="white">
                     Зарядов Люкса: {data.lux_tank?.charges || 0} / {data.lux_tank?.max || 1000}
@@ -482,65 +489,93 @@ const TransmutationTab = () => {
         <Stack.Item mt={2} mb={2}>
           <Stack align="center" justify="center">
             <Box 
-              onClick={() => data.transmute_item ? act('transmute_eject') : setSelecting(true)}
+              onClick={() => data.enchant_item ? act('enchant_eject') : setSelecting(true)}
               style={{ 
-                width: '80px', height: '80px', border: '2px dashed #00ffcc', 
+                width: '80px', height: '80px', border: '2px dashed #a29bfe', 
                 display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-                backgroundColor: 'rgba(0, 255, 204, 0.05)', borderRadius: '8px'
+                backgroundColor: 'rgba(162, 155, 254, 0.05)', borderRadius: '8px',
+                transition: 'all 0.15s ease-in-out'
               }}
             >
-              {data.transmute_item ? (
-                <img src={data.transmute_item.image} style={{ width: '64px', imageRendering: 'pixelated' }} />
+              {data.enchant_item ? (
+                <img src={data.enchant_item.image} style={{ width: '64px', imageRendering: 'pixelated' }} />
               ) : (
                 <Icon name="plus" size={3} color="gray" />
               )}
             </Box>
-            
-            <Icon name="arrow-right" size={3} mx={4} color="teal" />
-            
-            <Box style={{ 
-              width: '80px', height: '80px', border: '2px solid #555', 
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: '8px'
-            }}>
-              <Icon name="question" size={3} color="gray" opacity={0.3} />
-            </Box>
           </Stack>
         </Stack.Item>
 
+        {data.enchant_item && (
+          <Stack.Item mt={1} mb={2}>
+            <Tabs>
+              <Tabs.Tab selected={tierFilter === 0} onClick={() => setTierFilter(0)}>Все Ранги</Tabs.Tab>
+              <Tabs.Tab selected={tierFilter === 1} onClick={() => setTierFilter(1)}>Mundane (T1)</Tabs.Tab>
+              <Tabs.Tab selected={tierFilter === 2} onClick={() => setTierFilter(2)}>Superior (T2)</Tabs.Tab>
+              <Tabs.Tab selected={tierFilter === 3} onClick={() => setTierFilter(3)}>Greater (T3)</Tabs.Tab>
+              <Tabs.Tab selected={tierFilter === 4} onClick={() => setTierFilter(4)}>Mythic (T4)</Tabs.Tab>
+            </Tabs>
+          </Stack.Item>
+        )}
+
         <Stack.Item grow>
-          {data.transmute_recipes?.length > 0 ? (
-            data.transmute_recipes.map((recipe, i) => {
-              const hasEnergy = data.lux_tank && data.lux_tank.charges >= recipe.cost;
-              
-              return (
-                <Button 
-                  key={i} fluid mb={1} color={hasEnergy ? "teal" : "gray"}
-                  disabled={!hasEnergy} 
-                  onClick={() => act('do_transmute', { recipe_ref: recipe.ref })}
-                  style={{ height: '42px' }}
-                >
-                  <Stack align="center">
-                    <Stack.Item mr={1}>
-                      <img src={recipe.icon} style={{ width: '32px', height: '32px', imageRendering: 'pixelated' }} />
-                    </Stack.Item>
-                    <Stack.Item grow textAlign="left">
-                      <Box bold fontSize="1.1em" color="white">{recipe.name}</Box>
-                    </Stack.Item>
-                    <Stack.Item>
-                      <Box bold color={hasEnergy ? "yellow" : "gray"} fontSize="1.1em">
-                        <Icon name="bolt" mr={0.5} /> {recipe.cost}
-                      </Box>
-                    </Stack.Item>
-                  </Stack>
-                </Button>
-              );
-            })
+          {data.enchant_item ? (
+            filteredEnchants.length > 0 ? (
+              filteredEnchants.map((recipe, i) => {
+                const hasEnergy = data.lux_tank && data.lux_tank.charges >= recipe.cost;
+                const canCast = recipe.compatible && hasEnergy;
+                
+                let tierColor = "white";
+                let tierLabel = "Mundane";
+                switch(recipe.tier) {
+                  case 2: tierColor = "#3498db"; tierLabel = "Superior"; break;
+                  case 3: tierColor = "#f1c40f"; tierLabel = "Greater"; break;
+                  case 4: tierColor = "#9b59b6"; tierLabel = "Mythic"; break;
+                }
+
+                return (
+                  <Button 
+                    key={i} fluid mb={1} 
+                    color={canCast ? "purple" : "transparent"}
+                    disabled={!canCast} 
+                    onClick={() => act('do_enchant', { recipe_ref: recipe.ref })}
+                    style={{ 
+                      height: '56px', 
+                      opacity: recipe.compatible ? 1 : 0.4,
+                      border: '1px solid rgba(255,255,255,0.05)',
+                      backgroundColor: 'rgba(0,0,0,0.2)'
+                    }}
+                  >
+                    <Stack align="center">
+                      <Stack.Item mr={2}>
+                        <Icon name={recipe.icon || 'magic'} size={2} color={tierColor} />
+                      </Stack.Item>
+                      <Stack.Item grow textAlign="left">
+                        <Stack align="center">
+                          <Box bold fontSize="1.15em" color="white" mr={1}>{recipe.name}</Box>
+                          <Box fontSize="0.75em" px={1} style={{ border: `1px solid ${tierColor}`, borderRadius: '4px', color: tierColor }}>
+                            {tierLabel}
+                          </Box>
+                        </Stack>
+                        <Box fontSize="0.85em" color="gray" mt={0.5}>{recipe.desc}</Box>
+                      </Stack.Item>
+                      <Stack.Item>
+                        <Box bold color={hasEnergy ? "yellow" : "red"} fontSize="1.1em">
+                          <Icon name="bolt" mr={0.5} /> {recipe.cost}
+                        </Box>
+                      </Stack.Item>
+                    </Stack>
+                  </Button>
+                );
+              })
+            ) : (
+              <Box textAlign="center" color="gray" mt={2} style={{ fontStyle: 'italic' }}>
+                Нет подходящих заклинаний данного ранга.
+              </Box>
+            )
           ) : (
             <Box textAlign="center" color="gray" mt={2} style={{ fontStyle: 'italic' }}>
-              {data.transmute_item 
-                ? "Нет доступных трансмутаций для этой материи." 
-                : "Положите базовый материал (слиток, ткань, кожу) в слот."}
+              Поместите предмет в ячейку для активации алтаря зачарования.
             </Box>
           )}
         </Stack.Item>
@@ -548,10 +583,10 @@ const TransmutationTab = () => {
 
       {selecting && (
         <Box style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 100, padding: '15px' }}>
-          <Section title="Выберите материал" fill scrollable buttons={<Button icon="times" color="transparent" onClick={() => setSelecting(false)} />}>
+          <Section title="Выберите предмет для зачарования" fill scrollable buttons={<Button icon="times" color="transparent" onClick={() => setSelecting(false)} />}>
           {data.available_all_items.length > 0 ? (
               data.available_all_items.map((item, i) => (
-                <Button key={i} fluid mb={1} onClick={() => { act('transmute_assign', { item_ref: item.ref }); setSelecting(false); }}>
+                <Button key={i} fluid mb={1} onClick={() => { act('enchant_assign', { item_ref: item.ref }); setSelecting(false); }}>
                   <Stack align="center">
                     <img src={item.image} style={{ width: '24px', height: '24px', marginRight: '8px' }} />
                     <Box>{item.name}</Box>

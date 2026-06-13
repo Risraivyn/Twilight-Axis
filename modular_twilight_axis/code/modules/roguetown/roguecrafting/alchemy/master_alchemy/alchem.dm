@@ -26,7 +26,7 @@
 	var/list/partial_knowledge = list()
 
 	var/list/obj/item/crafting_grid = list(null, null, null, null, null, null, null, null, null)
-	var/obj/item/transmute_slot = null
+	var/obj/item/enchant_slot = null
 
 	var/obj/item/reagent_containers/beaker_1 = null
 	var/obj/item/reagent_containers/beaker_2 = null
@@ -34,7 +34,8 @@
 	var/flour_efficiency = 0
 	var/datum/reagents/pill_buffer
 	var/lux_charges = 0
-	var/max_lux_charges = 1000 
+	var/max_lux_charges = 1000
+	var/static/list/workbench_enchantments
 
 /obj/machinery/alch_workbench/Initialize(mapload)
 	. = ..()
@@ -47,6 +48,15 @@
 		STR.max_items = 30
 		STR.screen_max_columns = 6
 		STR.screen_max_rows = 5
+
+	if(!workbench_enchantments)
+		workbench_enchantments = list()
+		for(var/path in subtypesof(/datum/magic_item/workbench))
+			var/datum/magic_item/workbench/W = path
+			if(initial(W.abstract_type) == path)
+				continue
+			workbench_enchantments += path
+
 	update_icon()
 
 
@@ -98,8 +108,8 @@
 			crafting_grid[i] = null
 			update_needed = TRUE
 
-	if(transmute_slot && !(transmute_slot in src.contents))
-		transmute_slot = null
+	if(enchant_slot && !(enchant_slot in src.contents))
+		enchant_slot = null
 		update_needed = TRUE
 	if(update_needed) update_icon()
 	if(beaker_1 && !(beaker_1 in src.contents)) beaker_1 = null
@@ -141,23 +151,20 @@
 
 /obj/machinery/alch_workbench/proc/check_grid_recipe()
 
-    for(var/datum/alch_grid_recipe/R in GLOB.alch_grid_recipes)
-        if(!R.result_type) continue
-        
-        var/match = TRUE
-        for(var/i in 1 to 9)
-            var/obj/item/I = crafting_grid[i]
-            var/req = R.grid[i]
-            
-
-            if(!req && I) { match = FALSE; break }
-
-            if(req && !I) { match = FALSE; break }
-
-            if(req && I && !istype(I, req)) { match = FALSE; break }
-            
-        if(match) return R
-    return null
+	for(var/datum/alch_grid_recipe/R in GLOB.alch_grid_recipes)
+		if(!R.result_type) continue
+		
+		var/match = TRUE
+		for(var/i in 1 to 9)
+			var/obj/item/I = crafting_grid[i]
+			var/req = R.grid[i]
+			
+			if(!req && I) { match = FALSE; break }
+			if(req && !I) { match = FALSE; break }
+			if(req && I && !istype(I, req)) { match = FALSE; break }
+			
+		if(match) return R
+	return null
 
 
 /obj/machinery/alch_workbench/ui_interact(mob/user, datum/tgui/ui)
@@ -198,7 +205,7 @@
 	switch(upgrade_level)
 		if(1) req_text = "Требуется: 1 Железный слиток (положите в склад стола)"
 		if(2) req_text = "Требуется: 1 Золотой слиток (положите в склад стола)"
-		if(3) req_text = "Требуется: 1 Алмаз, 1 Загадка Стали, 2 Синих самоцвета, 4 Огненной пыли 2 чистых люкса (положите в склад стола)"
+		if(3) req_text = "Требуется: 1 Алмаз"
 	data["next_upgrade_req"] = req_text
 
 
@@ -375,38 +382,43 @@
 
 	data["knowledge"] = knowledge
 
-	if(transmute_slot && STR && (transmute_slot in STR.real_location()))
-		var/icon/T_IMG = icon(transmute_slot.icon, transmute_slot.icon_state, frame = 1)
-		data["transmute_item"] = list("name" = transmute_slot.name, "image" = "data:image/png;base64,[icon2base64(T_IMG)]")
+	if(enchant_slot && STR && (enchant_slot in STR.real_location()))
+		var/icon/T_IMG = icon(enchant_slot.icon, enchant_slot.icon_state, frame = 1)
+		data["enchant_item"] = list("name" = enchant_slot.name, "image" = "data:image/png;base64,[icon2base64(T_IMG)]")
 	else
-		transmute_slot = null
-		data["transmute_item"] = null
-	
-	var/list/avail_transmutes = list()
-	if(transmute_slot)
-		var/current_type = transmute_slot.type
-		var/safety = 0
-		
-		while(current_type && current_type != /obj/item && current_type != /obj && safety < 10)
-			safety++
-			
-			if(GLOB.alchemy_transmute_index[current_type])
-				for(var/list/R in GLOB.alchemy_transmute_index[current_type])
-					var/list/final_data = R.Copy()
-					final_data["icon"] = get_cached_alchemy_icon(R["result_type"])
-					
-					var/is_duplicate = FALSE
-					for(var/list/D in avail_transmutes)
-						if(D["ref"] == final_data["ref"])
-							is_duplicate = TRUE
-							break
-					
-					if(!is_duplicate)
-						avail_transmutes += list(final_data)
-			
-			current_type = type2parent(current_type)
+		enchant_slot = null
+		data["enchant_item"] = null
+  
+	var/list/avail_enchants = list()
+	if(enchant_slot)
+		var/datum/component/cursed_item/C = enchant_slot.GetComponent(/datum/component/cursed_item)
+		var/can_enchant = TRUE
 
-	data["transmute_recipes"] = avail_transmutes
+		if(enchant_slot.unenchantable || C)
+			can_enchant = FALSE
+
+		if(can_enchant)
+			for(var/path in workbench_enchantments)
+				var/datum/magic_item/workbench/W = path
+				
+				if(!istype(enchant_slot, initial(W.compatible_type)))
+					continue
+
+				var/is_compat = TRUE
+				var/datum/component/magic_item/M = enchant_slot.GetComponent(/datum/component/magic_item)
+				if(M && (length(M.magical_effects) >= M.enchanting_capacity))
+					is_compat = FALSE
+
+				avail_enchants += list(list(
+					"name" = initial(W.name),
+					"desc" = initial(W.description),
+					"cost" = initial(W.cost),
+					"ref" = "[path]",
+					"icon" = initial(W.icon_name),
+					"tier" = initial(W.tier),
+					"compatible" = is_compat
+				))
+	data["enchant_recipes"] = avail_enchants
 	return data
 
 /obj/machinery/alch_workbench/ui_act(action, params)
@@ -505,11 +517,6 @@
 					requirements[/obj/item/ingot/gold] = 1
 				if(3)
 					requirements[/obj/item/roguegem/diamond] = 1
-					requirements[/obj/item/riddleofsteel] = 1
-					requirements[/obj/item/roguegem/blue] = 2
-					requirements[/obj/item/alch/firedust] = 4
-					requirements[/obj/item/reagent_containers/lux] = 2
-
 
 			var/list/items_to_consume = list()
 			var/has_everything = TRUE
@@ -557,15 +564,15 @@
 			do_mix(user)
 			return TRUE
 
-		if("transmute_assign")
+		if("enchant_assign")
 			var/obj/item/I = locate(params["item_ref"]) in STR.real_location()
-			if(I && !transmute_slot)
-				transmute_slot = I
+			if(I && !enchant_slot)
+				enchant_slot = I
 				update_icon()
 			return TRUE
 
-		if("transmute_eject")
-			transmute_slot = null
+		if("enchant_eject")
+			enchant_slot = null
 			update_icon()
 			return TRUE
 
@@ -579,10 +586,10 @@
 			
 			if(L)
 				consumed = L
-				charge_gain = 15
+				charge_gain = 100
 			else if(LI)
 				consumed = LI
-				charge_gain = 5
+				charge_gain = 50
 				
 			if(consumed)
 				if(lux_charges + charge_gain > max_lux_charges)
@@ -598,26 +605,55 @@
 			return TRUE
 
 
-		if("do_transmute")
-			var/recipe_ref = params["recipe_ref"]
-			var/list/R_DATA = GLOB.alchemy_recipe_lookup[recipe_ref]
-			if(!R_DATA) return TRUE
-
-			var/cost = R_DATA["cost"]
-			var/atom/out_type = R_DATA["result_type"]
-
-			if(lux_charges < cost)
-				to_chat(usr, span_warning("Недостаточно энергии Люкса для этой формы!"))
+		if("do_enchant")
+			var/enchant_path_str = params["recipe_ref"]
+			var/path = text2path(enchant_path_str)
+			if(!path)
 				return TRUE
 
-			if(transmute_slot && out_type)
-				lux_charges -= cost
-				if(STR) STR.remove_from_storage(transmute_slot, null)
-				
-				qdel(transmute_slot)
-				transmute_slot = null
-				new out_type(get_turf(src))
-				update_icon()
+			if(!enchant_slot)
+				to_chat(usr, span_warning("Вы не положили предмет в ячейку зачарования!"))
+				return TRUE
+
+			if(enchant_slot.unenchantable)
+				to_chat(usr, span_warning("Этот предмет не может быть зачарован."))
+				return TRUE
+
+			var/datum/component/cursed_item/C = enchant_slot.GetComponent(/datum/component/cursed_item)
+			if(C)
+				to_chat(usr, span_warning("Этот предмет наполнен странной проклятой магией и не подлежит зачарованию."))
+				return TRUE
+
+			var/cost = 100
+			for(var/p in workbench_enchantments)
+				if(p == path)
+					cost = initial(p:cost)
+					break
+
+			if(lux_charges < cost)
+				to_chat(usr, span_warning("Недостаточно зарядов Люкса!"))
+				return TRUE
+
+			if(!istype(enchant_slot, initial(path:compatible_type)))
+				to_chat(usr, span_warning("Этот предмет не совместим с выбранным типом чар."))
+				return TRUE
+
+			var/datum/component/magic_item/M = enchant_slot.GetComponent(/datum/component/magic_item)
+			if(M)
+				if(length(M.magical_effects) >= M.enchanting_capacity)
+					to_chat(usr, span_warning("Этот предмет уже зачарован до предела своей емкости."))
+					return TRUE
+
+			lux_charges -= cost
+			var/magiceffect = new path
+			enchant_slot.AddComponent(/datum/component/magic_item, magiceffect)
+
+			var/sfx = initial(path:suffix)
+			if(sfx)
+				enchant_slot.name += sfx
+
+			to_chat(usr, span_nicegreen("Вы успешно наложили уникальное зачарование на [enchant_slot.name]!"))
+			update_icon()
 			return TRUE
 
 	var/obj/item/reagent_containers/target_beaker = (params["slot"] == "1") ? beaker_1 : beaker_2
