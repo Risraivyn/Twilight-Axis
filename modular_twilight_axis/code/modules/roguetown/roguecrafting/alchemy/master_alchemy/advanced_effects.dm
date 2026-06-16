@@ -12,6 +12,54 @@
 	name = "Advanced Reagent"
 	metabolization_rate = 0.4
 
+/datum/reagent/advanced/on_mob_life(mob/living/carbon/M)
+	if(istype(M))
+		var/total_advanced_volume = 0
+		
+		for(var/datum/reagent/advanced/A in M.reagents.reagent_list)
+			total_advanced_volume += A.volume
+
+		if(total_advanced_volume > 30)
+			M.apply_status_effect(/datum/status_effect/debuff/alchemy_toxic_shock)
+				
+	..()
+
+/datum/status_effect/debuff/alchemy_toxic_shock
+	id = "alchemy_toxic_shock"
+	duration = -1
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/blood_poison
+
+/atom/movable/screen/alert/status_effect/debuff/blood_poison
+	name = "Poison"
+	desc = "<span class='warning'>I feel sick.</span>\n"
+	icon_state = "poison"
+
+/datum/status_effect/debuff/alchemy_toxic_shock/on_apply()
+	to_chat(owner, span_userdanger("Я чувствую жуткое жжение в венах!"))
+	owner.playsound_local(get_turf(owner), 'sound/health/heartbeat.ogg', 50, TRUE)
+	return ..()
+
+
+/datum/status_effect/debuff/alchemy_toxic_shock/tick(delta_time)
+	var/mob/living/carbon/M = owner
+	if(!M || M.stat == DEAD) return
+
+	M.adjustToxLoss(2 * delta_time)
+	
+	if(prob(8))
+		M.emote("cough")
+
+	var/has_advanced = FALSE
+	if(M.reagents)
+		for(var/datum/reagent/advanced/A in M.reagents.reagent_list)
+			if(A.volume > 0)
+				has_advanced = TRUE
+				break
+
+	if(!has_advanced)
+		to_chat(M, span_nicegreen("Ваше тело наконец очистилось от остатков алхимических токсинов."))
+		qdel(src)
+
 /datum/reagent/advanced/growth
 	name = "Giant's Might"
 	description = "A thick, muddy-brown liquid that feels unnaturally heavy. The bottle seems to pull down on your hand with significant weight."
@@ -53,25 +101,21 @@
 /datum/status_effect/void_stealth/on_apply()
 	var/mob/living/L = owner
 	if(!L) return FALSE
-
-	L.toggle_rogmove_intent(MOVE_INTENT_SNEAK)
-	L.mob_timers[MT_INVISIBILITY] = world.time + 10 MINUTES 
-	
 	RegisterSignal(owner, COMSIG_MOB_BREAK_SNEAK, PROC_REF(handle_sneak_break))
-
-	START_PROCESSING(SSprocessing, src)
+	START_PROCESSING(SSfastprocess, src)
 	
-	to_chat(L, span_purple("Вы чувствуете, как Пустота поселилась в вашей тени, готовая скрыть вас по первому требованию..."))
+	to_chat(L, span_purple("Вы чувствуете, как Пустота поселилась в вашей тени. Нажмите кнопку Скрытности, чтобы уйти в тень..."))
+	L.update_sneak_invis()
 	return ..()
 
 /datum/status_effect/void_stealth/on_remove()
 	var/mob/living/L = owner
-	STOP_PROCESSING(SSprocessing, src)
+	STOP_PROCESSING(SSfastprocess, src)
 	
 	if(L)
 		UnregisterSignal(L, COMSIG_MOB_BREAK_SNEAK)
 		L.mob_timers[MT_INVISIBILITY] = world.time
-		L.toggle_rogmove_intent(MOVE_INTENT_WALK)
+		L.update_sneak_invis(reset = TRUE)
 	return ..()
 
 /datum/status_effect/void_stealth/proc/handle_sneak_break(datum/source)
@@ -91,23 +135,20 @@
 	if(!L || L.stat == DEAD) 
 		return
 
-	if(L.m_intent != MOVE_INTENT_SNEAK)
-		L.toggle_rogmove_intent(MOVE_INTENT_SNEAK)
-
 	if(L.mob_timers[MT_FOUNDSNEAK])
-		if(world.time > L.mob_timers[MT_FOUNDSNEAK] + 2 SECONDS)
-			to_chat(L, span_notice("Ваша связь с Пустотой восстановилась. Вы снова можете уйти в тень."))
-			
+		if(world.time > L.mob_timers[MT_FOUNDSNEAK] + 4 SECONDS)
 			L.mob_timers[MT_FOUNDSNEAK] = 0
-			L.mob_timers[MT_INVISIBILITY] = world.time + 10 MINUTES
-			L.toggle_rogmove_intent(MOVE_INTENT_SNEAK)
+			to_chat(L, span_notice("Ваша связь с Пустотой восстановилась."))
+			
+			if(L.m_intent == MOVE_INTENT_SNEAK)
+				L.toggle_rogmove_intent(MOVE_INTENT_SNEAK, TRUE)
 
 	if(L.m_intent == MOVE_INTENT_SNEAK)
 		if(!L.rogue_sneaking && !L.mob_timers[MT_FOUNDSNEAK])
 			L.rogue_sneaking = TRUE
-			L.mob_timers[MT_INVISIBILITY] = world.time + 10 MINUTES 
+			L.mob_timers[MT_INVISIBILITY] = world.time + 10 MINUTES
 			
-			animate(L, alpha = 0, time = 15)		
+			animate(L, alpha = 0, time = 15)
 			addtimer(CALLBACK(L, TYPE_PROC_REF(/mob/living, regenerate_icons)), 1.5 SECONDS)
 	else
 		if(L.rogue_sneaking)
@@ -165,7 +206,7 @@
 	description = "A crackling yellow liquid resembling captured lightning. It vibrates with intense, suppressed energy."
 	color = "#ffff00"
 	taste_description = "citric acid"
-	metabolization_rate = REAGENTS_METABOLISM * 0.5
+	metabolization_rate = REAGENTS_METABOLISM * 0.7
 
 /datum/reagent/advanced/speed/on_mob_add(mob/living/M)
 	if(!istype(M)) return

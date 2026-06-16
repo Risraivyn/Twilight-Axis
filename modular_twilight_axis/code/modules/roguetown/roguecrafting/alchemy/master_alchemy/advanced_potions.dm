@@ -6,7 +6,7 @@
 
 /datum/alch_cauldron_recipe/advanced/swift_feet
 	name = "Elixir of Swift Feet"
-	skill_required = SKILL_LEVEL_APPRENTICE
+	skill_required = SKILL_LEVEL_EXPERT
 	output_reagents = list(/datum/reagent/advanced/speed = ADVANCED_POTION_VOLUME_STANDARD)
 
 ///datum/alch_cauldron_recipe/advanced/sleep_draught
@@ -27,7 +27,7 @@
 
 /datum/alch_cauldron_recipe/advanced/invisible
 	name = "Void Ichor"
-	skill_required = SKILL_LEVEL_APPRENTICE
+	skill_required = SKILL_LEVEL_EXPERT
 	output_reagents = list(/datum/reagent/advanced/invisible = ADVANCED_POTION_VOLUME_STANDARD)
 
 
