@@ -332,9 +332,11 @@
 		chargedprog = 0
 		START_PROCESSING(SSmousecharge, src)
 
-/* /client/Destroy() // TA EDIT START
+/client/Destroy()
 	STOP_PROCESSING(SSmousecharge, src)
-	return ..() */ //TA EDIT END
+	if(mob?.listed_turf)
+		LAZYREMOVE(mob.listed_turf.panel_listeners, src)
+	return ..()
 
 /client/process()
 	if(!isliving(mob))

@@ -49,10 +49,14 @@
 /datum/job/roguetown/gnoll/special_job_check(mob/dead/new_player/player)
 	if(is_storyteller_soft_antag_blocked())
 		return FALSE
+	if(get_active_player_count(alive_check = 1, afk_check = 1, human_check = 1) < 40)
+		return FALSE
 	return ..()
 
 /datum/job/roguetown/gnoll/special_check_latejoin(client/C)
 	if(is_storyteller_soft_antag_blocked())
+		return FALSE
+	if(get_active_player_count(alive_check = 1, afk_check = 1, human_check = 1) < 40)
 		return FALSE
 	return ..()
 
@@ -64,7 +68,7 @@
 		if(H.mind && !H.mind.has_antag_datum(/datum/antagonist/gnoll))
 			var/datum/antagonist/new_antag = new /datum/antagonist/gnoll()
 			H.mind.add_antag_datum(new_antag)
-			H.verbs |= /mob/living/carbon/human/proc/gnoll_inspect_skin
+			add_verb(H, /mob/living/carbon/human/proc/gnoll_inspect_skin)
 
 /datum/outfit/job/roguetown/gnoll/proc/don_pelt(mob/living/carbon/human/H)
 	if(H.mind)
@@ -114,6 +118,9 @@
 	if(SSgamemode.current_storyteller?.preferred_gnoll_mode == GNOLL_SCALING_NONE)
 		result["final_slots"] = 0
 		return result
+	if(get_active_player_count(alive_check = 1, afk_check = 1, human_check = 1) < 40)
+		result["final_slots"] = 0
+		return result
 	var/slots = 1
 	if(SSgnoll_scaling)
 		switch(SSgnoll_scaling.get_gnoll_scaling())
@@ -137,7 +144,7 @@
 
 /mob/living/carbon/human/proc/gnoll_inspect_skin()
 	set name = "Inspect Pelt"
-	set category = "Gnoll"
+	set category = "RoleUnique.Gnoll"
 	set desc = "Examine your gnoll skin armor"
 	if(!istype(skin_armor, /obj/item/clothing/suit/roguetown/armor/regenerating/skin/gnoll_armor))
 		to_chat(src, span_warning("You don't have any gnoll skin armor to inspect!"))

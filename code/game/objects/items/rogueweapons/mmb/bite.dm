@@ -62,6 +62,9 @@
 	if(HAS_TRAIT(user, TRAIT_PACIFISM))
 		to_chat(user, span_warning("I don't want to harm [src]!"))
 		return FALSE
+	if(user.has_status_effect(/datum/status_effect/debuff/deadite_grace) && src.mind)
+		to_chat(user, span_warning("Ah, Lux... I calm down considerably, but my hunger only increases."))
+		user.remove_status_effect(/datum/status_effect/debuff/deadite_grace)
 	if(!user.can_bite())
 		to_chat(user, span_warning("My mouth has something in it."))
 		return FALSE
@@ -82,6 +85,7 @@
 
 	next_attack_msg.Cut()
 
+	user.break_invisibility_from_combat()
 	user.do_attack_animation(src, "bite")
 	playsound(user, 'sound/gore/flesh_eat_01.ogg', vol = 50, vary = FALSE, extrarange = -2, ignore_walls = FALSE, quiet = TRUE)
 	var/nodmg = FALSE
@@ -252,6 +256,7 @@
 		return FALSE*/
 
 	user.changeNext_move(CLICK_CD_GRABBING)
+	user.break_invisibility_from_combat()
 	var/mob/living/carbon/C = grabbed
 	var/damage = user.get_punch_dmg()
 	if(HAS_TRAIT(user, TRAIT_STRONGBITE))
@@ -276,7 +281,7 @@
 							if(W.werewolf_infect_attempt())
 								infected = TRUE
 								break
-						
+
 						if(infected)
 							to_chat(user, span_boldnotice("I have delivered the gift to [C] while chewing on their [parse_zone(sublimb_grabbed)]!"))
 
@@ -328,4 +333,5 @@
 		to_chat(user, span_warning("Sigh. It's not bleeding."))
 		return
 
+	user.break_invisibility_from_combat()
 	user.drinksomeblood(grabbed, sublimb_grabbed)
