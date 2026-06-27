@@ -93,6 +93,20 @@
 	if (M.mob_biotypes & MOB_BEAST)
 		M.adjustFireLoss(-0.1  * REAGENTS_EFFECT_MULTIPLIER)
 	else
+		var/mob/living/carbon/human/H = M //TA EDIT START
+		if(istype(H) && (H.days_without_sleep > 0 || H.has_status_effect(/datum/status_effect/debuff/sleepytime)))
+			H.days_without_sleep = 0
+			H.remove_status_effect(/datum/status_effect/debuff/sleepytime)
+			H.remove_stress(/datum/stressevent/sleepytime)
+			H.remove_stress(/datum/stressevent/sleep_deprivation_2)
+			H.remove_stress(/datum/stressevent/sleep_deprivation_3)
+			H.remove_stress(/datum/stressevent/sleep_deprivation_4)
+			
+			if(H.hallucination > 0 && !H.has_flaw(/datum/charflaw/mind_broken))
+				H.hallucination = 0
+			REMOVE_TRAIT(H, TRAIT_PSYCHOSIS, "sleep_deprivation")
+			
+			to_chat(H, span_nicegreen("Ароматный пряный кофе разливает тепло по моему телу и полностью разгоняет сонливость!")) //TA EDIT END
 		M.adjustBruteLoss(-0.3  * REAGENTS_EFFECT_MULTIPLIER)
 		M.adjustFireLoss(-0.3  * REAGENTS_EFFECT_MULTIPLIER)
 		M.adjustOxyLoss(-0.15, 0)

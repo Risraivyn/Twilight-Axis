@@ -183,6 +183,7 @@
 			to_chat(target, span_blue("My mind flashes with inspiring images of the NOCMOS! My dreams will prove fruitful...!"))
 			target.mind.sleep_adv.sleep_adv_points += H.get_skill_level(associated_skill)
 			H.mind.sleep_adv.sleep_adv_points += floor(H.get_skill_level(associated_skill)/2)
+			target.mind.sleep_adv.noc_inspired = TRUE //TA EDIT
 		return TRUE
 	return FALSE
 

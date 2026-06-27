@@ -3612,6 +3612,8 @@
 #include "modular_twilight_axis\code\datums\sexcon\sexcon.dm"
 #include "modular_twilight_axis\code\datums\sexcon\sexcon_helpers.dm"
 #include "modular_twilight_axis\code\datums\sexcon\sexcon_reagents.dm"
+#include "modular_twilight_axis\code\datums\sleep_adv\deam_event.dm"
+#include "modular_twilight_axis\code\datums\sleep_adv\sleep_adv.dm"
 #include "modular_twilight_axis\code\datums\status_effects\gas.dm"
 #include "modular_twilight_axis\code\datums\status_effects\rogue\debuff.dm"
 #include "modular_twilight_axis\code\datums\status_effects\rogue\roguebaff.dm"
@@ -4109,4 +4111,5 @@
 #include "modular_twilight_axis\modular\Neu_food\code\cookware\cup.dm"
 #include "modular_twilight_axis\code\datums\flaws\gefheretic.dm"
 #include "modular_twilight_axis\code\datums\magic_items\mythical_items\mythic.dm"
+#include "modular_twilight_axis\modular\Nue_food\code\drinks\drinks_reagent.dm"
 // END_INCLUDE

@@ -47,13 +47,37 @@
 			A.on_life(src)
 
 	handle_vamp_dreams()
+	if(stat == CONSCIOUS && days_without_sleep >= 4 && !IsSleeping()) //TA EDIT START
+		if(prob(5))
+			to_chat(src, span_suicide("Мои глаза закрываются сами по себе... Я больше не могу сопротивляться сну..."))
+			Sleeping(200)
+	
 	if(IsSleeping())
 		if(health > 0)
+			var/slept = FALSE
+
 			if(has_status_effect(/datum/status_effect/debuff/sleepytime))
 				remove_status_effect(/datum/status_effect/debuff/sleepytime)
+				slept = TRUE
+			
+			if(has_stress_event(/datum/stressevent/sleepytime) || \
+			   has_stress_event(/datum/stressevent/sleep_deprivation_2) || \
+			   has_stress_event(/datum/stressevent/sleep_deprivation_3) || \
+			   has_stress_event(/datum/stressevent/sleep_deprivation_4))
+				
 				remove_stress(/datum/stressevent/sleepytime)
-				if(mind)
-					mind.sleep_adv.advance_cycle()
+				remove_stress(/datum/stressevent/sleep_deprivation_2)
+				remove_stress(/datum/stressevent/sleep_deprivation_3)
+				remove_stress(/datum/stressevent/sleep_deprivation_4)
+				days_without_sleep = 0
+				slept = TRUE
+			
+				if(!has_flaw(/datum/charflaw/mind_broken))
+					hallucination = 0
+				REMOVE_TRAIT(src, TRAIT_PSYCHOSIS, "sleep_deprivation")
+				
+			if(slept && mind)
+				mind.sleep_adv.advance_cycle() //TA EDIT END
 	if(leprosy == 1)
 		adjustToxLoss(2)
 	else if(leprosy == 2)

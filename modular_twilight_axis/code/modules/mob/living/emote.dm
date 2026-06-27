@@ -586,6 +586,18 @@
 	if(ishuman(target))
 		playsound(target.loc, 'sound/vo/hug.ogg', 100, FALSE, -1)
 
+/mob/living/carbon/human/verb/open_sleep_menu()
+	set name = "Мечтать"
+	set category = "IC"
+	
+	if(!IsSleeping())
+		to_chat(src, span_warning("Я должен спать, чтобы мечтать!"))
+		return
+		
+	if(mind && mind.sleep_adv)
+		mind.sleep_adv.show_ui(src)
+	else
+		to_chat(src, span_warning("Я не могу вспомнить свои сны."))
 /*
 /datum/emote/living/stat_roll/strength
 	attempt_message_list = list(

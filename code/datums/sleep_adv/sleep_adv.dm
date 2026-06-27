@@ -233,6 +233,10 @@
 		var/level_name = SSskills.level_names[next_level]
 		dat += "<br><a [can_buy ? "" : "class='linkOff'"] href='?src=[REF(src)];task=buy_skill;skill_type=[skill_type]'>[skill.name] ([level_name])</a> - \Roman[get_skill_cost(skill_type)]"
 	dat += "<br>"
+	var/trait_cost = 5 //TA EDIT
+	var/can_buy_trait = (sleep_adv_points >= trait_cost)//TA EDIT
+	dat += "<br><a [can_buy_trait ? "" : "class='linkOff'"] href='?src=[REF(src)];task=roll_dream'>Try Dream</a> - \Roman[trait_cost]"
+
 	if(rolled_specials > 0)
 		var/can_buy = can_buy_special()
 		dat += "<br><a [can_buy ? "" : "class='linkOff'"] href='?src=[REF(src)];task=buy_special'>Dream something <b>special</b></a> - \Roman[get_special_cost()]"
@@ -249,22 +253,39 @@
 	mind.current << browse(null, "window=dreams")
 
 /datum/sleep_adv/proc/process_sleep()
+	var/mob/living/carbon/human/H = mind?.current //TA EDIT start
+	if(!H)
+		return
 	if(is_considered_sleeping())
 		woke_up = FALSE // Reset flag while sleeping so on_wake can fire on next transition
 		return
-	if(mind.current.eyesclosed)
+	if(H.eyesclosed)//TA EDIT end
 		return
 	on_wake()
 	close_ui()
 
 /// Called when the player wakes up, whether voluntarily (clicking continue) or involuntarily (being woken).
 /// Guarded by woke_up flag to ensure it only fires once per sleep session.
-/datum/sleep_adv/proc/on_wake()
+/datum/sleep_adv/proc/on_wake() //TE EDIT START
+	var/mob/living/carbon/human/H = mind?.current
+	if(!H)
+		return
+
 	if(woke_up)
 		return
+		
 	woke_up = TRUE
-	if(mind.aspect_resets_used > 0)
-		mind.aspect_resets_used = 0
+	if(length(queued_wake_events))
+		for(var/event_path in queued_wake_events)
+			var/datum/dream_event/DE = GLOB.dream_events[event_path]
+
+			if(!DE)
+				DE = new event_path()
+				
+			if(DE)
+				DE.on_wake(H, src)
+				
+		queued_wake_events.Cut()//TE EDIT END
 
 /datum/sleep_adv/proc/is_considered_sleeping()
 	if(!mind.current)
@@ -393,6 +414,8 @@
 			buy_skill(skill_type)
 		if("buy_special")
 			buy_special()
+		if("roll_dream")//TA_EDIT
+			roll_dream_event()
 		if("continue")
 			finish()
 			return
