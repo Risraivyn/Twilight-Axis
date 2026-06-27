@@ -56,7 +56,7 @@
 					to_chat(player, span_notice("No choice detected. Picking a random compatible origin."))
 					new_origin = pick(/datum/virtue/origin/enigma, /datum/virtue/origin/valorian, /datum/virtue/origin/zybantian)
 				change_origin(H, new_origin, "Royal line")
-		else
+		else if(SSmapping.config.map_name != "Desert Town")
 			if(!istype(player.prefs.virtue_origin, /datum/virtue/origin/azuria) && !istype(player.prefs.virtue_origin, /datum/virtue/origin/grenzelhoft) && !istype(player.prefs.virtue_origin, /datum/virtue/origin/valorian))
 				var/list/new_origins = list("Azuria" = /datum/virtue/origin/azuria, 
 				"Grenzelhoft" = /datum/virtue/origin/grenzelhoft,

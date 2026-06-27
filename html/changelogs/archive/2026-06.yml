@@ -1363,6 +1363,7 @@
   - bugfix: Changed nicotine mood message to be valid for both smoking and eating
   WeNeedMorePhoron:
   - balance: Reduce Zadcote Voyeur cost from 5 to 1 to encourage more usage, maybe?
+  - balance: Deflecting spells should make you immune to hotspots briefly (1 second)
   borneblood:
   - bugfix: Fixed an exploit with Rituos, again
   nauticall:
