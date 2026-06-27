@@ -65,6 +65,17 @@
 	last_free_send[user.ckey] = world.time
 
 /obj/structure/roguemachine/mail/attack_hand(mob/user)
+	if(user.mind && length(user.mind.manor_packages)) //TA EDIT START
+		var/mob/living/carbon/human/H = user
+		var/obj/item/manor_delivery/D = pick(user.mind.manor_packages)
+		user.mind.manor_packages -= D
+		H.put_in_hands(D)
+		if(SSroguemachine.hermailermaster)
+			var/obj/item/roguemachine/mastermail/M = SSroguemachine.hermailermaster
+			if(!any_additional_mail(M, H))
+				H.remove_status_effect(/datum/status_effect/ugotmail)
+		else
+			H.remove_status_effect(/datum/status_effect/ugotmail) //TA EDIT END
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/addl_mail = FALSE
@@ -191,7 +202,18 @@
 	if(inqcoins)
 		to_chat(user, span_warning("The machine doesn't respond."))
 		return
-	ui_interact(user)
+	if(coin_loaded) //TA EDIT START
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(can_open_manor_panel(H))
+				var/choice = tgui_alert(user, "What would you like to do?", "HERMES Terminal", list("Send Mail", "Correspond with Estate"))
+				switch(choice)
+					if("Send Mail")
+						ui_interact(user)
+					if("Correspond with Estate")
+						open_manor_panel(user)
+				return FALSE
+	ui_interact(user) //TA EDIT END
 
 /obj/structure/roguemachine/mail/ui_state(mob/user)
 	return GLOB.human_adjacent_state
@@ -345,6 +367,14 @@
 					to_chat(user, span_warning("Failed to send. Bad number?"))
 					qdel(P)
 			else
+				var/mob/living/carbon/human/mailrecipient = null
+				for(var/mob/living/carbon/human/H in GLOB.human_list)
+					if(H.real_name == send2place)
+						mailrecipient = H
+				if(!mailrecipient)
+					to_chat(user, span_warning("There's no one by that name to receive it."))
+					qdel(P)
+					return TRUE
 				if(SSroguemachine.hermailermaster)
 					var/obj/item/roguemachine/mastermail/X = SSroguemachine.hermailermaster
 					P.forceMove(X.loc)
@@ -353,10 +383,8 @@
 					X.new_mail = TRUE
 					X.update_icon()
 					send_ooc_note("You got new letter waiting for you in HERMES.", name = send2place) // TA EDIT
-					for(var/mob/living/carbon/human/H in GLOB.human_list)
-						if(H.real_name == send2place)
-							H.apply_status_effect(/datum/status_effect/ugotmail)
-							H.playsound_local(H, 'sound/misc/mail.ogg', 100, FALSE, -1)
+					mailrecipient.apply_status_effect(/datum/status_effect/ugotmail)
+					mailrecipient.playsound_local(mailrecipient, 'sound/misc/mail.ogg', 100, FALSE, -1)
 					log_mail_send(user, sentfrom, send2place)
 					visible_message(span_warning("[user] sends something."))
 					playsound(loc, 'sound/misc/disposalflush.ogg', 100, FALSE, -1)
@@ -771,7 +799,8 @@
 				for(var/mob/living/carbon/human/H in GLOB.human_list)
 					if(H.real_name == send2place)
 						mailrecipient = H
-				if(!mailrecipient && (alert("Could not find recipient [send2place]. Still send the letter?", "", "YES", "NO") == "NO")) // ask player if they still want to send a letter to a non-found character
+				if(!mailrecipient)
+					to_chat(user, span_warning("There's no one by that name to receive it."))
 					return
 				var/findmaster
 				if(SSroguemachine.hermailermaster)
@@ -824,6 +853,16 @@
 		qdel(C)
 		playsound(src, 'sound/misc/coininsert.ogg', 100, FALSE, -1)
 		update_icon()
+		if(ishuman(user)) //TA EDIT START
+			var/mob/living/carbon/human/H = user
+			if(can_open_manor_panel(H))
+				var/choice = tgui_alert(user, "What would you like to do?", "HERMES Terminal", list("Send Mail", "Correspond with Estate"))
+				switch(choice)
+					if("Send Mail")
+						ui_interact(user)
+					if("Correspond with Estate")
+						open_manor_panel(user)
+				return FALSE //TA EDIT END
 		ui_interact(user)
 		return
 	..()

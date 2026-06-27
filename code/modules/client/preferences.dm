@@ -112,6 +112,9 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/static/datum/species/default_species = new /datum/species/human/northern()
 	var/datum/patron/selected_patron
 	var/static/datum/patron/default_patron = /datum/patron/divine/undivided
+	var/have_manor = TRUE //TA EDIT
+	var/manor_name = "" //TA EDIT
+	var/manor_type = "manor" //TA EDIT
 	var/list/features = MANDATORY_FEATURE_LIST
 	var/list/randomise = list(RANDOM_UNDERWEAR = TRUE, RANDOM_UNDERWEAR_COLOR = TRUE, RANDOM_UNDERSHIRT = TRUE, RANDOM_SOCKS = TRUE, RANDOM_BACKPACK = TRUE, RANDOM_JUMPSUIT_STYLE = FALSE, RANDOM_SKIN_TONE = TRUE, RANDOM_EYE_COLOR = TRUE)
 	var/list/friendlyGenders = list("male" = "masculine", "female" = "feminine")
@@ -167,6 +170,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/no_redflash = FALSE
 	var/no_storyteller_events = FALSE
 	var/top_examine = FALSE
+	var/no_runechat_animation = FALSE //TA EDIT
 
 	var/lastclass
 
@@ -198,7 +202,8 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/family = FAMILY_NONE
 
 	var/crt = FALSE
-	var/grain = TRUE
+	var/grain = FALSE
+	var/icon_scaling = FALSE
 	var/dnr_pref = FALSE
 	var/qsr_pref = FALSE
 
@@ -274,9 +279,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 
 	var/averse_chosen_faction = "Inquisition"
 
-
 	var/datum/voicepack/temp_vp
-
 
 	var/mood_messages_in_chat
 
@@ -313,6 +316,8 @@ GLOBAL_LIST_EMPTY(chosen_names)
 				max_save_slots = get_max_save_slots(plevel)
 	var/loaded_preferences_successfully = load_preferences()
 	if(loaded_preferences_successfully)
+		if(C)
+			C.apply_saved_visual_preferences()
 		if(load_character())
 			if(check_nameban(C.ckey) || (C.blacklisted() == 1))
 				real_name = pref_species.random_name(gender,1)
@@ -949,6 +954,10 @@ GLOBAL_LIST_EMPTY(chosen_names)
 
 			dat += "<br><b>Family Preferences:</b> <a href='?_src_=prefs;preference=family_options;task=input'>Change</a>" // TA EDIT
 			dat += "<br><b>Loadout Items:</b> <a href='?_src_=prefs;preference=loadout_item;task=input'>Change</a>"
+
+			dat += "<BR><BR><b>Has an Estate:</b> <a href='?_src_=prefs;preference=have_manor;task=input'>[have_manor ? "Yes" : "No"]</a><BR>" // TA EDIT
+			dat += "<b>Estate Name:</b> <a href='?_src_=prefs;preference=manor_name;task=input'>[manor_name ? manor_name : "Unknown Manor"]</a><BR>" // TA EDIT
+			dat += "<b>Estate Type:</b> <a href='?_src_=prefs;preference=manor_type;task=input'>[get_manor_type_display_name(manor_type)]</a><BR>" //TA EDIT
 
 			dat += "</td>"
 
@@ -2009,6 +2018,34 @@ GLOBAL_LIST_EMPTY(chosen_names)
 						else
 							to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ', . and ,.</font>")
 
+				if("manor_name")  //TA EDIT START
+					var/new_name = tgui_input_text(user, "Choose a name for your manor:", "MANOR NAME", encode = FALSE)
+					if(new_name)
+						new_name = reject_bad_name(new_name)
+						if(new_name)
+							manor_name = new_name
+						else
+							to_chat(user, "<font color='red'>Invalid manor name. It should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ', . and ,.</font>")
+
+				if("have_manor")
+					have_manor = !have_manor
+					if(have_manor)
+						to_chat(user, span_notice("При наличии дворянства, вы сможете управлять имением, которое будет приносить вам доход и предоставлять различные бонусы. Для того, чтобы связаться с имением, используйте ГЕРМЕС."))
+					else
+						to_chat(user, span_notice("При наличии дворянства ваш персонаж будет считаться безземельным дворянином, не получая доступ к имению."))
+
+				if("manor_type")
+					var/list/manor_type_choices = list(
+						"Manor" = "manor",
+						"Hunter Mansion" = "hunter_mansion",
+						"Village" = "village",
+						"Fisher Hamlet" = "fisher_hamlet",
+						"Mining Settlement" = "mining_settlement"
+					)
+					var/new_manor_type = tgui_input_list(user, "Choose the type of manor you'd like to manage:", "MANOR TYPE", manor_type_choices, get_manor_type_display_name(manor_type))
+					if(new_manor_type)
+						manor_type = manor_type_choices[new_manor_type] //TA EDIT END
+
 //				if("age")
 //					var/new_age = input(user, "Choose your character's age:\n([AGE_MIN]-[AGE_MAX])", "Years Dead") as num|null
 //					if(new_age)
@@ -2103,12 +2140,9 @@ GLOBAL_LIST_EMPTY(chosen_names)
 							to_chat(user, "<font color='red'>Your character will now audibly emote in accordance to their Voice Identity and any Racial / Class-specific voice packs.</font>")
 				if("voicepack_preview")
 					if(voice_pack != "Default")
-						var/datum/voicepack/VP = GLOB.voice_packs_list[voice_pack]
-						if(!istype(temp_vp, VP))
-							temp_vp = new VP()
-						var/voiceline = temp_vp.get_sound(pick(temp_vp.preview))
+						var/datum/voicepack/VP = GLOB.voice_packs[GLOB.voice_packs_list[voice_pack]]
+						var/voiceline = VP.get_sound(pick(VP.preview))
 						user.playsound_local(user, voiceline, 100)
-
 				if("taur_type")
 					var/list/species_taur_list = pref_species.get_taur_list()
 					if(!LAZYLEN(species_taur_list))
@@ -3380,6 +3414,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	character.set_patron(selected_patron)
 	character.backpack = backpack
 	character.defiant = defiant
+	character.check_manor_pref = have_manor //TA EDIT
 
 	character.jumpsuit_style = jumpsuit_style
 
