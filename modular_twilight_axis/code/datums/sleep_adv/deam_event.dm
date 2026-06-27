@@ -353,17 +353,6 @@ GLOBAL_LIST_INIT(dream_events, init_dream_events())
 	added_flaw.on_mob_creation(H)
 	to_chat(H, span_boldred("Мир во сне стремительно тускнеет и теряет свои краски. Я просыпаюсь в мире, лишенном цвета..."))
 
-/datum/dream_event/negative/clumsy
-	name = "Неуклюжесть"
-	is_positive = FALSE
-
-/datum/dream_event/negative/clumsy/can_trigger(mob/living/carbon/human/H)
-	return !HAS_TRAIT(H, TRAIT_CLUMSY)
-
-/datum/dream_event/negative/clumsy/on_dream(mob/living/carbon/human/H, datum/sleep_adv/SA)
-	ADD_TRAIT(H, TRAIT_CLUMSY, TRAIT_GENERIC)
-	to_chat(H, span_boldred("Мои руки во сне не слушаются меня, а ноги заплетаются... Я просыпаюсь с ощущением жуткой неловкости."))
-
 /datum/dream_event/negative/unseemly
 	name = "Уродство лица"
 	is_positive = FALSE
