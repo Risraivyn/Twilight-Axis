@@ -1,18 +1,18 @@
 /datum/sleep_adv
 	var/list/queued_wake_events = list()
 	var/noc_inspired = FALSE
+	var/dream_roll_cost = 5
 
 /datum/sleep_adv/proc/roll_dream_event()
 	var/mob/living/carbon/human/H = mind.current
 	if(!istype(H))
 		return
 	
-	var/trait_cost = 3
-	if(sleep_adv_points < trait_cost)
+	if(sleep_adv_points < dream_roll_cost)
 		to_chat(H, span_warning("Мне не хватает очков снов для погружения в глубокий сон."))
 		return
 
-	sleep_adv_points -= trait_cost
+	sleep_adv_points -= dream_roll_cost
 	var/stress = H.get_stress_amount()
 	var/positive_chance = 50
 	if(stress < 0)
@@ -27,19 +27,19 @@
 		if("sleepy" in H.buckled.vars)
 			comfort = H.buckled.vars["sleepy"]
 
-		switch(comfort)
-			if(3 to INFINITY)
-				bed_bonus = 25
-				to_chat(H, span_notice("Мягкая постель согревает мою душу, даруя спокойные и легкие сны."))
-			if(2 to 3)
-				bed_bonus = 15
-				to_chat(H, span_notice("Я сплю в относительном тепле и удобстве."))
-			if(1 to 2)
-				bed_bonus = 10
-				to_chat(H, span_warning("Жесткое спальное место колет мне бока."))
-			if(0 to 1)
-				bed_bonus = 5
-				to_chat(H, span_danger("Ужасное и холодное ложе навевает мне кошмары..."))
+
+		if(comfort >= 3)
+			bed_bonus = 25
+			to_chat(H, span_notice("Мягкая постель согревает мою душу, даруя спокойные и легкие сны."))
+		else if(comfort >= 2)
+			bed_bonus = 15
+			to_chat(H, span_notice("Я сплю в относительном тепле и удобстве."))
+		else if(comfort >= 1)
+			bed_bonus = 10
+			to_chat(H, span_warning("Жесткое спальное место колет мне бока."))
+		else
+			bed_bonus = 5
+			to_chat(H, span_danger("Ужасное и холодное ложе навевает мне кошмары..."))
 	else
 		to_chat(H, span_danger("Сон на холодном, сыром полу отзывается сильной ломотой во всем теле..."))
 		
@@ -81,3 +81,15 @@
 	var/datum/dream_event/chosen_event = pick(viable_events)
 	chosen_event.on_dream(H, src)
 	queued_wake_events += chosen_event.type
+
+/mob/living/carbon/human/proc/reset_sleep_deprivation()
+	days_without_sleep = 0
+	remove_status_effect(/datum/status_effect/debuff/sleepytime)
+	remove_stress(/datum/stressevent/sleepytime)
+	remove_stress(/datum/stressevent/sleep_deprivation_2)
+	remove_stress(/datum/stressevent/sleep_deprivation_3)
+	remove_stress(/datum/stressevent/sleep_deprivation_4)
+
+	if(hallucination > 0 && !has_flaw(/datum/charflaw/mind_broken))
+		hallucination = 0
+	REMOVE_TRAIT(src, TRAIT_PSYCHOSIS, "sleep_deprivation")

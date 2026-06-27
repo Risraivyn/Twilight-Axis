@@ -234,7 +234,7 @@
 		dat += "<br><a [can_buy ? "" : "class='linkOff'"] href='?src=[REF(src)];task=buy_skill;skill_type=[skill_type]'>[skill.name] ([level_name])</a> - \Roman[get_skill_cost(skill_type)]"
 	dat += "<br>"
 	var/trait_cost = 5 //TA EDIT
-	var/can_buy_trait = (sleep_adv_points >= trait_cost)//TA EDIT
+	var/can_buy_trait = (sleep_adv_points >= dream_roll_cost)//TA EDIT
 	dat += "<br><a [can_buy_trait ? "" : "class='linkOff'"] href='?src=[REF(src)];task=roll_dream'>Try Dream</a> - \Roman[trait_cost]"
 
 	if(rolled_specials > 0)
@@ -275,6 +275,8 @@
 		return
 		
 	woke_up = TRUE
+	if(mind.aspect_resets_used > 0)
+		mind.aspect_resets_used = 0
 	if(length(queued_wake_events))
 		for(var/event_path in queued_wake_events)
 			var/datum/dream_event/DE = GLOB.dream_events[event_path]

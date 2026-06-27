@@ -7,6 +7,8 @@ GLOBAL_LIST_INIT(dream_events, init_dream_events())
 /proc/init_dream_events()
 	var/list/L = list()
 	for(var/path in subtypesof(/datum/dream_event))
+		if(path == /datum/dream_event/positive || path == /datum/dream_event/negative)
+			continue
 		L[path] = new path()
 	return L
 
@@ -395,4 +397,5 @@ GLOBAL_LIST_INIT(dream_events, init_dream_events())
 	H.Immobilize(50)
 	H.add_stress(/datum/stressevent/terrible_dreams)
 	H.blur_eyes(5)
-	playsound(T, 'sound/effects/ghost.ogg', 60, FALSE)
+	if(T)
+		playsound(T, 'sound/effects/ghost.ogg', 60, FALSE)

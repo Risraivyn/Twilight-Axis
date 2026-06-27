@@ -69,6 +69,7 @@
 				ADD_TRAIT(src, TRAIT_PSYCHOSIS, "sleep_deprivation")
 
 /mob/living/carbon/human/update_tod(todd)
+	..()
 	if(client)
 		var/area/areal = get_area(src)
 		if(!cmode)
