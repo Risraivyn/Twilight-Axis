@@ -20,18 +20,29 @@
 	else
 		positive_chance -= stress * 2
 
-	var/bed_bonus = 0
-	if(istype(H.buckled, /obj/structure/bed))
-		var/obj/structure/bed/Bed = H.buckled
-		var/bname = lowertext(Bed.name)
-		if(findtext(bname, "royal") || findtext(bname, "luxury") || findtext(bname, "роскошн") || findtext(bname, "барск"))
-			bed_bonus = 25
-		else if(findtext(bname, "straw") || findtext(bname, "солом") || findtext(bname, "мешок"))
-			bed_bonus = 5
-		else
-			bed_bonus = 15
+	var/bed_bonus = -15
+	if(H.buckled)
+		var/comfort = 0.5
+		
+		if("sleepy" in H.buckled.vars)
+			comfort = H.buckled.vars["sleepy"]
+
+		switch(comfort)
+			if(3 to INFINITY)
+				bed_bonus = 25
+				to_chat(H, span_notice("Мягкая постель согревает мою душу, даруя спокойные и легкие сны."))
+			if(2 to 3)
+				bed_bonus = 15
+				to_chat(H, span_notice("Я сплю в относительном тепле и удобстве."))
+			if(1 to 2)
+				bed_bonus = 10
+				to_chat(H, span_warning("Жесткое спальное место колет мне бока."))
+			if(0 to 1)
+				bed_bonus = 5
+				to_chat(H, span_danger("Ужасное и холодное ложе навевает мне кошмары..."))
 	else
-		bed_bonus = -15
+		to_chat(H, span_danger("Сон на холодном, сыром полу отзывается сильной ломотой во всем теле..."))
+		
 	positive_chance += bed_bonus
 
 	var/blanket_bonus = -10
