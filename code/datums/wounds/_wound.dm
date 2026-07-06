@@ -98,11 +98,9 @@ GLOBAL_LIST_INIT(primordial_wounds, init_primordial_wounds())
 	owner = null
 	. = ..()
 
-	if(temp_owner && hascall(temp_owner, "is_werewolf_infected")) // TA EDIT START
-		var/is_infected = call(temp_owner, "is_werewolf_infected")()
-		if(!is_infected)
-			if(hascall(temp_owner, "create_scent_image"))
-				call(temp_owner, "create_scent_image")()// TA EDIT END
+	var/mob/living/carbon/human/H = temp_owner // TA EDIT START
+	if(istype(H) && !H.is_werewolf_infected())
+		H.create_scent_image()// TA EDIT END
 
 	return QDEL_HINT_IWILLGC
 

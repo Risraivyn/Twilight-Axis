@@ -47,10 +47,10 @@
 
 /proc/get_active_werewolves()
 	var/list/werewolves = list()
-	for(var/mob/living/L in GLOB.mob_living_list)
-		if(L.mind && L.mind.has_antag_datum(/datum/antagonist/werewolf))
-			if(istype(L, /mob/living/carbon/human/species/werewolf))
-				werewolves += L
+	for(var/mob/living/carbon/human/H in GLOB.human_list)
+		if(H.mind && H.mind.has_antag_datum(/datum/antagonist/werewolf))
+			if(istype(H, /mob/living/carbon/human/species/werewolf))
+				werewolves += H
 	return werewolves
 
 /mob/living/carbon/human/proc/clear_scent_image()

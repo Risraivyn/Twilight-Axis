@@ -117,7 +117,7 @@
 	mind.transfer_to(W)
 
 	if(W.client) //TA EDIT START
-		for(var/mob/living/carbon/human/H2 in GLOB.mob_living_list)
+		for(var/mob/living/carbon/human/H2 in GLOB.human_list)
 			if(H2.scent_image)
 				W.client.images |= H2.scent_image // TA EDIT END
 
@@ -193,9 +193,9 @@
 	mind.transfer_to(W)
 
 	if(W.client) //TA EDIT START
-		for(var/mob/living/carbon/human/H2 in GLOB.mob_living_list)
+		for(var/mob/living/carbon/human/H2 in GLOB.human_list)
 			if(H2.scent_image)
-				W.client.images -= H2.scent_image //TA EDIT END
+				W.client.images |= H2.scent_image // TA EDIT END
 
 	var/mob/living/carbon/human/species/werewolf/WA = src
 	W.copy_known_languages_from(WA.stored_language)
