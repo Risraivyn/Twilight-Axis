@@ -25,57 +25,13 @@
 // T0 - Ignition - Ignite a target or an object. //
 ///////////////////////////////////////////////////
 
-/datum/action/cooldown/spell/astrata/ignition
-	name = "Ignition"
-	desc = "Ignites target, living or object."
-	fluff_desc = "The first gift to men, a sliver of Her radiance at fingertips of those devoted to Her wae of lyfe. Some sae it was Matthios who forced Astrata's hand in relinquishing such force to lowly mortals."
-	button_icon_state = "ignite"
-	sound = 'sound/items/firelight.ogg'
+/datum/action/cooldown/spell/miracle/ignition/astrata
+	background_icon = 'icons/mob/actions/astratamiracles.dmi'
+	button_icon = 'icons/mob/actions/astratamiracles.dmi'
+	spell_color = GLOW_COLOR_ASTRATA
 	glow_intensity = GLOW_INTENSITY_LOW
-	sparks_amt = 2
 
-	click_to_activate = TRUE
-	cast_range = SPELL_RANGE_GROUND
-	self_cast_possible = FALSE //Why are you trying to set YOURSELF on fire.
-
-	primary_resource_cost = SPELLCOST_MIRACLE_MINOR
-
-	secondary_resource_cost = SPELLCOST_MINOR_PROJECTILE
-
-	invocation_type = INVOCATION_NONE //It has seperate message ON USE
-
-	charge_required = FALSE
-	cooldown_time = 10 SECONDS
-
-	spell_flags = SPELL_PSYDON
-	spell_requirements = SPELL_REQUIRES_NO_ANTIMAGIC | SPELL_REQUIRES_HUMAN | SPELL_REQUIRES_SAME_Z
-
-/datum/action/cooldown/spell/astrata/ignition/cast(atom/cast_on)
-	. = ..()
-	var/mob/living/carbon/human/H = owner
-	if(!istype(H))
-		return FALSE
-
-	var/mob/living/spelltarget = cast_on
-
-	if(!isliving(spelltarget))
-		if(spelltarget.fire_act())
-			owner.visible_message("<font color='yellow'>[owner] engulfs [spelltarget] in sacred flame!</font>")
-			spelltarget.fire_act()
-			return TRUE
-		else
-			to_chat(owner, span_warning("You attempt to ignite [spelltarget], but it fails to catch fire."))
-			return FALSE
-	else
-		owner.visible_message("<font color='yellow'>[owner] engulfs [spelltarget] in sacred flame!</font>")
-		if(spelltarget.anti_magic_check(TRUE, TRUE))
-			return FALSE
-		if(spell_guard_check(spelltarget, TRUE))
-			spelltarget.visible_message(span_warning("[spelltarget] shields against the divine flame!"))
-			return TRUE
-		spelltarget.adjust_fire_stacks(2)
-		spelltarget.ignite_mob()
-		return TRUE
+	required_items = list(/obj/item/clothing/neck/roguetown/psicross/astrata, /obj/item/clothing/neck/roguetown/psicross/silver/astrata, /obj/item/clothing/neck/roguetown/psicross/undivided, /obj/item/clothing/neck/roguetown/psicross/silver/undivided)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // T1 - Astratan Gaze - Removes cone vision for a dynamic duration. Adds PERCEPTION based on holy skill and time of day. //
@@ -128,7 +84,7 @@
 	.=..()
 
 /datum/status_effect/buff/astrata_gaze/on_apply()
-	// Reset base values because the miracle can 
+	// Reset base values because the miracle can
 	// now actually be recast at high enough skill and during day time
 	// This is a safeguard because buff code makes my head hurt
 	var/per_bonus = 0
@@ -197,7 +153,7 @@
 	ignore_armor_penalty = TRUE
 	charge_required = TRUE
 	charge_time = CHARGETIME_MAJOR
-	charge_drain = 1
+	hold_drain = 1
 	charge_slowdown = CHARGING_SLOWDOWN_MEDIUM
 	charge_sound = 'sound/magic/holycharging.ogg'
 	cooldown_time = 45 SECONDS
@@ -290,7 +246,7 @@
 
 	charge_required = TRUE
 	charge_time = 3 SECONDS
-	charge_drain = 1
+	hold_drain = 1
 	charge_slowdown = CHARGING_SLOWDOWN_MEDIUM
 	charge_sound = 'sound/magic/holycharging.ogg'
 	cooldown_time = 10 MINUTES
@@ -311,7 +267,7 @@
 	if(!target || !target.Enter(owner) || is_type_in_list(target, turf_blacklist))
 		to_chat(owner, span_warning("This turf can't be on fiyaaaah! (It's blocked sire.)"))
 		return FALSE
-	
+
 	new /obj/machinery/light/rogue/campfire/miracle_pyre(target)
 
 	return TRUE
@@ -418,7 +374,7 @@
 
 	charge_required = TRUE
 	charge_time = 1 SECONDS
-	charge_drain = 0
+	hold_drain = 0
 	charge_slowdown = CHARGING_SLOWDOWN_NONE
 	charge_sound = 'sound/magic/holycharging.ogg'
 	cooldown_time = 1.5 MINUTES

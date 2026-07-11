@@ -124,7 +124,7 @@
 		head = /obj/item/clothing/head/roguetown/sultana
 		mask = /obj/item/clothing/head/roguetown/crown/serpcrown
 		// l_hand = /obj/item/rogueweapon/lordscepter //currently aren't working on sultans
-		belt = /obj/item/storage/belt/rogue/leather/cloth/lady
+		belt = /obj/item/storage/belt/rogue/leather/cloth/upgraded/lady
 		gloves = /obj/item/clothing/gloves/roguetown/leather/black
 		armor = /obj/item/clothing/suit/roguetown/shirt/sultana
 		shoes = /obj/item/clothing/shoes/roguetown/gladiator
@@ -258,7 +258,7 @@
 /datum/outfit/job/roguetown/sultan/wizard/pre_equip(mob/living/carbon/human/H)
 	..()
 	backr = /obj/item/storage/backpack/rogue/satchel
-	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/roguegem/amethyst = 1, /obj/item/spellbook_unfinished/pre_arcyne = 1)
+	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/roguegem/amethyst = 1, /obj/item/rogueweapon/spellbook = 1)
 
 /**
 	Inbred Lord subclass. A joke class, evolution of the Inbred Wastrel.

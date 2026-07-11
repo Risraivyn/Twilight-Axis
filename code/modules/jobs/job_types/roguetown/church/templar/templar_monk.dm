@@ -10,7 +10,7 @@
 		STATKEY_STR = 3, // TA EDIT
 		STATKEY_CON = 2,
 		STATKEY_WIL = 2,
-		STATKEY_SPD = 2
+		STATKEY_SPD = 1
 	)
 	subclass_skills = list(
 		/datum/skill/combat/unarmed = SKILL_LEVEL_EXPERT,
@@ -99,7 +99,7 @@
 	shirt = /obj/item/clothing/suit/roguetown/shirt/tunic/black
 	armor = /obj/item/clothing/suit/roguetown/shirt/robe/monk/holy
 	pants = /obj/item/clothing/under/roguetown/tights/black
-	belt = /obj/item/storage/belt/rogue/leather/rope
+	belt = /obj/item/storage/belt/rogue/leather/rope/upgraded
 	beltl = /obj/item/storage/belt/rogue/pouch/coins/mid
 	beltr = /obj/item/storage/keyring/acolyte
 	shoes = /obj/item/clothing/shoes/roguetown/sandals

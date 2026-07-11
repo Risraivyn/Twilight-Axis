@@ -167,6 +167,9 @@
 		return
 	if(stat >= DEAD) //do shit the natural way i guess
 		return
+	if(HAS_TRAIT(src, TRAIT_BLACKBLOOD) && prob(20)) // since WWs are harder to infect, reducing this to just a fraction of the normal chance
+		to_chat(src, span_danger("I feel something churning within my body... No, not again...! Not this time!"))
+		return
 	to_chat(src, span_danger("I feel horrible... REALLY horrible..."))
 	mob_timers["puke"] = world.time
 	vomit(1, blood = TRUE, stun = FALSE)
@@ -254,7 +257,7 @@
 	parrysound = list('sound/combat/parry/parrygen.ogg')
 	embedding = list("embedded_pain_multiplier" = 0, "embed_chance" = 0, "embedded_fall_chance" = 0)
 	item_flags = DROPDEL
-	special = /datum/special_intent/axe_swing/graggarite	//Good pairing for area denial for WW's.
+	special = /datum/special_intent/axe_swing/graggarite/werewolf	//Good pairing for area denial for WW's. // TA EDIT
 	experimental_inhand = FALSE
 
 /obj/item/rogueweapon/werewolf_claw/right

@@ -152,6 +152,7 @@
 #define TRAIT_XYLIX "Blessing of Xylix" // secret thieves cant language
 #define TRAIT_XYLIX_DEVOTEE "Xylixian Fateweaver" // fate-weaving and luck-based bonuses
 #define TRAIT_FORGEBLESSED "Blessing of Malum" //Reduces the fatigue cost of smithing a bit.
+#define TRAIT_MALUMCHOSEN "Chosen of Malum" //Massively increase chance to craft items.
 #define TRAIT_APRICITY	"Apricity" //Decreased stamina regen time during "day" and less so during night
 #define TRAIT_SHARPER_BLADES "Sharper Blades" //Weapons lose less blade integrity
 #define TRAIT_BATTLEMASTER "Battlemaster" //You can use weapon specials no matter what
@@ -298,10 +299,13 @@
 #define TRAIT_TEMPO	"Tempo Capable"
 #define TRAIT_SILVER_WEAK "Silver Weakness"
 #define TRAIT_PALLID "Pallid"
+#define TRAIT_BLACKBLOOD "Blackblooded"
 #define TRAIT_ASSASSIN	"Assassin"
 #define TRAIT_EQUESTRIAN "Equestrian"
 #define TRAIT_REGROW_LIMBS "Regrow Limbs"
 #define TRAIT_LEVY "Azurean Militia"
+#define TRAIT_MUSES_GRACE	"Muses Grace"
+#define TRAIT_SUNLIGHT_SENSITIVE "Sunlight Sensitivity"
 // ARMOR / CLOTHING GIVEN TRAITS (GIVEN BY WEARING CLOTHES/ARMOR PIECES)
 #define TRAIT_MONK_ROBE	"Holy Vestatures"
 #define TRAIT_BLACKOAK "Heritage Vision"
@@ -481,6 +485,7 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_CAUTIOUS_FISHER = span_info("I know my way around the dangers of fishing, and know how to avoid unwanted attention from the depths."),
 	TRAIT_DEATHSIGHT = span_info("I can feel when someone nearby draws the Undermaiden's attention."),
 	TRAIT_FORGEBLESSED = span_info("Countless long nights spent forging metal have honed my endurance, allowing me to work an anvil far longer than most without tiring."),
+	TRAIT_MALUMCHOSEN = span_info("He guides my hands in my crafts, allowing for feats I'd normally not be able to achieve."),
 	TRAIT_XYLIX = span_info("I know how to speak in code that only fellow tricksters can understand."),
 	TRAIT_XYLIX_DEVOTEE = span_info("Xylix smiles upon me. When there's a juncture in fate, I will be pulled toward the better outcome."),
 	TRAIT_APRICITY = span_info("Astrata's light blesses and rejuvenates me, allowing me to regain my stamina quicker."),
@@ -493,10 +498,6 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_BLACKBAGGER = span_info("I've been trained to properly abduct individuals through the use of seizing garrotes and blackbags."),
 	TRAIT_LYCANRESILENCE = span_info("Dendor's fury flows through my veins, my wounds regenerate over time..."),
 	TRAIT_FORTITUDE = span_info("The typical drain I feel from day to day life is lessened, my athleticism greater."),
-	TRAIT_GUIDANCE = span_info("Something guides my hand in battle, my strikes and defenses are more precise."),
-	TRAIT_LESSER_GUIDANCE = span_info("Something faintly guides my hand in battle, my strikes and defenses are slightly more precise."),
-	TRAIT_REVERSE_GUIDANCE = span_warning("Something hinders me in battle, my strikes and defenses feel sluggish and imprecise."),
-	TRAIT_LESSER_REVERSE_GUIDANCE = span_warning("Something faintly hinders me in battle, my strikes and defenses feel slightly imprecise."),
 	TRAIT_DEPRAVED = span_info("The languid scent of Her debauchery is known to me."),
 	TRAIT_SILVER_BLESSED = span_info("I have been baptized in fire. Blessed silverdust flows through my blood, protecting me from both vampyrism and lycanthropy."),
 	TRAIT_UNLYCKERABLE = span_info("My kind cannot bear the Sun curse for it already has another."),
@@ -512,7 +513,7 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_COUNTERCOUNTERSPELL = span_info("I automatically know when to counter Counterspells, and can do so without even thinking about it."),
 	TRAIT_UNSEEMLY = span_info("My face is ugly and makes everyone who looks at me miserable."),
 	TRAIT_HERETIC_SEER = span_info("I can tell other Ascendant followers without sharing their faith."),
-	TRAIT_DUALWIELDER = span_info("If I wield two weapons of the same type, I attack with them both simultaneously. I suffer a disadvantage when attempting to parry. I do not suffer penalties from using my off-hand in combat."),
+	TRAIT_DUALWIELDER = span_info("While wielding two one-hand weapons with at least Journeyman skill on each, I alternate attacks between them. After 4 strikes, I'll attack with both at once. My parry and dodge are reduced by 5% while holding two weapons."),
 	TRAIT_SENTINELOFWITS = span_info("My Intelligence aids in my defense. Every 2 points above 10 INT become an additional 10% chance to dodge or parry. Does not count positive buffs from potions or substances."),
 	TRAIT_KEENEARS = span_info("I've a good pair of ears, and can tell who is speaking, even when they're out of sight. I can also hear whispers from further away."),
 	TRAIT_SCREENSHAKE = span_suicide("I don't feel very steady anymore..."),
@@ -605,7 +606,8 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_SELF_SUSTENANCE = span_greentext("Yils of experience running from the law and living off the land have made me a jack of all trades. All crafting and labor skills can progress to Journeyman levels. I am also quite savvy at repairing damaged equipment."),
 	TRAIT_SELF_RELIANCE = span_greentext("I've spent enough time standing on my own that I've learned to either adapt or die young. All crafting and labor skills can progress to Journeyman levels."),
 	TRAIT_SILVER_WEAK = span_warning("Silver is the greatest threat to my lyfe. Blows from silver weapons will set me alight, inhibit my ability to regenerate, and - if blessed - can outright destroy my vessel."),
-	TRAIT_PALLID = span_warning("I was once a creature of the night. The open sky fills me with unease, but my eyes pierce the darkness and my lungs need no air."),
+	TRAIT_PALLID = span_artery("I was once a creature of the night, but cured by divine intervention. The open sky fills me with unease, but my eyes pierce the darkness and my lungs need no air."),
+	TRAIT_BLACKBLOOD = span_artery("I was once a creature of the night, but cured by the Otavan Inquisition at a heavy cost. My blood, tainted with tinctures, rites and concoctions, endures infection and holds an odd regenerative factor to it. Unfortunately, most healing miracles do not affect me at all, and I am sensitive to sunlight, aswell."),	
 	TRAIT_COMBAT_AWARE = span_notice("My honed senses and intuition allow me to spot notable things in the midst of battle with ease."),
 	TRAIT_TEMPO	= span_greentext("I can keep up with multiple opponents at once."),
 	TRAIT_BLACKOAK = span_warning("The Black Oaks can spot <b>any</b> foreigners and outsiders, no matter how long they've lived in Azuria. I can spot an invader at a glance."),
@@ -643,7 +645,9 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_EDIT_DESCRIPTORS = span_info("I can change my appearance at a magic mirror in a thorough manner."),
 	TRAIT_DUSTRUNNER = span_info("I run dust for the Thieves' Guild. Those in the trade know how to spot one of their own."),
 	TRAIT_REGROW_LIMBS = span_info("I can regrow my limbs in my sleep, but doing so will make me hungry."),
-
+	TRAIT_MUSES_GRACE = span_info("I feel a sudden and powerful urge to break out into song."),
+	TRAIT_SUNLIGHT_SENSITIVE = span_danger("Put on those shades and wave to yesterday, 'cause the sunlight hurts my eyes!"),
+ 
 	TRAIT_CLERGY_TA = span_notice("My oath empowers me when I am within the Temple's walls, or near my spiritual guide, the Bishop."), //TA TRAITS FROM HERE
 	TRAIT_PSYDONITE_2 = span_info("My body is a temple of iron will; the stronger my willpower, the faster my flesh knits back together."),
 	TRAIT_PSYDONITE_3 = span_info("My body is a temple of iron will; the stronger my willpower, the faster my flesh knits back together."),
@@ -923,10 +927,6 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define NOCTITE_SPELLBLADE_TRAIT "noctitespellblade"
 
 // unique trait sources, still defines
-#define TRAIT_GUIDANCE "Guidance"
-#define TRAIT_LESSER_GUIDANCE "Lesser Guidance"
-#define TRAIT_REVERSE_GUIDANCE "Reverse Guidance"
-#define TRAIT_LESSER_REVERSE_GUIDANCE "Lesser Reverse Guidance"
 #define TRAIT_FORTITUDE "Fortitude"
 #define CLONING_POD_TRAIT "cloning-pod"
 #define STATUE_MUTE "statue"

@@ -48,7 +48,8 @@
 	response_harm_continuous = "kicks"
 	response_harm_simple = "kick"
 	faction = list(FACTION_ROGUEANIMAL, FACTION_NEUTRAL)
-	speed = 0.8
+	speed = 0
+	move_to_delay = 2
 	breedchildren = 0 //Yeah no, I'm not falling for this one.
 	dodgetime = 20
 	held_items = list(null, null)
@@ -102,6 +103,15 @@
 // if they are within the orb, they should not be able to commit recursion
 /mob/living/simple_animal/pet/familiar/restrained(ignore_grab)
 	return !isturf(src.loc)
+
+/mob/living/simple_animal/pet/familiar/become_item()
+	var/obj/item/mob_item/orb = ..()
+	orb.slot_flags = ITEM_SLOT_HIP|ITEM_SLOT_NECK|ITEM_SLOT_RING // little pendant-esque thing
+	orb.filters += filter(type = "drop_shadow", x=0, y=0, size=1, offset = 2, color = GLOW_COLOR_ARCANE)
+	orb.desc = "A small orb, containing the spirit of [name]."
+	orb.can_container = TRUE
+	orb.w_class = WEIGHT_CLASS_SMALL
+	return orb
 
 /mob/living/simple_animal/pet/familiar/Initialize()
 	. = ..()
@@ -506,7 +516,7 @@
 	var/datum/skill/craft/cooking/cs = user?.get_skill_level(/datum/skill/craft/cooking)
 	var/cooktime_divisor = get_cooktime_divisor(cs)
 	if(istype(I, /obj/item/reagent_containers/food/snacks))
-		if(istype(I, /obj/item/reagent_containers/food/snacks/egg))
+		if(istype(I, /obj/item/reagent_containers/food/snacks/rogue/egg))
 			to_chat(user, "<span class='warning'>I wouldn't be able to cook this over the fire...</span>")
 			return FALSE
 		var/obj/item/A = user.get_inactive_held_item()

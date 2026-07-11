@@ -62,7 +62,7 @@
 	choice_tooltips = list(
 		NOTABLE_BEAUTY = "Just looking at me relieves some of the hardships of the world, and I'm quite good in bed.",
 		NOTABLE_STASH = "I've a hidden coinpurse for a particularly dark dae.",
-		NOTABLE_RESIDENCY = "I am a Resident of the city, with access to one of its buildings all to myself.", //TA_EDIT
+		NOTABLE_RESIDENCY = "I am a Resident of Azure Peak, with access to one of its buildings all to myself.",
 		NOTABLE_SHREWD = "Grants Secular Appraise -- a spell that allows you to tell how much wealth someone has on them, and in their Meister."
 	)
 
@@ -85,7 +85,6 @@
 				recipient.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/appraise/secular)
 			if(NOTABLE_RESIDENCY)
 				ADD_TRAIT(recipient, TRAIT_RESIDENT, TRAIT_VIRTUE)
-				recipient.mind?.special_items["Resident Manuscript"] = /obj/item/book/granter/residentcardvirtue //TA_EDIT
 				var/mapswitch = 0
 				if(SSmapping.config.map_name == "Dun World")
 					mapswitch = 1
@@ -115,7 +114,7 @@
 							var/obj/structure/chair/chosen_chair = pick(possible_chairs)
 							recipient.forceMove(get_turf(chosen_chair))
 							chosen_chair.buckle_mob(recipient)
-							to_chat(recipient, span_notice("As a resident, you find yourself seated at a chair in the local tavern.")) //TA_EDIT
+							to_chat(recipient, span_notice("As a resident of Azure Peak, you find yourself seated at a chair in the local tavern."))
 						else
 							var/list/possible_spawns = list()
 							for(var/turf/T in spawn_area)
@@ -125,7 +124,7 @@
 							if(length(possible_spawns))
 								var/turf/spawn_loc = pick(possible_spawns)
 								recipient.forceMove(spawn_loc)
-								to_chat(recipient, span_notice("As a resident, you find yourself in the local tavern.")) //TA_EDIT
+								to_chat(recipient, span_notice("As a resident of Azure Peak, you find yourself in the local tavern."))
 
 #undef NOTABLE_BEAUTY
 #undef NOTABLE_STASH
@@ -344,30 +343,33 @@
 
 /datum/virtue/utility/bronzelimbs/apply_to_human(mob/living/carbon/human/recipient)
 	. = ..()
-	if(triumph_check(recipient))
-		var/obj/item/bodypart/to_attach
-		var/zone
-		for(var/choice in picked_choices)
-			switch(choice)
-				if("Right Arm")
-					to_attach = /obj/item/bodypart/r_arm/prosthetic/bronzeright
-					zone = BODY_ZONE_R_ARM
-				if("Left Arm")
-					to_attach = /obj/item/bodypart/l_arm/prosthetic/bronzeleft
-					zone = BODY_ZONE_L_ARM
-				if("Right Leg")
-					to_attach = /obj/item/bodypart/r_leg/prosthetic/bronzeright
-					zone = BODY_ZONE_R_LEG
-				if("Left Leg")
-					to_attach = /obj/item/bodypart/l_leg/prosthetic/bronzeleft
-					zone = BODY_ZONE_L_LEG
-			var/obj/item/bodypart/O = recipient.get_bodypart(zone)
-			if(O)
-				O.drop_limb()
-				qdel(O)
-			if(recipient.charflaws.len)
-				var/obj/item/bodypart/BP = new to_attach()
-				BP.attach_limb(recipient)
+	if(!triumph_check(recipient))
+		to_chat(recipient, span_warning("Sorry Ser, we don't \"give\" credit. Come back when you're a little, mmmmm... TRIUMPHant."))
+		return
+	for(var/choice in picked_choices)
+		var/to_attach = null
+		var/zone = null
+		switch(choice)
+			if("Right Arm")
+				to_attach = /obj/item/bodypart/r_arm/prosthetic/bronzeright
+				zone = BODY_ZONE_R_ARM
+			if("Left Arm")
+				to_attach = /obj/item/bodypart/l_arm/prosthetic/bronzeleft
+				zone = BODY_ZONE_L_ARM
+			if("Right Leg")
+				to_attach = /obj/item/bodypart/r_leg/prosthetic/bronzeright
+				zone = BODY_ZONE_R_LEG
+			if("Left Leg")
+				to_attach = /obj/item/bodypart/l_leg/prosthetic/bronzeleft
+				zone = BODY_ZONE_L_LEG
+		if(!to_attach || !zone)
+			continue
+		var/obj/item/bodypart/old_limb = recipient.get_bodypart(zone)
+		if(old_limb)
+			old_limb.drop_limb()
+			qdel(old_limb)
+		var/obj/item/bodypart/new_limb = new to_attach()
+		new_limb.attach_limb(recipient)
 
 /datum/virtue/utility/woodwalker
 	name = "Woodwalker"
@@ -378,11 +380,6 @@
 	name = "Defiled Keyholder"
 	desc = "The 'Holy' See has their blood-stained grounds, and so do we. Underneath their noses, we pray to the true gods - I know the location of the local heretic conclave. Secrecy is paramount. If found out, I will surely be killed."
 	added_traits = list(TRAIT_ZURCH)
-
-/datum/virtue/utility/mountable
-	name = "Mountable"
-	desc = "You have trained and become fit enough to function as a suitable mount. People may ride you as they would a saiga."
-	added_traits = list(TRAIT_MOUNTABLE)
 
 // AUTHOR NOTE - Probably remove this from court, leader and inquisition roles later since the barrier to roleplaying this correctly as those roles is extremely high.
 // Mostly meant as a virtue for strange fey creatures, or people roleplaying as if they have been influenced by hags positively in the past, following an active pact to avoid vengeance.

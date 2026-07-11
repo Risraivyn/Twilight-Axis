@@ -335,12 +335,12 @@
 	. = ..()
 	if(should_wear_femme_clothes(H))
 		shirt = /obj/item/clothing/suit/roguetown/shirt/dress/silkydress/random
-		belt = /obj/item/storage/belt/rogue/leather/cloth/lady
+		belt = /obj/item/storage/belt/rogue/leather/cloth/upgraded/lady
 		shoes = /obj/item/clothing/shoes/roguetown/anklets
 	else if(should_wear_masc_clothes(H))
 		pants = /obj/item/clothing/under/roguetown/sirwal/fancy/random
 		shirt = /obj/item/clothing/suit/roguetown/shirt/dress/thawb/gold
-		belt = /obj/item/storage/belt/rogue/leather/cloth/lady
+		belt = /obj/item/storage/belt/rogue/leather/cloth/upgraded/lady
 		shoes = /obj/item/clothing/shoes/roguetown/shalal
 	if(H.mind)
 		SStreasury.grant_savings(ECONOMIC_UPPER_CLASS, H)

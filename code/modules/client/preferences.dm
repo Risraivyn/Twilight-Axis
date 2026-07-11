@@ -550,11 +550,13 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	ResetJobs()
 	if(user)
 		if(pref_species.desc)
+			var/langs = length(pref_species.languages)
+			var/bonus_languages = langs > 1 ? span_info("<br>Racial Language[langs > 2 ? "s" : ""]: [pref_species.get_string_languages()]") : null
 			var/bonus_stats = span_racialstatinfo(pref_species.get_string_bonus_stats())
 			var/traits_list = pref_species.get_string_bonus_traits()
 			var/bonus_traits = traits_list && length(traits_list) ? "<br>" + span_smallracialstatinfo(traits_list) : null
 			var/mechanics = pref_species.mechanics_explanations ? span_info(pref_species.get_string_mechanics_explanations()) : null
-			var/description2print  = fieldset_block(span_big("<b>[span_bignotice(pref_species.desc_title)]</b>"), "[pref_species.desc]<br><hr>[bonus_stats][bonus_traits][mechanics]", "speciesdesc_block")
+			var/description2print  = fieldset_block(span_big("<b>[span_bignotice(pref_species.desc_title)]</b>"), "[pref_species.desc]<br><hr>[bonus_stats][bonus_languages][bonus_traits][mechanics]", "speciesdesc_block")
 			to_chat(user, description2print)
 		to_chat(user, span_red("Classes reset."))
 	random_character(gender, FALSE, FALSE)
@@ -2837,6 +2839,12 @@ GLOBAL_LIST_EMPTY(chosen_names)
 						var/datum/virtue/virtue_chosen = virtue_choices[result]
 						virtue = new virtue_chosen.type
 						to_chat(user, process_virtue_text(virtue_chosen))
+						if(!istype(virtue, /datum/virtue/combat/second_chance) && !istype(virtuetwo, /datum/virtue/combat/second_chance))
+							if(skin_tone == SKIN_COLOR_ROT)
+								var/new_tone = random_skin_tone()
+								skin_tone = new_tone
+								features["mcolor"] = sanitize_hexcolor(new_tone)
+								try_update_mutant_colors()
 				if("virtuetwo")
 					var/list/virtue_choices = list()
 					for (var/path as anything in GLOB.virtues)
@@ -2863,6 +2871,12 @@ GLOBAL_LIST_EMPTY(chosen_names)
 						var/datum/virtue/virtue_chosen = virtue_choices[result]
 						virtuetwo = new virtue_chosen.type
 						to_chat(user, process_virtue_text(virtue_chosen))
+						if(!istype(virtue, /datum/virtue/combat/second_chance) && !istype(virtuetwo, /datum/virtue/combat/second_chance))
+							if(skin_tone == SKIN_COLOR_ROT)
+								var/new_tone = random_skin_tone()
+								skin_tone = new_tone
+								features["mcolor"] = sanitize_hexcolor(new_tone)
+								try_update_mutant_colors()
 					/*	if (statpack.type != /datum/statpack/wildcard/virtuous)
 							statpack = new /datum/statpack/wildcard/virtuous
 							to_chat(user, span_purple("Your statpack has been set to virtuous (no stats) due to selecting a virtue.")) */
@@ -2926,6 +2940,8 @@ GLOBAL_LIST_EMPTY(chosen_names)
 */
 				if("s_tone")
 					var/listy = pref_species.get_skin_list()
+					if(istype(virtue, /datum/virtue/combat/second_chance) || istype(virtuetwo, /datum/virtue/combat/second_chance))
+						listy["Rotten"] = SKIN_COLOR_ROT
 					var/new_s_tone = tgui_input_list(user, "Choose your character's skin tone:", "SKINTONE", listy)
 					if(new_s_tone)
 						skin_tone = listy[new_s_tone]
