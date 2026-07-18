@@ -475,7 +475,7 @@ SUBSYSTEM_DEF(vote)
 					else
 						GLOB.master_mode = .
 			if("map")
-				save_map_vote_log(.)
+				// save_map_vote_log(.)
 				SSmapping.changemap(global.config.maplist[.])
 				SSmapping.map_voted = TRUE
 			if("endround")
@@ -752,8 +752,8 @@ SUBSYSTEM_DEF(vote)
 		message_admins(span_danger("Admin [key_name_admin(usr)] start a vote of [vote_type]!"))
 		log_admin("Admin [key_name_admin(usr)] start a vote of [vote_type]!")
 		mode = vote_type
-		if(mode == "map")
-			load_map_vote_coefficients()
+		// if(mode == "map")
+		// 	load_map_vote_coefficients()
 		initiator = initiator_key
 		started_time = world.time
 		var/text = "[capitalize(mode)] vote started by [initiator]."
@@ -828,8 +828,8 @@ SUBSYSTEM_DEF(vote)
 			. += "<div style='color:#992414;font-size:0.9rem;margin-bottom:6px;'>[pool_text]</div>"
 			. += render_storyteller_choices(can_vote, C)
 		else
-			if(mode == "map")
-				. += "<div style='color:#5a9f54;font-size:0.95rem;margin-bottom:6px;'>Каждая карта копит свой бонус отдельно: первый проигрыш даёт +20% к весу голоса, второй +10%, третий и последующие +5%. Победившая карта сбрасывает только свой бонус до x1.</div>"
+			// if(mode == "map")
+			// 	. += "<div style='color:#5a9f54;font-size:0.95rem;margin-bottom:6px;'>Каждая карта копит свой бонус отдельно: первый проигрыш даёт +20% к весу голоса, второй +10%, третий и последующие +5%. Победившая карта сбрасывает только свой бонус до x1.</div>"
 			. += "<ul>"
 			var/selected_option = vote_selections[C.ckey]
 			for(var/i=1,i<=choices.len,i++)

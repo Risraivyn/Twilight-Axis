@@ -709,6 +709,11 @@
 			H.update_inv_armor()
 			H.update_icon()
 	
+/obj/item/clothing/shoes/roguetown/simpleshoes/heels/ComponentInitialize()
+	. = ..()
+	AddComponent(/datum/component/item_equipped_movement_rustle, SFX_HEELS, 2)
+	stepnoise_flag = STEPNOISE_HEELS // This will prevent default footstep noise from being made by the heels (sounds odd)
+
 /obj/item/clothing/shoes/roguetown/simpleshoes/heels/update_icon()
 	cut_overlays()
 	if(get_detail_tag())
@@ -2049,3 +2054,32 @@ As Excaliber."
 	icon_state = "donor_skull"
 	worn_offsets = list("x" = 0, "y" = 14)
 	color = null
+
+// MORTOSASYE
+/obj/item/rogueweapon/woodstaff/implement/grand/morto
+	base_implement_name = null
+	name = "Frozen Vow"
+	desc = "A magic staff sheathed in dark ice and crowned with flawless blortz gems of exceptional purity. Each crystalline facet drinks in the arcane energy that would otherwise dissipate into the air with every spell, preserving it within the frozen metal before returning it to its wielder. Extremely cold to the touch."
+	icon_state = "mystralstaff"
+	icon = 'icons/obj/items/donor_weapons_64.dmi'
+
+/obj/item/rogueweapon/woodstaff/implement/grand/magos/morto
+	base_implement_name = null
+	name = "Frozen Vow"
+	desc = "A magic staff sheathed in dark ice and crowned with flawless blortz gems of exceptional purity. Each crystalline facet drinks in the arcane energy that would otherwise dissipate into the air with every spell, preserving it within the frozen metal before returning it to its wielder. Extremely cold to the touch."
+	icon_state = "mystralstaff"
+	icon = 'icons/obj/items/donor_weapons_64.dmi'
+
+/obj/item/rogueweapon/woodstaff/implement/greater/quartz/morto
+	base_implement_name = null
+	name = "Frozen Vow"
+	desc = "A magic staff sheathed in dark ice and crowned with flawless blortz gems of exceptional purity. Each crystalline facet drinks in the arcane energy that would otherwise dissipate into the air with every spell, preserving it within the frozen metal before returning it to its wielder. Extremely cold to the touch."
+	icon_state = "mystralstaff"
+	icon = 'icons/obj/items/donor_weapons_64.dmi'
+
+/obj/item/rogueweapon/woodstaff/implement/amethyst/morto
+	base_implement_name = null
+	name = "Frozen Vow"
+	desc = "A magic staff sheathed in dark ice and crowned with flawless blortz gems of exceptional purity. Each crystalline facet drinks in the arcane energy that would otherwise dissipate into the air with every spell, preserving it within the frozen metal before returning it to its wielder. Extremely cold to the touch."
+	icon_state = "mystralstaff"
+	icon = 'icons/obj/items/donor_weapons_64.dmi'
