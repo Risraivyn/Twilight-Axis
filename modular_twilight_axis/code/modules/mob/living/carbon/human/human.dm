@@ -34,12 +34,10 @@
 	remove_stress(/datum/stressevent/sleep_deprivation_3)
 	remove_stress(/datum/stressevent/sleep_deprivation_4)
 
-	var/is_antag = FALSE
-	if(mind && (mind.special_role || length(mind.antag_datums)))
-		is_antag = TRUE
+	var/capped = is_sleep_capped()
 
 	if(has_status_effect(/datum/status_effect/debuff/sleepytime))
-		if(is_antag)
+		if(capped)
 			days_without_sleep = 1
 		else
 			days_without_sleep = min(days_without_sleep + 1, 4)
@@ -59,7 +57,7 @@
 
 			if(!has_flaw(/datum/charflaw/mind_broken))
 				hallucination = max(hallucination, 150)
-				
+
 		if(4)
 			to_chat(src, span_suicide("ЧЕТЫРЕ ДНЯ БЕЗ СНА! МОЙ РАЗУМ УГАСАЕТ, Я В ЛЮБОЙ МОМЕНТ МОГУ ОТКЛЮЧИТЬСЯ!"))
 			add_stress(/datum/stressevent/sleep_deprivation_4)
@@ -98,3 +96,15 @@
 			apply_status_effect(/datum/status_effect/buff/noc_light_blessing)
 	else 
 		remove_status_effect(/datum/status_effect/buff/noc_light_blessing)
+
+/mob/living/carbon/human/proc/is_sleep_capped()
+
+	if(mob_biotypes & MOB_UNDEAD)
+		return TRUE
+
+	if(mind)
+		var/role = mind.special_role
+		if(role in list(ROLE_LICH, ROLE_VAMPIRE, ROLE_NBEAST, ROLE_VAMPIRE_SUMMON, ROLE_NECRO_SKELETON, ROLE_SIEGE_SKELETON, ROLE_LICH_SKELETON, ROLE_UNBOUND_DEATHKNIGHT, ROLE_REVENANT, ROLE_DREAMWALKER))
+			return TRUE
+
+	return FALSE

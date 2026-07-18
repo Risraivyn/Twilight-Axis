@@ -587,11 +587,11 @@
 		playsound(target.loc, 'sound/vo/hug.ogg', 100, FALSE, -1)
 
 /mob/living/carbon/human/verb/open_sleep_menu()
-	set name = "Мечтать"
+	set name = "Dream"
 	set category = "IC"
 	
 	if(!IsSleeping())
-		to_chat(src, span_warning("Я должен спать, чтобы мечтать!"))
+		to_chat(src, span_warning("Я должен спать!"))
 		return
 		
 	if(mind && mind.sleep_adv)
