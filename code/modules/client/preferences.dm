@@ -715,7 +715,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 				dat += "<b>Race Bonus:</b> <a href='?_src_=prefs;preference=race_bonus_select;task=input'>[race_bonus_display ? "[race_bonus_display]" : "None"]</a><BR>"
 			else
 				race_bonus = null
-			
+
 			var/datum/language/selected_lang
 			var/lang_output = "None"
 			if(ispath(extra_language, /datum/language))
@@ -845,7 +845,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 				if(istype(cf, /datum/charflaw/averse))
 					has_averse = TRUE
 					break
-			
+
 			if(has_averse)
 				if(!averse_chosen_faction)
 					averse_chosen_faction = "Inquisition"
@@ -2010,7 +2010,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 						else
 							to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ', . and ,.</font>")
 
-	
+
 				if("nickname")
 					var/new_name = tgui_input_text(user, "Choose your character's nickname (For Highlighting):", "NICKNAME",  encode = FALSE)
 					if(new_name)
@@ -2178,9 +2178,10 @@ GLOBAL_LIST_EMPTY(chosen_names)
 					var/faith_input = tgui_input_list(user, "The world rots. Which truth you bear?", "FAITH", faiths_named)
 					if(faith_input)
 						var/datum/faith/faith = faiths_named[faith_input]
-						to_chat(user, "<font color='yellow'>Вера: [faith.translated_name]</font>") //	TA EDIT
-						to_chat(user, "Описание: [faith.desc]") //										TA EDIT
-						to_chat(user, "<font color='red'>Последователи: [faith.worshippers]</font>") //	TA EDIT
+						var/pantheon_info = "[faith.desc]<br><br>"
+						pantheon_info += span_redtext("Последователи: " + faith.worshippers)
+						var/pantheon_fieldsetblock = fieldset_block(span_big("<b>[span_bignotice(faith.translated_name)]</b>"), pantheon_info, "faithdesc_block")
+						to_chat(user, pantheon_fieldsetblock)
 						selected_patron = GLOB.patronlist[faith.godhead] || GLOB.patronlist[pick(GLOB.patrons_by_faith[faith_input])]
 
 				if("patron")
@@ -2193,10 +2194,12 @@ GLOBAL_LIST_EMPTY(chosen_names)
 					var/god_input = tgui_input_list(user, "The first amongst many.", "PATRON", patrons_named)
 					if(god_input)
 						selected_patron = patrons_named[god_input]
-						to_chat(user, "<font color='yellow'>Покровитель: [selected_patron.translated_name]</font>") //	TA EDIT
-						to_chat(user, "<font color='#FFA500'>Домены: [selected_patron.domain]</font>") //				TA EDIT
-						to_chat(user, "Описание: [selected_patron.desc]") //											TA EDIT
-						to_chat(user, "<font color='red'>Последователи: [selected_patron.worshippers]</font>") //		TA EDIT
+						var/patron_info = ""
+						patron_info += span_honeyyellow("Домены: [selected_patron.domain]<br><br>")
+						patron_info += "[selected_patron.desc]<br><br>"
+						patron_info += span_redtext("Последователи: [selected_patron.worshippers]")
+						var/patron_fieldsetblock = fieldset_block(span_big("<b>[span_bignotice(selected_patron.translated_name)]</b>"), patron_info, "patrondesc_block")
+						to_chat(user, patron_fieldsetblock)
 
 				if("combat_music") // if u change shit here look at /client/verb/combat_music() too
 					select_combat_music(user) // TA EDIT
@@ -3458,7 +3461,7 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	character.nsfw_ooc_extra_img_link = nsfw_ooc_extra_img_link	
 
 	character.erpprefs = erpprefs
-	
+
 	// Copy the cached version
 	character.flavortext_cached = flavortext_cached
 	character.ooc_notes_cached = ooc_notes_cached

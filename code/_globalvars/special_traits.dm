@@ -44,8 +44,7 @@ GLOBAL_LIST_INIT(special_traits, build_special_traits())
 		apply_dnr_trait(character, player)
 	if(player.prefs.qsr_pref)
 		apply_qsr_trait(character, player)
-
-	var/triumph_discount_remaining = get_donator_triumph_discount(player.ckey) // TA EDIT
+	var/triumph_discount_remaining = get_donator_triumph_discount(player.ckey)
 	if(player.prefs.selected_loadout_items)
 		for(var/key in player.prefs.selected_loadout_items)
 			var/datum/loadout_item/item = GLOB.loadout_items_by_name[key]
