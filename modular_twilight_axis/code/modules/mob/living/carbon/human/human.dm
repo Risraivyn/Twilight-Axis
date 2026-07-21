@@ -26,7 +26,7 @@
 	return FALSE
 
 /mob/living/carbon/human/proc/apply_sleep_deprivation()
-	if(HAS_TRAIT(src, TRAIT_INFINITE_STAMINA) || HAS_TRAIT(src, TRAIT_NOSLEEP) || HAS_TRAIT(src, TRAIT_INFINITE_ENERGY))
+	if(HAS_TRAIT(src, TRAIT_INFINITE_STAMINA) || HAS_TRAIT(src, TRAIT_INFINITE_ENERGY))
 		return
 
 	remove_stress(/datum/stressevent/sleepytime)
@@ -84,8 +84,10 @@
 		if("night")
 			SEND_SIGNAL(src, COMSIG_SLEEPY_TIME)
 			handle_sleep_triumphs()
-			if(HAS_TRAIT(src, TRAIT_INFINITE_STAMINA) || HAS_TRAIT(src, TRAIT_NOSLEEP))
-				return ..()
+
+			if(HAS_TRAIT(src, TRAIT_INFINITE_STAMINA))
+				return
+
 			if(HAS_TRAIT(src, TRAIT_NIGHT_OWL))
 				add_stress(/datum/stressevent/night_owl)
 			else
@@ -94,12 +96,11 @@
 	if(todd != "day")
 		if(HAS_TRAIT(src, TRAIT_NOC_LIGHT_BLESSING))
 			apply_status_effect(/datum/status_effect/buff/noc_light_blessing)
-	else 
+	else
 		remove_status_effect(/datum/status_effect/buff/noc_light_blessing)
 
 /mob/living/carbon/human/proc/is_sleep_capped()
-
-	if(mob_biotypes & MOB_UNDEAD)
+	if((mob_biotypes & MOB_UNDEAD) || HAS_TRAIT(src, TRAIT_NOSLEEP))
 		return TRUE
 
 	if(mind)
