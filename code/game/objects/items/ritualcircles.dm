@@ -1848,6 +1848,7 @@
 			outfit_path = /datum/outfit/job/roguetown/viciousrite
 		if("Vicious Full-Plate")
 			outfit_path = /datum/outfit/job/roguetown/viciousrite/heavy
+			ADD_TRAIT(target, TRAIT_NOSLEEP, TRAIT_RITUAL) //TA EDIT
 	if(!helm_path)
 		helm_path = /obj/item/clothing/head/roguetown/helmet/heavy/graggar
 	if(!outfit_path)
@@ -1863,7 +1864,6 @@
 		var/datum/outfit/job/roguetown/viciousrite/ritual_outfit = new outfit_path()
 		ritual_outfit.selected_helm_path = helm_path
 		target.equipOutfit(ritual_outfit)
-		ADD_TRAIT(target, TRAIT_NOSLEEP, TRAIT_RITUAL) //TA EDIT
 		tag_kit_items(target, list(
 			"armor" = target.get_item_by_slot(SLOT_ARMOR),
 			"shirt" = target.get_item_by_slot(SLOT_SHIRT),
