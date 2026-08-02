@@ -165,19 +165,6 @@ GLOBAL_LIST_INIT(dream_events, init_dream_events())
 	added_flaw.on_mob_creation(H)
 	to_chat(H, span_boldred("Мне снятся предсмертные хрипы и муки моих врагов... Я чувствую, что только страдания других вернут мне покой."))
 
-/datum/dream_event/negative/colorblind
-	name = "Потеря красок"
-	is_positive = FALSE
-
-/datum/dream_event/negative/colorblind/can_trigger(mob/living/carbon/human/H)
-	return !H.has_flaw(/datum/charflaw/colorblind)
-
-/datum/dream_event/negative/colorblind/on_dream(mob/living/carbon/human/H, datum/sleep_adv/SA)
-	var/datum/charflaw/added_flaw = new /datum/charflaw/colorblind()
-	H.charflaws.Add(added_flaw)
-	added_flaw.on_mob_creation(H)
-	to_chat(H, span_boldred("Мир во сне стремительно тускнеет и теряет свои краски. Я просыпаюсь в мире, лишенном цвета..."))
-
 /datum/dream_event/negative/ghost_visage
 	name = "Ночной гость"
 	is_positive = FALSE
