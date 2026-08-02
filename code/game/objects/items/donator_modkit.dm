@@ -5,7 +5,9 @@
 	desc = "A small container of special morphing dust, perfect to make a specific item."
 	icon = 'icons/obj/items/donor_objects.dmi'
 	icon_state = "enchanting_kit"
-	w_class = WEIGHT_CLASS_SMALL
+	grid_width = 32
+	grid_height = 64
+	w_class = WEIGHT_CLASS_SMALL	//So can fit in a bag, we don't need these large. They're just used to apply to items.
 	var/list/target_items = list()
 	var/result_item = null
 	var/icon_loadout = null
