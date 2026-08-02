@@ -21,20 +21,25 @@
 		positive_chance -= stress * 2
 
 	var/bed_bonus = -15
+	var/comfort = 0
+
 	if(H.buckled)
-		var/comfort = 0.5
-		
-		if("sleepy" in H.buckled.vars)
-			comfort = H.buckled.vars["sleepy"]
+		comfort = H.buckled.sleepy
+	else
+		var/turf/T = get_turf(H)
+		if(T)
+			for(var/obj/structure/S in T)
+				if(S.sleepy > comfort)
+					comfort = S.sleepy
 
-
+	if(comfort > 0)
 		if(comfort >= 3)
 			bed_bonus = 25
 			to_chat(H, span_notice("Мягкая постель согревает мою душу, даруя спокойные и легкие сны."))
 		else if(comfort >= 2)
 			bed_bonus = 15
 			to_chat(H, span_notice("Я сплю в относительном тепле и удобстве."))
-		else if(comfort >= 1)
+		else if(comfort >= 1.5)
 			bed_bonus = 10
 			to_chat(H, span_warning("Жесткое спальное место колет мне бока."))
 		else
@@ -42,7 +47,7 @@
 			to_chat(H, span_danger("Ужасное и холодное ложе навевает мне кошмары..."))
 	else
 		to_chat(H, span_danger("Сон на холодном, сыром полу отзывается сильной ломотой во всем теле..."))
-		
+
 	positive_chance += bed_bonus
 
 	var/blanket_bonus = -10
@@ -60,7 +65,7 @@
 		positive_chance += 25
 		noc_inspired = FALSE
 		to_chat(H, span_blue("Голубой полумесяц на моем лбу сияет теплым астральным светом, направляя мои сны по благословенному пути Нок..."))
-		
+
 	positive_chance = clamp(positive_chance, 5, 95)
 
 	if(prob(20))
