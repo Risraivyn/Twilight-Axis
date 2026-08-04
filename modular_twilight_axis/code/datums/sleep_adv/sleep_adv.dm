@@ -7,7 +7,7 @@
 	var/mob/living/carbon/human/H = mind.current
 	if(!istype(H))
 		return
-	
+
 	if(sleep_adv_points < dream_roll_cost)
 		to_chat(H, span_warning("Мне не хватает очков снов для погружения в глубокий сон."))
 		return

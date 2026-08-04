@@ -41,7 +41,7 @@ GLOBAL_LIST_INIT(dream_events, init_dream_events())
 	var/list/active_vices = list()
 	for(var/datum/charflaw/addiction/A in H.charflaws)
 		active_vices += A
-		
+
 	if(length(active_vices))
 		var/datum/charflaw/addiction/chosen_vice = pick(active_vices)
 		to_chat(H, span_nicegreen("Я вижу яркую вспышку чистого разума. Моя тяга к пороку <b>[chosen_vice.name]</b> безвозвратно угасает!"))
@@ -80,7 +80,7 @@ GLOBAL_LIST_INIT(dream_events, init_dream_events())
 			/obj/effect/spawner/lootdrop/cheap_tableware_spawner,
 			/obj/effect/spawner/lootdrop/cheap_jewelry_spawner
 		))
-		
+
 		new spawner_path(T)
 		to_chat(H, span_nicegreen("Я открываю глаза и замечаю, что на краю моей постели лежит какая-то вещица... Кажется, я захватил ее из сна."))
 
@@ -101,30 +101,30 @@ GLOBAL_LIST_INIT(dream_events, init_dream_events())
 			/obj/effect/spawner/lootdrop/valuable_jewelry_spawner,
 			/obj/effect/spawner/lootdrop/puzzlebox_rings
 		))
-		
+
 		new spawner_path(T)
-		
+
 		to_chat(H, span_nicegreen("Я открываю глаза и вижу, что рядом лежит прекрасный дар сновидений... Какая чудесная находка!"))
 		playsound(T, 'sound/magic/ahh2.ogg', 80, FALSE)
 
 
 //          ОТРИЦАТЕЛЬНЫЕ СОБЫТИЯ
 
-/datum/dream_event/negative/wake_pig
-	name = "Трюфельная свинья под боком"
-	is_positive = FALSE
+// /datum/dream_event/negative/wake_pig
+// 	name = "Трюфельная свинья под боком"
+// 	is_positive = FALSE
 
-/datum/dream_event/negative/wake_pig/on_dream(mob/living/carbon/human/H, datum/sleep_adv/SA)
-	to_chat(H, span_warning("Сквозь туман дремоты я слышу настойчивое хрюканье и сопение..."))
+// /datum/dream_event/negative/wake_pig/on_dream(mob/living/carbon/human/H, datum/sleep_adv/SA)
+// 	to_chat(H, span_warning("Сквозь туман дремоты я слышу настойчивое хрюканье и сопение..."))
 
-/datum/dream_event/negative/wake_pig/on_wake(mob/living/carbon/human/H, datum/sleep_adv/SA)
-	var/turf/T = get_turf(H)
-	if(T)
-		var/mob/living/simple_animal/hostile/retaliate/rogue/trufflepig/P = new(T)
-		if(P)
-			P.name = "Сонная свинья"
-			to_chat(H, span_warning("Я открываю глаза и обнаруживаю, что делю постель с... трюфельной свиньей?! Хрю!"))
-			playsound(T, pick('modular/Creechers/sound/pig1.ogg', 'modular/Creechers/sound/pig2.ogg'), 100, TRUE, -1)
+// /datum/dream_event/negative/wake_pig/on_wake(mob/living/carbon/human/H, datum/sleep_adv/SA)
+// 	var/turf/T = get_turf(H)
+// 	if(T)
+// 		var/mob/living/simple_animal/hostile/retaliate/rogue/trufflepig/P = new(T)
+// 		if(P)
+// 			P.name = "Сонная свинья"
+// 			to_chat(H, span_warning("Я открываю глаза и обнаруживаю, что делю постель с... трюфельной свиньей?! Хрю!"))
+// 			playsound(T, pick('modular/Creechers/sound/pig1.ogg', 'modular/Creechers/sound/pig2.ogg'), 100, TRUE, -1)
 
 /datum/dream_event/negative/vice_alcoholic
 	name = "Тяга к бутылке"
