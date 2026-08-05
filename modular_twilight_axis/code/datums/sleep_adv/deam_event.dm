@@ -58,7 +58,7 @@ GLOBAL_LIST_INIT(dream_events, init_dream_events())
 /datum/dream_event/positive/tooth_fairy/on_wake(mob/living/carbon/human/H, datum/sleep_adv/SA)
 	var/turf/T = get_turf(H)
 	if(T)
-		var/obj/item/roguecoin/gold/pile/G = new(T)
+		var/obj/item/roguecoin/silver/pile/G = new(T)
 		if(G)
 			G.name = "Подарок Зубной Феи"
 			G.desc = "Волшебная стопка монеток, странно зубы все на месте..."
@@ -98,8 +98,7 @@ GLOBAL_LIST_INIT(dream_events, init_dream_events())
 			/obj/effect/spawner/lootdrop/valuable_clutter_spawner,
 			/obj/effect/spawner/lootdrop/valuable_candle_spawner,
 			/obj/effect/spawner/lootdrop/valuable_tableware_spawner,
-			/obj/effect/spawner/lootdrop/valuable_jewelry_spawner,
-			/obj/effect/spawner/lootdrop/puzzlebox_rings
+			/obj/effect/spawner/lootdrop/valuable_jewelry_spawner
 		))
 
 		new spawner_path(T)
