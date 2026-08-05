@@ -55,8 +55,8 @@
 			to_chat(src, span_boldred("Я не спал трое суток! Мир вокруг начинает плыть..."))
 			add_stress(/datum/stressevent/sleep_deprivation_3)
 
-			if(!has_flaw(/datum/charflaw/mind_broken))
-				hallucination = max(hallucination, 150)
+			// if(!has_flaw(/datum/charflaw/mind_broken))
+			// 	hallucination = max(hallucination, 150)
 
 		if(4)
 			to_chat(src, span_suicide("ЧЕТЫРЕ ДНЯ БЕЗ СНА! МОЙ РАЗУМ УГАСАЕТ, Я В ЛЮБОЙ МОМЕНТ МОГУ ОТКЛЮЧИТЬСЯ!"))

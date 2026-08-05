@@ -236,9 +236,9 @@
 		var/level_name = SSskills.level_names[next_level]
 		dat += "<br><a [can_buy ? "" : "class='linkOff'"] href='?src=[REF(src)];task=buy_skill;skill_type=[skill_type]'>[skill.name] ([level_name])</a> - \Roman[get_skill_cost(skill_type)]"
 	dat += "<br>"
-	var/can_buy_trait = (sleep_adv_points >= dream_roll_cost)
-	var/warning_text = "ВНИМАНИЕ: Сон может обернуться как великим даром, так и ужасным проклятием! Шанс на хороший исход зависит от вашего уровня стресса, комфорта кровати и наличия укрывающего одеяла."
-	dat += "<br><a [can_buy_trait ? "" : "class='linkOff'"] href='?src=[REF(src)];task=roll_dream'>Try Dream</a> - \Roman[dream_roll_cost] <span title='[warning_text]' style='cursor: help; color: #ffaa00; font-weight: bold;'>(?)</span>"
+	// var/can_buy_trait = (sleep_adv_points >= dream_roll_cost)
+	// var/warning_text = "ВНИМАНИЕ: Сон может обернуться как великим даром, так и ужасным проклятием! Шанс на хороший исход зависит от вашего уровня стресса, комфорта кровати и наличия укрывающего одеяла."
+	// dat += "<br><a [can_buy_trait ? "" : "class='linkOff'"] href='?src=[REF(src)];task=roll_dream'>Try Dream</a> - \Roman[dream_roll_cost] <span title='[warning_text]' style='cursor: help; color: #ffaa00; font-weight: bold;'>(?)</span>"
 
 	if(rolled_specials > 0)
 		var/can_buy = can_buy_special()
