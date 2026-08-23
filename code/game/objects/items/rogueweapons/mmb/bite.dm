@@ -195,6 +195,8 @@
 			if(istype(user.dna.species, /datum/species/gnoll))
 				if(prob(30))
 					user.gnoll_feed(bite_victim, 10)
+			if(istype(user.dna.species, /datum/species/vurdalak))//TA EDIT
+				user.vurdalak_feed(bite_victim, 15)
 			/*
 				ZOMBIE INFECTION VIA BITE
 			*/
@@ -351,6 +353,9 @@
 			if(istype(user.dna.species, /datum/species/werewolf))
 				if(prob(50))
 					user.werewolf_feed(C)
+			if(istype(user.dna.species, /datum/species/vurdalak)) //TA EDIT
+				if(prob(50))
+					user.vurdalak_feed(C, 10)
 
 			/*
 				ZOMBIE CHEW. ZOMBIFICATION
