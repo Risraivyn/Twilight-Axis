@@ -103,7 +103,7 @@
 	update_icon()
 
 /obj/structure/mannequin/attack_hand(mob/living/user)
-	if(user.a_intent.name == "punch")
+	if(istype(user.a_intent, /datum/intent/unarmed/punch))
 		if(!tipped_over)
 			TipOver()
 			return
@@ -514,7 +514,7 @@
 		var/icon/blood_overlay = bloody_layer[used]
 		if(!blood_overlay)
 			blood_overlay = icon(I.sleeved, used)
-			blood_overlay.Blend("#fff", ICON_ADD) 			//fills the icon_state with white (except where it's transparent)
+			blood_overlay.Blend("#fff", ICON_ADD)			//fills the icon_state with white (except where it's transparent)
 			blood_overlay.Blend(icon(I.bloody_icon, I.bloody_icon_state), ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
 			bloody_layer[used] = fcopy_rsc(blood_overlay)
 		var/mutable_appearance/pic = mutable_appearance(blood_overlay, layer=-layer_used)

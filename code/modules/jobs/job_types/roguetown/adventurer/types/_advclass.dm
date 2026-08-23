@@ -144,6 +144,8 @@
 
 	if(length(subclass_virtues))
 		for(var/virtue in subclass_virtues)
+			if(!virtue)
+				continue
 			apply_virtue(H, new virtue)
 
 	if(age_mod)
@@ -160,6 +162,8 @@
 
 	if(applies_post_equipment)
 		apply_character_post_equipment(H)
+	H.set_advsetup(FALSE)
+	H.mind?.refresh_spell_buttons()
 //======== Massive shitcode, that works at least.
 /datum/advclass/proc/get_vice_limits(mob/living/carbon/human/H)
 	if(length(vice_limits))
@@ -214,7 +218,8 @@
 	. += get_limited_vice_names(player.prefs.charflaws, get_prefs_vice_limits(player))
 //===
 /datum/advclass/proc/post_equip(mob/living/carbon/human/H)
-	addtimer(CALLBACK(H,TYPE_PROC_REF(/mob/living/carbon/human, add_credit), TRUE), 20)
+	if(H.ckey)
+		SScrediticons.processing[H.ckey] = TRUE
 	if(cmode_music)
 		H.cmode_music = cmode_music
 	if(class_tempo_faction)
@@ -247,6 +252,58 @@
 				if(L != player.prefs.extra_language)
 					H.remove_language(L)
 		H.grant_language(player.prefs.extra_language)  //TA EDIT END
+
+/datum/advclass/proc/check_preferences_requirements(datum/preferences/prefs, client/player, check_slots = TRUE, check_probability = TRUE) // TA EDIT START
+	if(!prefs)
+		return FALSE
+
+	var/datum/species/pref_species = prefs.pref_species
+	var/list/local_allowed_sexes = list()
+	if(length(allowed_sexes))
+		local_allowed_sexes |= allowed_sexes
+	if(!immune_to_genderswap && pref_species?.gender_swapping)
+		if(MALE in allowed_sexes)
+			local_allowed_sexes -= MALE
+			local_allowed_sexes += FEMALE
+		if(FEMALE in allowed_sexes)
+			local_allowed_sexes -= FEMALE
+			local_allowed_sexes += MALE
+	if(length(local_allowed_sexes) && !(prefs.gender in local_allowed_sexes))
+		return FALSE
+
+	if(length(forbidden_races) && (pref_species?.type in forbidden_races))
+		return FALSE
+
+	if(length(allowed_ages) && !(prefs.age in allowed_ages))
+		return FALSE
+
+	if(length(allowed_patrons) && !(prefs.selected_patron?.type in allowed_patrons))
+		return FALSE
+
+	if(length(virtue_limits))
+		for(var/virtuetype in virtue_limits)
+			if(istype(prefs.virtue, virtuetype) || istype(prefs.virtuetwo, virtuetype))
+				return FALSE
+
+	var/list/current_vice_limits = vice_limits
+	if(player?.prefs == prefs)
+		current_vice_limits = get_prefs_vice_limits(player)
+	if(length(current_vice_limits) && has_limited_vice(prefs.charflaws, current_vice_limits))
+		return FALSE
+
+	if(check_slots && !SSrole_class_handler.class_has_available_slot(src, player?.ckey))
+		return FALSE
+
+	#ifdef USES_PQ
+	if(min_pq != -100)
+		if(!player || !(get_playerquality(player.ckey) >= min_pq))
+			return FALSE
+	#endif
+
+	if(check_probability && !prob(pickprob))
+		return FALSE
+
+	return TRUE // TA EDIT END
 
 /*
 	Whoa! we are checking requirements here!
@@ -287,9 +344,8 @@
 		if(has_limited_vice(H.charflaws, current_vice_limits))
 			return FALSE
 
-	if(maximum_possible_slots > -1)
-		if(total_slots_occupied >= maximum_possible_slots)
-			return FALSE
+	if(!SSrole_class_handler.class_has_available_slot(src, H.client?.ckey)) // TA EDIT START
+		return FALSE // TA EDIT END
 
 	#ifdef USES_PQ
 	if(min_pq != -100) // If someone sets this we actually do the check.
@@ -299,6 +355,45 @@
 
 	if(prob(pickprob))
 		return TRUE
+
+/datum/advclass/proc/prefs_lock_reason(datum/preferences/prefs)
+	if(!prefs)
+		return "unavailable"
+
+	var/datum/species/pref_species = prefs.pref_species
+	if(length(allowed_sexes))
+		var/list/local_allowed_sexes = allowed_sexes.Copy()
+		if(!immune_to_genderswap && pref_species?.gender_swapping)
+			if(MALE in allowed_sexes)
+				local_allowed_sexes -= MALE
+				local_allowed_sexes += FEMALE
+			if(FEMALE in allowed_sexes)
+				local_allowed_sexes -= FEMALE
+				local_allowed_sexes += MALE
+		if(length(local_allowed_sexes) && !(prefs.gender in local_allowed_sexes))
+			return "sex"
+
+	if(length(forbidden_races) && (pref_species?.type in forbidden_races))
+		return "species"
+
+	if(length(allowed_ages) && !(prefs.age in allowed_ages))
+		return "age"
+
+	if(length(allowed_patrons) && !(prefs.selected_patron?.type in allowed_patrons))
+		return "faith"
+
+	if(length(virtue_limits))
+		for(var/virtuetype in virtue_limits)
+			if(istype(prefs.virtue, virtuetype) || istype(prefs.virtuetwo, virtuetype))
+				return "virtue"
+
+	#ifdef USES_PQ
+	if(min_pq != -100 && prefs.parent)
+		if(get_playerquality(prefs.parent.ckey) < min_pq)
+			return "reputation"
+	#endif
+
+	return null
 
 // Basically the handler has a chance to plus up a class, heres a generic proc you can override to handle behavior related to it.
 // For now you just get an extra stat in everything depending on how many plusses you managed to get.

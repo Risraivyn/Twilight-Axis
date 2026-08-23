@@ -52,6 +52,7 @@
 	)
 	fixed_spells = list(
 		/datum/action/cooldown/spell/phase,
+		/datum/action/cooldown/spell/blink,
 	)
 
 /datum/magic_aspect/autowardry
@@ -123,7 +124,7 @@
 		"Illusio, me relinquere!",
 	)
 	fixed_spells = list(
-		/obj/effect/proc_holder/spell/invoked/invisibility,
+		/datum/action/cooldown/spell/invisibility,
 	)
 
 /datum/magic_aspect/hearthcraft

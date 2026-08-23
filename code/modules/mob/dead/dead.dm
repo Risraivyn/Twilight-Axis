@@ -7,7 +7,7 @@ INITIALIZE_IMMEDIATE(/mob/dead)
 	move_resist = INFINITY
 	throwforce = 0
 
-/mob/dead/Initialize()
+/mob/dead/Initialize(mapload)
 	SHOULD_CALL_PARENT(FALSE)
 	if(flags_1 & INITIALIZED_1)
 		stack_trace("Warning: [src]([type]) initialized multiple times!")
@@ -172,6 +172,9 @@ INITIALIZE_IMMEDIATE(/mob/dead)
 
 		if(key == "City Watch" || key == "Vanguard" || key == "Retinue")
 			key = "Garrison"
+
+		if(key == "ATC" || key == "Azurian Trading Company")
+			key = "Burghers"
 
 		var/list/job_players = ready_players_by_job[job_name]
 

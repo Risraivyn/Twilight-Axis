@@ -33,8 +33,8 @@
 		/datum/skill/craft/traps = SKILL_LEVEL_MASTER,
 	)
 	subclass_stashed_items = list(
-        "Sewing Kit" =  /obj/item/repair_kit,
-    )
+		"Sewing Kit" =	/obj/item/repair_kit,
+	)
 
 /datum/outfit/job/roguetown/wretch/outlaw/pre_equip(mob/living/carbon/human/H)
 	..()
@@ -115,4 +115,3 @@
 //It is mostly reverted to how it originally was with some boons to not be worse than heretic spy (that is limited, this is not).
 //Kettle and Hardened Leather should be maintained in spite of the medium armour it's more there as an option.
 //A true hybrid of Melee and Ranged (Xbow / Tossblades)
-		wretch_select_bounty(H)

@@ -7,7 +7,7 @@
 	miracles = list(/datum/action/cooldown/spell/touch/orison						= CLERIC_ORI,
 					/obj/effect/proc_holder/spell/invoked/baothavice				= CLERIC_T0,
 					/obj/effect/proc_holder/spell/invoked/baothablessings			= CLERIC_T0,
-					/datum/action/cooldown/spell/miracle/heal 						= CLERIC_T1,
+					/datum/action/cooldown/spell/miracle/heal						= CLERIC_T1,
 					/datum/action/cooldown/spell/miracle/bloodmiracle				= CLERIC_T1,
 					/obj/effect/proc_holder/spell/self/insufflation					= CLERIC_T1,
 					/obj/effect/proc_holder/spell/targeted/touch/loversruin			= CLERIC_T1,
@@ -31,9 +31,11 @@
 		"Lady of Heartbreak",
 		"Scarlet Lady",
 		"Baosumi",
-		"Thorns", // Queen of thorns, Lady of thorns, etc etc. 
+		"Thorns", // Queen of thorns, Lady of thorns, etc etc.
 		"Belladoth",
-		"Beladoth" //SOMEONE WILL MISPELL IT, I JUST KNOW IT. 
+		"Beladoth", //SOMEONE WILL MISPELL IT, I JUST KNOW IT.
+		"Leopard", // fjall
+		"Solace", // bigger part of her new lore, i.e. lady of solace
 	)
 
 /datum/patron/inhumen/baotha/can_pray(mob/living/follower)
@@ -42,12 +44,12 @@
 	if(istype(get_area(follower), /area/rogue/under/cave/inhumen))
 		return TRUE
 	// Allows prayer near EEEVIL psycross
-	for(var/obj/structure/fluff/psycross/zizocross/cross in view(4, get_turf(follower)))
+	for(var/obj/structure/fluff/psycross/cross in view(4, get_turf(follower)))
 		if(cross.divine == TRUE)
-			to_chat(follower, span_danger("That acсursed cross interupts my prayers!"))
+			to_chat(follower, span_danger("That accursed cross interrupts my prayer."))
 			return FALSE
 		return TRUE
-	// Allows prayers in the bath house - whore.
+	// Allows prayers in the bath house
 	if(istype(get_area(follower), /area/rogue/indoors/town/bath))
 		return TRUE
 	// Allows prayers if actively high on drugs.
@@ -59,26 +61,26 @@
 	// Allows praying atop ritual chalk of the god.
 	for(var/obj/structure/ritualcircle/baotha in view(1, get_turf(follower)))
 		return TRUE
-	to_chat(follower, span_danger("For Baotha to hear my prayers I must either be in the church of the abandoned, near an inverted psycross, within the town's bathhouse, or actively partaking in one of various types of nose-candy!"))
+	to_chat(follower, span_danger("For Baotha to hear my prayers I must either be in the church of the abandoned, near an inverted psycross, within the town's bathhouse, or actively partaking in a substance."))
 	return FALSE
 
 #define BAOTHA_SUFFERING_DIVIDER 3.535 // max bonus at 50 pain/bleedrate and pain_mod = 1
 
 /datum/patron/inhumen/baotha/on_lesser_heal(
-    mob/living/user,
-    mob/living/target,
-    message_out,
-    message_self,
-    conditional_buff,
-    situational_bonus,
+	mob/living/user,
+	mob/living/target,
+	message_out,
+	message_self,
+	conditional_buff,
+	situational_bonus,
 	is_inhumen
 )
 	*is_inhumen = TRUE
-	*message_out = span_info("Hedonistic impulses and emotions throb all about from [target].")
-	*message_self = span_notice("An intoxicating rush of narcotic delight soothes my suffering!")
+	*message_out = span_info("Heart-throb and loss radiate from [target].")
+	*message_self = span_notice("Warm numbness soothes my suffering.")
 
 	if(!ishuman(target))
-		*message_self = span_notice("An intoxicating rush of narcotic delight flows through me!")
+		*message_self = span_notice("Warm numbness soothes my suffering.")
 		return
 
 	var/mob/living/carbon/human/human_target = target

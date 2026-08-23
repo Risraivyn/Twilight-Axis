@@ -21,7 +21,7 @@ GLOBAL_LIST_EMPTY(respawncounts)
 #define ADMINSWARNED_AT	5
 	/*
 	When somebody clicks a link in game, this Topic is called first.
-	It does the stuff in this proc and  then is redirected to the Topic() proc for the src=[0xWhatever]
+	It does the stuff in this proc and	then is redirected to the Topic() proc for the src=[0xWhatever]
 	(if specified in the link). ie locate(hsrc).Topic()
 
 	Such links can be spoofed.
@@ -32,7 +32,7 @@ GLOBAL_LIST_EMPTY(respawncounts)
 		- If so, does it have checks to see if the person who called it (usr.client) is an admin?
 		- Are the processes being called by Topic() particularly laggy?
 		- If so, is there any protection against somebody spam-clicking a link?
-	If you have any  questions about this stuff feel free to ask. ~Carn
+	If you have any	questions about this stuff feel free to ask. ~Carn
 	*/
 
 /client
@@ -172,7 +172,7 @@ GLOBAL_LIST_EMPTY(respawncounts)
 		var/mob/voice = locate(href_list["voice"])
 		if(QDELETED(schizo) || !voice.client)
 			return
-		var/msg = input("Ask again:", "To the voice of a [schizo.voice_names[voice.client.ckey]]") as text|null
+		var/msg = input(src, "Ask again:", "To the voice of a [schizo.voice_names[voice.client.ckey]]") as text|null
 		if(msg)
 			mob.schizohelp(msg, TRUE, voice, schizo)
 			schizo.asked_again = TRUE
@@ -296,6 +296,18 @@ GLOBAL_LIST_EMPTY(respawncounts)
 	log_admin("[key_name(src)] opened the Chronicle preview.")
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "View Chronicle")
 
+/client/proc/cmd_admin_view_economics()
+	set category = "Debug"
+	set name = "View Economics"
+	set desc = "Open the Realm Economics panel without waiting for round end."
+
+	if(!check_rights(R_ADMIN|R_DEBUG))
+		return
+	var/datum/economic_chronicle/chronicle = get_economic_chronicle()
+	chronicle.ui_interact(mob)
+	log_admin("[key_name(src)] opened the Realm Economics preview.")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "View Economics")
+
 /client/proc/is_content_unlocked()
 	if(!prefs.unlock_content)
 		to_chat(src, "Become a BYOND member to access member-perks and features, as well as support the engine that makes this game possible. Only 10 bucks for 3 months! <a href=\"https://secure.byond.com/membership\">Click Here to find out more</a>.")
@@ -400,7 +412,7 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 					autorank = R
 					break
 			if(!autorank)
-				to_chat(world, "Autoadmin rank not found")
+				to_world("Autoadmin rank not found")
 			else
 				new /datum/admins(autorank, ckey)
 	if(CONFIG_GET(flag/enable_localhost_rank) && !connecting_admin)
@@ -574,7 +586,7 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 		to_chat(src, get_message_output("memo"))
 		adminGreet()
 	if(!BC_IsKeyAllowedToConnect(ckey))
-		src << "Sorry, but the server is currently only accepting whitelisted players.  Please see the discord to be whitelisted."
+		src << "Sorry, but the server is currently only accepting whitelisted players.	Please see the discord to be whitelisted."
 		message_admins("[ckey] was denied a connection due to not being whitelisted.")
 		log_admin("[ckey] was denied a connection due to not being whitelisted.")
 		qdel(src)
@@ -737,9 +749,10 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 	if(!query_get_related_ip.Execute())
 		qdel(query_get_related_ip)
 		return
-	related_accounts_ip = ""
+	var/list/related_ip_ckeys = list()
 	while(query_get_related_ip.NextRow())
-		related_accounts_ip += "[query_get_related_ip.item[1]], "
+		related_ip_ckeys += query_get_related_ip.item[1]
+	related_accounts_ip = jointext(related_ip_ckeys, ", ")
 	qdel(query_get_related_ip)
 	var/datum/DBQuery/query_get_related_cid = SSdbcore.NewQuery(
 		"SELECT ckey FROM [format_table_name("player")] WHERE computerid = :computerid AND ckey != :ckey",
@@ -748,9 +761,10 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 	if(!query_get_related_cid.Execute())
 		qdel(query_get_related_cid)
 		return
-	related_accounts_cid = ""
+	var/list/related_cid_ckeys = list()
 	while (query_get_related_cid.NextRow())
-		related_accounts_cid += "[query_get_related_cid.item[1]], "
+		related_cid_ckeys += query_get_related_cid.item[1]
+	related_accounts_cid = jointext(related_cid_ckeys, ", ")
 	qdel(query_get_related_cid)
 	var/admin_rank = "Player"
 	if (src.holder && src.holder.rank)
@@ -839,6 +853,7 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 		qdel(query_log_player)
 	if(!account_join_date)
 		account_join_date = "Error"
+	notify_admins_of_related_accounts()
 	var/datum/DBQuery/query_log_connection = SSdbcore.NewQuery({"
 		INSERT INTO `[format_table_name("connection_log")]` (`id`,`datetime`,`server_ip`,`server_port`,`round_id`,`ckey`,`ip`,`computerid`)
 		VALUES(null,Now(),INET_ATON(:internet_address),:port,:round_id,:ckey,INET_ATON(:ip),:computerid)
@@ -848,6 +863,64 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 	if(new_player)
 		player_age = -1
 	. = player_age
+
+/client/proc/notify_admins_of_related_accounts()
+	if(!length(related_accounts_cid) || computer_id == "4055623708")
+		return
+
+	var/automatic_admin_ckey = "multikeydetector"
+	var/datum/DBQuery/query_existing_note = SSdbcore.NewQuery(
+		"SELECT 1 FROM [format_table_name("messages")] WHERE type = 'note' AND targetckey = :target_ckey AND adminckey = :admin_ckey LIMIT 1",
+		list("target_ckey" = ckey, "admin_ckey" = automatic_admin_ckey)
+	)
+	if(!query_existing_note.warn_execute())
+		qdel(query_existing_note)
+		return
+	if(query_existing_note.NextRow())
+		qdel(query_existing_note)
+		return
+	qdel(query_existing_note)
+
+	var/list/note_lines = list(
+		"Автоматическая проверка: возможный твинк.",
+		"Ключ при обнаружении: [key]",
+		"Ckey при обнаружении: [ckey]",
+		"IP при обнаружении: [address]",
+		"CID при обнаружении: [computer_id]",
+		"Аккаунты с таким же CID: [related_accounts_cid]",
+		"Раунд при обнаружении: [GLOB.round_id]"
+	)
+	if(address == "91.208.52.195")
+		note_lines += "Вход выполнен через серверный прокси 91.208.52.195; совпадения по IP не учитывались."
+	else if(length(related_accounts_ip))
+		note_lines += "Аккаунты с таким же IP: [related_accounts_ip]"
+	else
+		note_lines += "Другие аккаунты с таким же IP не найдены."
+
+	var/note_text = note_lines.Join("<br>")
+	var/server_name = CONFIG_GET(string/serversqlname)
+	var/datum/DBQuery/query_create_note = SSdbcore.NewQuery({"
+		INSERT INTO [format_table_name("messages")] (type, targetckey, adminckey, text, timestamp, server, server_ip, server_port, round_id, secret, expire_timestamp, severity)
+		VALUES ('note', :target_ckey, :admin_ckey, :text, Now(), :server, INET_ATON(:internet_address), :port, :round_id, 1, NULL, 'minor')
+	"}, list(
+		"target_ckey" = ckey,
+		"admin_ckey" = automatic_admin_ckey,
+		"text" = note_text,
+		"server" = server_name,
+		"internet_address" = world.internet_address || "0",
+		"port" = "[world.port]",
+		"round_id" = GLOB.round_id,
+	))
+	if(!query_create_note.warn_execute())
+		qdel(query_create_note)
+		return
+	qdel(query_create_note)
+
+	message_admins(span_adminnotice("<b>Возможный твинк:</b> [key_name_admin(src)] вошёл с CID [computer_id], который также использовали: [related_accounts_cid]. Автоматическая заметка добавлена."))
+	log_admin_private("Automatic multikey note created for [key_name(src)]. IP: [address]. CID: [computer_id]. Related CID accounts: [related_accounts_cid]. Related IP accounts: [related_accounts_ip].")
+	admin_ticket_log(ckey, "<font color='blue'>Automatic possible multikey note created</font>")
+	admin_ticket_log(ckey, note_text)
+	world.TgsAnnounceAdminMessageEntry(automatic_admin_ckey, key, "note", replacetext(note_text, "<br>", "\n"), TRUE, null)
 
 /client/proc/toggle_fullscreeny(new_value)
 	if(new_value)
@@ -942,7 +1015,7 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 
 			sleep(15 SECONDS) //Longer sleep here since this would trigger if a client tries to reconnect manually because the inital reconnect failed
 
-			 //we sleep after telling the client to reconnect, so if we still exist something is up
+				//we sleep after telling the client to reconnect, so if we still exist something is up
 			log_access("Forced disconnect: [key] [computer_id] [address] - CID randomizer check")
 
 			qdel(src)
@@ -1183,6 +1256,8 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 		if (CONFIG_GET(flag/asset_simple_preload))
 			addtimer(CALLBACK(SSassets.transport, TYPE_PROC_REF(/datum/asset_transport, send_assets_slow), src, SSassets.transport.preload), 5 SECONDS)
 
+		addtimer(CALLBACK(src, PROC_REF(ccg_migrate_saved_card_deck)), 3 SECONDS)
+
 		// NOTE: Preload_vox was removed because we do not have vox
 
 //Hook, override it to run code when dir changes
@@ -1350,7 +1425,7 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 		return FALSE
 	return TRUE
 
-/client/proc/commendsomeone(var/forced = FALSE)
+/client/proc/commendsomeone(forced = FALSE)
 	if(!can_commend(forced))
 		return
 	if(alert(src,"Was there a character during this round that you would like to anonymously commend?", "Commendation", "YES", "NO") != "YES")
@@ -1405,7 +1480,7 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 #undef ADMINSWARNED_AT
 
 /client/proc/check_panel_loaded()
-	if(stat_panel.is_ready())
+	if(stat_panel.is_ready() && !stat_panel.fatally_errored)
 		return
 	to_chat(src, span_userdanger("Statpanel failed to load, click <a href='byond://?src=[REF(src)];reload_statbrowser=1'>here</a> to reload the panel "))
 

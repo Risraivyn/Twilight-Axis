@@ -15,7 +15,7 @@
 	var/roundstart_forbid = FALSE
 	var/refueling = FALSE
 
-/obj/machinery/light/rogue/Initialize()
+/obj/machinery/light/rogue/Initialize(mapload)
 	if(soundloop)
 		soundloop = new soundloop(src, FALSE)
 		soundloop.start()
@@ -80,7 +80,10 @@
 		GLOB.fires_list -= src
 
 /obj/machinery/light/rogue/Destroy()
-	QDEL_NULL(soundloop)
+	if(ispath(soundloop))
+		soundloop = null
+	else
+		QDEL_NULL(soundloop)
 	GLOB.fires_list -= src
 	. = ..()
 

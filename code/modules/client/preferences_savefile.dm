@@ -7,7 +7,7 @@
 //	where you would want the updater procs below to run
 
 //	This also works with decimals.
-#define SAVEFILE_VERSION_MAX	33.9
+#define SAVEFILE_VERSION_MAX	36
 
 /*
 SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Carn
@@ -95,6 +95,24 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 						species_name = "Venardine"
 		_load_species(S, species_name)
+	if(current_version < 35) // Migrate old 3-slot loadout to selected_loadout_items
+		var/list/saved_selected_loadout_items
+		S["selected_loadout_items"] >> saved_selected_loadout_items
+		if(!islist(saved_selected_loadout_items))
+			selected_loadout_items = list()
+			var/list/old_keys = list("loadout", "loadout2", "loadout3")
+			for(var/old_key in old_keys)
+				var/loadout_type
+				S[old_key] >> loadout_type
+				if(!loadout_type || !ispath(loadout_type))
+					continue
+				var/datum/loadout_item/LI = GLOB.loadout_items[loadout_type]
+				if(!LI || LI.name == "Parent loadout datum")
+					continue
+				if(!(LI.name in selected_loadout_items))
+					selected_loadout_items.Add(LI.name)
+	if(current_version < 36) // Strip the old per-item favorite/hated food & drink data now that preferences are category flags
+		S.dir.Remove("culinary_preferences")
 
 /datum/preferences/proc/load_path(ckey,filename="preferences.sav")
 	if(!ckey)
@@ -126,7 +144,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["showrolls"]			>> showrolls
 	S["chatheadshot"]		>> chatheadshot
 	S["max_chat_length"]	>> max_chat_length
-	S["see_chat_non_mob"] 	>> see_chat_non_mob
+	S["see_chat_non_mob"]	>> see_chat_non_mob
 	S["tgui_fancy"]			>> tgui_fancy
 	S["tgui_lock"]			>> tgui_lock
 	S["tgui_theme"]			>> tgui_theme
@@ -135,7 +153,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["preferred_ui_language"] >> preferred_ui_language
 	S["buttons_locked"]		>> buttons_locked
 	S["windowflash"]		>> windowflashing
-	S["be_special"] 		>> be_special
+	S["be_special"]		>> be_special
 	S["no_storyteller_events"] >> no_storyteller_events
 	S["triumphs"]			>> triumphs
 	S["musicvol"]			>> musicvol
@@ -166,7 +184,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["mastervol"]			>> mastervol
 	S["lastclass"]			>> lastclass
 	load_donor_job_boost_prefs(S) // TA EDIT
-	S["compliance_notifs"]  >> compliance_notifs
+	S["compliance_notifs"]	>> compliance_notifs
 
 
 	S["default_slot"]		>> default_slot
@@ -187,7 +205,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["clientfps"]			>> clientfps
 	S["ambientocclusion"]	>> ambientocclusion
 	S["auto_fit_viewport"]	>> auto_fit_viewport
-	S["widescreenpref"]	    >> widescreenpref
+	S["widescreenpref"]		>> widescreenpref
 	S["menuoptions"]		>> menuoptions
 	S["enable_tips"]		>> enable_tips
 	S["attack_blip_frequency"] >> attack_blip_frequency
@@ -242,16 +260,16 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	ambientocclusion	= sanitize_integer(ambientocclusion, 0, 1, initial(ambientocclusion))
 	auto_fit_viewport	= sanitize_integer(auto_fit_viewport, 0, 1, initial(auto_fit_viewport))
 	attack_blip_frequency = sanitize_integer(attack_blip_frequency, 0, 100, ATTACK_BLIP_PREF_DEFAULT)
-	widescreenpref  = sanitize_integer(widescreenpref, 0, 1, initial(widescreenpref))
+	widescreenpref	= sanitize_integer(widescreenpref, 0, 1, initial(widescreenpref))
 	ghost_form		= sanitize_inlist(ghost_form, GLOB.ghost_forms, initial(ghost_form))
-	ghost_orbit 	= sanitize_inlist(ghost_orbit, GLOB.ghost_orbits, initial(ghost_orbit))
+	ghost_orbit	= sanitize_inlist(ghost_orbit, GLOB.ghost_orbits, initial(ghost_orbit))
 	ghost_accs		= sanitize_inlist(ghost_accs, GLOB.ghost_accs_options, GHOST_ACCS_DEFAULT_OPTION)
 	ghost_others	= sanitize_inlist(ghost_others, GLOB.ghost_others_options, GHOST_OTHERS_DEFAULT_OPTION)
 	menuoptions		= SANITIZE_LIST(menuoptions)
 	be_special		= SANITIZE_LIST(be_special)
 	pda_style		= sanitize_inlist(pda_style, GLOB.pda_styles, initial(pda_style))
 	pda_color		= sanitize_hexcolor(pda_color, 6, 1, initial(pda_color))
-	key_bindings 	= sanitize_islist(key_bindings, list())
+	key_bindings	= sanitize_islist(key_bindings, list())
 	donor_ooc_color	= sanitize_integer(donor_ooc_color, FALSE, TRUE, TRUE) // TA EDIT
 	donor_ooc_icon	= sanitize_integer(donor_ooc_icon, FALSE, TRUE, TRUE) // TA EDIT
 	donor_examine_icon	= sanitize_integer(donor_examine_icon, FALSE, TRUE, TRUE) // TA EDIT
@@ -264,6 +282,24 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	erp_organ_prefs = sanitize_islist(erp_organ_prefs, list())
 	sanitize_erp_organ_prefs()
 	//TA Addition end - new ERP SYSTEM
+
+	S["ccg_known_rare_cards"] >> ccg_known_rare_cards
+	ccg_known_rare_cards = SANITIZE_LIST(ccg_known_rare_cards)
+	S["ccg_selected_deck"] >> ccg_selected_deck
+	ccg_selected_deck = SANITIZE_LIST(ccg_selected_deck)
+	S["ccg_saved_deck_cards"] >> ccg_saved_deck_cards
+	ccg_saved_deck_cards = SANITIZE_LIST(ccg_saved_deck_cards)
+	S["ccg_saved_deck_faction"] >> ccg_saved_deck_faction
+	S["ccg_saved_deck_leader"] >> ccg_saved_deck_leader
+	S["ccg_saved_decks"] >> ccg_saved_decks
+	ccg_saved_decks = SANITIZE_LIST(ccg_saved_decks)
+	S["ccg_active_deck_index"] >> ccg_active_deck_index
+	S["ccg_deckbuilder_view_mode"] >> ccg_deckbuilder_view_mode
+	S["ccg_soundtrack_enabled"] >> ccg_soundtrack_enabled
+	S["ccg_presets_are_virtual"] >> ccg_presets_are_virtual
+	if(!length(ccg_saved_deck_cards) && length(ccg_selected_deck))
+		ccg_saved_deck_cards = ccg_selected_deck.Copy()
+	ccg_load_or_migrate_sql()
 
 	verify_keybindings_valid()
 	return TRUE
@@ -288,7 +324,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(!prefs.path)
 		return
 
-	if(alert("Are you sure you want to export your preferences? This will create a file on your computer that contains your preferences.", "Export Preferences", "Yes", "No") == "No")
+	if(alert(src, "Are you sure you want to export your preferences? This will create a file on your computer that contains your preferences.", "Export Preferences", "Yes", "No") == "No")
 		return
 
 	if(!fexists(prefs.path))
@@ -441,6 +477,9 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 			var/datum/charflaw/cf = new charflaw_type()
 			if(cf)
 				charflaws.Add(cf)
+	// fix saves maid during the period where there was an exploit allowing "true flawless" i.e. no charflaws
+	if(!length(charflaws))
+		charflaws.Add(new /datum/charflaw/noflaw())
 	if(needs_resave)
 		var/list/cleaned_types = list()
 		for(var/datum/charflaw/cf in charflaws)
@@ -448,13 +487,10 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		WRITE_FILE(S["charflaws"], cleaned_types)
 
 /datum/preferences/proc/_load_culinary_preferences(S)
-	var/list/loaded_culinary_preferences
-	S["culinary_preferences"] >> loaded_culinary_preferences
-	if(loaded_culinary_preferences)
-		culinary_preferences = loaded_culinary_preferences
-		validate_culinary_preferences()
-	else
-		reset_culinary_preferences()
+	S["favorite_cuisine"] >> favorite_cuisine
+	S["favorite_dish"] >> favorite_dish
+	S["favorite_drink"] >> favorite_drink
+	sanitize_culinary_preferences()
 
 /datum/preferences/proc/_load_statpack(S)
 	var/statpack_type
@@ -554,6 +590,53 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 /datum/preferences/proc/_load_loadout(S)
 	S["selected_loadout_items"] >> selected_loadout_items
 	selected_loadout_items = SANITIZE_LIST(selected_loadout_items)
+	var/list/root_ccg_known_rare_cards = islist(ccg_known_rare_cards) ? ccg_known_rare_cards.Copy() : list()
+	var/list/root_ccg_selected_deck = islist(ccg_selected_deck) ? ccg_selected_deck.Copy() : list()
+	var/list/root_ccg_saved_deck_cards = islist(ccg_saved_deck_cards) ? ccg_saved_deck_cards.Copy() : list()
+	var/root_ccg_saved_deck_faction = ccg_saved_deck_faction
+	var/root_ccg_saved_deck_leader = ccg_saved_deck_leader
+	var/list/root_ccg_saved_decks = islist(ccg_saved_decks) ? deepCopyList(ccg_saved_decks) : list()
+	var/root_ccg_active_deck_index = ccg_active_deck_index
+	var/root_ccg_deckbuilder_view_mode = ccg_deckbuilder_view_mode
+	var/root_ccg_soundtrack_enabled = ccg_soundtrack_enabled
+	var/root_ccg_presets_are_virtual = ccg_presets_are_virtual
+	S["ccg_known_rare_cards"] >> ccg_known_rare_cards
+	ccg_known_rare_cards = SANITIZE_LIST(ccg_known_rare_cards)
+	S["ccg_selected_deck"] >> ccg_selected_deck
+	ccg_selected_deck = SANITIZE_LIST(ccg_selected_deck)
+	S["ccg_saved_deck_cards"] >> ccg_saved_deck_cards
+	ccg_saved_deck_cards = SANITIZE_LIST(ccg_saved_deck_cards)
+	S["ccg_saved_deck_faction"] >> ccg_saved_deck_faction
+	S["ccg_saved_deck_leader"] >> ccg_saved_deck_leader
+	S["ccg_saved_decks"] >> ccg_saved_decks
+	ccg_saved_decks = SANITIZE_LIST(ccg_saved_decks)
+	S["ccg_active_deck_index"] >> ccg_active_deck_index
+	S["ccg_deckbuilder_view_mode"] >> ccg_deckbuilder_view_mode
+	S["ccg_soundtrack_enabled"] >> ccg_soundtrack_enabled
+	S["ccg_presets_are_virtual"] >> ccg_presets_are_virtual
+	if(!length(ccg_known_rare_cards) && length(root_ccg_known_rare_cards))
+		ccg_known_rare_cards = root_ccg_known_rare_cards
+	if(!length(ccg_selected_deck) && length(root_ccg_selected_deck))
+		ccg_selected_deck = root_ccg_selected_deck
+	if(!length(ccg_saved_deck_cards) && length(root_ccg_saved_deck_cards))
+		ccg_saved_deck_cards = root_ccg_saved_deck_cards
+	if(!length(ccg_saved_decks) && length(root_ccg_saved_decks))
+		ccg_saved_decks = root_ccg_saved_decks
+	if(!ccg_saved_deck_faction)
+		ccg_saved_deck_faction = root_ccg_saved_deck_faction
+	if(!ccg_saved_deck_leader)
+		ccg_saved_deck_leader = root_ccg_saved_deck_leader
+	if(!ccg_active_deck_index)
+		ccg_active_deck_index = root_ccg_active_deck_index
+	if(!ccg_deckbuilder_view_mode)
+		ccg_deckbuilder_view_mode = root_ccg_deckbuilder_view_mode
+	if(isnull(ccg_soundtrack_enabled))
+		ccg_soundtrack_enabled = root_ccg_soundtrack_enabled
+	if(isnull(ccg_presets_are_virtual))
+		ccg_presets_are_virtual = root_ccg_presets_are_virtual
+	if(!length(ccg_saved_deck_cards) && length(ccg_selected_deck))
+		ccg_saved_deck_cards = ccg_selected_deck.Copy()
+	ccg_load_or_migrate_sql()
 
 /datum/preferences/proc/_load_loadout_colours(S)
 	S["loadout_1_hex"] >> loadout_1_hex
@@ -634,6 +717,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["familiar_names"]					>> familiar_prefs.familiar_names
 	S["familiar_pronouns"]				>> familiar_prefs.familiar_pronouns
 	S["familiar_species"]				>> familiar_prefs.familiar_species
+	S["familiar_voice_colors"]			>> familiar_prefs.familiar_voice_colors
 	S["familiar_flavortext"]			>> familiar_prefs.familiar_flavortext
 	S["familiar_flavortext_display"]	>> familiar_prefs.familiar_flavortext_display
 	S["familiar_headshot_link"]			>> familiar_prefs.familiar_headshot_link
@@ -718,8 +802,11 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["joblessrole"] >> joblessrole
 	//Load prefs
 	S["job_preferences"] >> job_preferences
+	S["job_subprefs"] >> job_subprefs
 
 	S["job_characters"] >> job_characters //TA EDIT
+	S["job_subclass_preferences"] >> job_subclass_preferences // TA EDIT START
+	S["job_subclass_strict"] >> job_subclass_strict // TA EDIT END
 
 	//Quirks
 	S["all_quirks"] >> all_quirks
@@ -746,7 +833,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(!valid_headshot_link(null, werewolf_headshot_link, TRUE))
 		werewolf_headshot_link = null
 
-	S["qsr"] 			>> qsr_pref
+	S["qsr"]			>> qsr_pref
 	S["flavortext"]			>> flavortext
 	S["ooc_notes"]			>> ooc_notes
 	S["ooc_extra"]			>> ooc_extra
@@ -830,7 +917,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 
 	age				= sanitize_inlist(age, pref_species.possible_ages)
 	eye_color		= sanitize_hexcolor(eye_color, 3, 0)
-	extra_language  = extra_language
+	extra_language	= extra_language
 	voice_color		= voice_color
 	voice_pitch		= voice_pitch
 	skin_tone		= skin_tone
@@ -897,6 +984,76 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		var/slot_num = job_characters[job_title]
 		if(!isnum(slot_num) || slot_num < 1 || slot_num > max_save_slots)
 			job_characters -= job_title //TA EDIT END
+
+	if(!islist(job_subclass_preferences)) // TA EDIT START
+		job_subclass_preferences = list()
+	if(!islist(job_subclass_strict))
+		job_subclass_strict = list()
+	for(var/job_title in job_subclass_preferences.Copy())
+		var/subclass_name = job_subclass_preferences[job_title]
+		var/datum/job/J = SSjob.GetJob(job_title)
+		var/valid_subclass = FALSE
+		if(istext(subclass_name) && length(J?.job_subclasses))
+			for(var/subclass_path in J.job_subclasses)
+				var/datum/advclass/subclass_type = subclass_path
+				if(initial(subclass_type.name) == subclass_name)
+					valid_subclass = TRUE
+					break
+		if(!valid_subclass)
+			job_subclass_preferences -= job_title
+			job_subclass_strict -= job_title
+	for(var/job_title in job_subclass_strict.Copy())
+		if(!(job_title in job_subclass_preferences))
+			job_subclass_strict -= job_title
+		else
+			job_subclass_strict[job_title] = sanitize_integer(job_subclass_strict[job_title], FALSE, TRUE, FALSE)
+			if(!job_subclass_strict[job_title])
+				job_subclass_strict -= job_title // TA EDIT END
+
+	if(!islist(job_subprefs))
+		job_subprefs = list()
+	for(var/job_title in job_subprefs.Copy())
+		if(!islist(job_subprefs[job_title]))
+			job_subprefs -= job_title
+
+	for(var/job_title in job_subclass_preferences)
+		var/datum/job/J = SSjob.GetJob(job_title)
+		if(!J)
+			continue
+		var/local_subclass_path
+		for(var/subclass_path in J.job_subclasses)
+			var/datum/advclass/subclass_type = subclass_path
+			if(initial(subclass_type.name) != job_subclass_preferences[job_title])
+				continue
+			local_subclass_path = subclass_path
+			break
+		if(!local_subclass_path)
+			continue
+		var/list/roleprefs = job_subprefs[job_title]
+		if(!islist(roleprefs))
+			roleprefs = islist(J.default_subprefs) ? J.default_subprefs.Copy() : list()
+			job_subprefs[job_title] = roleprefs
+		roleprefs["favorite_advclass"] = local_subclass_path
+
+	for(var/job_title in job_subprefs)
+		if(job_subclass_preferences[job_title])
+			continue
+		var/list/roleprefs = job_subprefs[job_title]
+		var/favorite_subclass_path = roleprefs["favorite_advclass"]
+		if(!favorite_subclass_path)
+			continue
+		if(!ispath(favorite_subclass_path, /datum/advclass))
+			roleprefs["favorite_advclass"] = null
+			continue
+		var/datum/job/J = SSjob.GetJob(job_title)
+		if(!J || !length(J.job_subclasses))
+			continue
+		if(!(favorite_subclass_path in J.job_subclasses))
+			roleprefs["favorite_advclass"] = null
+			continue
+		var/datum/advclass/favorite_subclass_type = favorite_subclass_path
+		job_subclass_preferences[job_title] = initial(favorite_subclass_type.name)
+		job_subclass_strict -= job_title
 	
 	all_quirks = SANITIZE_LIST(all_quirks)
 
@@ -1012,7 +1169,9 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["highlight_color"]		, highlight_color)
 	WRITE_FILE(S["taur_type"]			, taur_type)
 	WRITE_FILE(S["taur_color"]			, taur_color)
-	WRITE_FILE(S["culinary_preferences"], culinary_preferences)
+	WRITE_FILE(S["favorite_cuisine"]	, favorite_cuisine)
+	WRITE_FILE(S["favorite_dish"]		, favorite_dish)
+	WRITE_FILE(S["favorite_drink"]		, favorite_drink)
 	WRITE_FILE(S["topjob"]				, topjob)
 
 	//Custom names
@@ -1020,15 +1179,18 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		var/savefile_slot_name = custom_name_id + "_name" //TODO remove this
 		WRITE_FILE(S[savefile_slot_name],custom_names[custom_name_id])
 
-	WRITE_FILE(S["preferred_ai_core_display"] ,  preferred_ai_core_display)
+	WRITE_FILE(S["preferred_ai_core_display"] ,	preferred_ai_core_display)
 	WRITE_FILE(S["prefered_security_department"] , prefered_security_department)
 
 	//Jobs
 	WRITE_FILE(S["joblessrole"]		, joblessrole)
 	//Write prefs
 	WRITE_FILE(S["job_preferences"] , job_preferences)
+	WRITE_FILE(S["job_subprefs"] , job_subprefs)
 
 	WRITE_FILE(S["job_characters"]  , job_characters) //TA EDIT
+	WRITE_FILE(S["job_subclass_preferences"], job_subclass_preferences) // TA EDIT START
+	WRITE_FILE(S["job_subclass_strict"], job_subclass_strict) // TA EDIT END
 
 	//Quirks
 	WRITE_FILE(S["all_quirks"]			, all_quirks)
@@ -1108,6 +1270,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["familiar_names"] , familiar_prefs.familiar_names)
 	WRITE_FILE(S["familiar_pronouns"] , familiar_prefs.familiar_pronouns)
 	WRITE_FILE(S["familiar_species"] , familiar_prefs.familiar_species)
+	WRITE_FILE(S["familiar_voice_colors"] , familiar_prefs.familiar_voice_colors)
 	WRITE_FILE(S["familiar_flavortext"] , familiar_prefs.familiar_flavortext)
 	WRITE_FILE(S["familiar_flavortext_display"] , familiar_prefs.familiar_flavortext_display)
 	WRITE_FILE(S["familiar_headshot_link"] , familiar_prefs.familiar_headshot_link)

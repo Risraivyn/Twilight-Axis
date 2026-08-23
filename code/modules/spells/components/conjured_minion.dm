@@ -29,6 +29,7 @@
 	RegisterSignal(parent, COMSIG_MOVABLE_PRE_MOVE, PROC_REF(check_leash))
 	if(ishuman(parent))
 		apply_phantasmal()
+		seal_organs()
 		RegisterSignal(parent, COMSIG_PARENT_EXAMINE, PROC_REF(on_examine))
 	var/mob/living/M = parent
 	base_alpha = M.alpha
@@ -147,6 +148,11 @@
 	M.alpha = base_alpha
 	M.visible_message(span_notice("[M] steadies as its master's presence returns."))
 
+/datum/component/conjured_minion/proc/seal_organs()
+	var/mob/living/carbon/human/H = parent
+	for(var/obj/item/organ/organ as anything in H.internal_organs)
+		organ.organ_flags |= ORGAN_INTERNAL_ONLY | ORGAN_SURGERY_HIDDEN
+
 /datum/component/conjured_minion/proc/apply_phantasmal()
 	var/mob/living/M = parent
 	M.alpha = 170
@@ -161,6 +167,15 @@
 	return rgb(parts[1] + (255 - parts[1]) * blend, parts[2] + (255 - parts[2]) * blend, parts[3] + (255 - parts[3]) * blend)
 
 /datum/component/conjured_minion/proc/get_phantom_color()
+	if(istype(parent, /mob/living/carbon/human/species/skeleton))
+		var/list/palette = list("#a76cff", "#7718cf")
+		var/mob/living/summoner = summoner_ref?.resolve()
+		var/key = summoner ? "[summoner.real_name]" : "zizo"
+		var/hash = 0
+		for(var/i in 1 to length(key))
+			hash += text2ascii(key, i)
+		return palette[(hash % length(palette)) + 1]
+
 	var/mob/living/summoner = summoner_ref?.resolve()
 	var/key = summoner ? "[summoner.real_name]" : "arcyne"
 	var/hash = 0
@@ -172,6 +187,11 @@
 /datum/component/conjured_minion/proc/on_examine(datum/source, mob/user, list/examine_list)
 	SIGNAL_HANDLER
 	var/mob/living/summoner = summoner_ref?.resolve()
+
+	if(istype(parent, /mob/living/carbon/human/species/skeleton))
+		examine_list += span_notice("An unnatural skeleton, its form seems bound and reanimated by <font color='#940000'>avantyne strings</font>, and the will of a nearby magus.")
+		return
+
 	examine_list += span_notice("A phantasmal servant, bound to the will of [summoner ? summoner.real_name : "an unknown magus"].")
 
 #undef CONJURE_UNTETHER_ID
