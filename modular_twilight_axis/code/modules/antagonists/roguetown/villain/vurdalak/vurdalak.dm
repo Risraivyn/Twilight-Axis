@@ -404,7 +404,8 @@
 	H.visible_message(span_userdanger("Вурдалак с тяжелым стоном валится замертво!"))
 
 	H.forceMove(null)
-	qdel(H)
+	H.alpha = 0
+	QDEL_IN(H, 1)
 
 
 /datum/component/vurdalak_death_loot
@@ -465,12 +466,23 @@
 	announce_latejoin = FALSE
 	total_positions = 4
 	spawn_positions = 4
+	min_pq = 0
+	max_pq = null
 	bypass_jobban = TRUE
 	always_show_on_latechoices = TRUE
+	advclass_cat_rolls = list("vurdalak" = 20)
+	job_subclasses = list(
+		/datum/advclass/vurdalak
+	)
 
 /datum/job/roguetown/vurdalak/New()
 	..()
 	GLOB.antagonist_positions |= title
+
+/datum/advclass/vurdalak
+	name = "Vurdalak"
+	tutorial = "Вы — проклятое болотное чудовище, жаждущее людской плоти и Люкса."
+	category_tags = list("vurdalak")
 
 /datum/job/roguetown/vurdalak/equip(mob/living/carbon/human/H, visuals_only = FALSE)
 	. = ..()
