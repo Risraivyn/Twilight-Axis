@@ -96,9 +96,9 @@
 	remove_movespeed_modifier(MOVESPEED_ID_DAMAGE_SLOWDOWN)
 	remove_movespeed_modifier(MOVESPEED_ID_DAMAGE_SLOWDOWN_FLYING)
 
-/mob/living/carbon/human/species/vurdalak/death(gibbed)
+/mob/living/carbon/human/species/vurdalak/death(gibbed, nocutscene = FALSE)
 	var/already_dead = (stat == DEAD)
-	. = ..()
+	. = ..(gibbed, nocutscene)
 	if(!already_dead && !gibbed)
 		replace_with_vurdalak_corpse(src)
 
@@ -484,9 +484,9 @@
 	tutorial = "Вы — проклятое болотное чудовище, жаждущее людской плоти и Люкса."
 	category_tags = list("vurdalak")
 
-/datum/job/roguetown/vurdalak/equip(mob/living/carbon/human/H, visuals_only = FALSE)
+/datum/job/roguetown/vurdalak/equip(mob/living/carbon/human/H, visualsOnly = FALSE, announce = TRUE, latejoin = FALSE, datum/outfit/outfit_override = null, client/preference_source)
 	. = ..()
-	if(visuals_only)
+	if(visualsOnly)
 		return
 
 	GLOB.vurdalak_consumed_slots++
