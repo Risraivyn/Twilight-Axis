@@ -88,6 +88,7 @@
 
 //AND -1 MEANS "ABOVE", OK?, OK!?!
 #define ABOVE_SHOES_LAYER			(SHOES_LAYER-1)
+#define ABOVE_CLOAK_LAYER			(CLOAK_LAYER-0.5)	//used by covers_breasts underwear rendering above clothing - see /datum/bodypart_feature/underwear/get_bodypart_overlay()
 #define ABOVE_BODY_FRONT_LAYER		(BODY_FRONT_LAYER-1)
 
 #define OVER_GLOVES_LAYER			(GLOVESLEEVE_LAYER-0.5)
