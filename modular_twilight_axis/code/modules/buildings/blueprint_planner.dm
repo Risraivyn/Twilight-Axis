@@ -976,7 +976,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 		"layer_type" = "obj",
 		"build_order" = 3,
 		"path" = /obj/machinery/light/rogue/smelter/great,
-		"reqs" = list(/obj/item/ingot/iron = 2, /obj/item/rogueore/coal = 1),
+		"reqs" = list(/obj/item/ingot/iron = 2, /obj/item/riddleofsteel = 1, /obj/item/rogueore/coal = 1),
 		"icon_file" = 'icons/roguetown/misc/forge.dmi',
 		"icon_state" = "smelter0"
 	),
@@ -1325,44 +1325,25 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 ))
 
 
-/obj/item/blueprint_planner
-	name = "архитектурный чертеж"
-	desc = "Позволяет спроектировать здание с мебелью и возвести его молотком."
-	icon_state = "skub"
-	w_class = WEIGHT_CLASS_SMALL
-	var/list/design_data = list()
-	var/is_designed = FALSE
-	var/max_floors = 2
+#define MAX_PLANNER_RADIUS 6
+#define MAX_SPELL_RADIUS 13
 
-/proc/get_blueprint_target_turf(turf/origin, dx, dy, dz)
-	if(!origin) return null
-	var/turf/base_turf = locate(origin.x + dx, origin.y + dy, origin.z)
-	if(!base_turf) return null
+/proc/init_blueprint_icons()
+	for(var/key in GLOB.blueprint_buildable_types)
+		var/list/info = GLOB.blueprint_buildable_types[key]
+		if(info["image"]) continue
 
-	var/turf/target_turf = base_turf
-	if(dz > 0)
-		for(var/i = 1 to dz)
-			var/turf/above = get_step_multiz(target_turf, UP)
-			if(!above)
-				above = locate(target_turf.x, target_turf.y, target_turf.z + 1)
-			target_turf = above
-			if(!target_turf) break
+		var/atom/build_path = info["path"]
+		var/i_file = info["icon_file"] || initial(build_path.icon)
+		var/i_state = info["icon_state"] || initial(build_path.icon_state)
 
-	return target_turf
+		var/icon/I = icon(i_file, i_state, SOUTH, 1)
+		info["image"] = icon2base64(I)
 
-/obj/item/blueprint_planner/attack_self(mob/user)
-	if(is_designed)
-		to_chat(user, span_notice("Проект уже готов. Кликните по свободной земле для размещения стройплощадки."))
-		return
-	ui_interact(user)
+		CHECK_TICK
 
-/obj/item/blueprint_planner/ui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui, "BlueprintPlanner")
-	if(!ui)
-		ui = new(user, src, "BlueprintPlanner", name)
-		ui.open()
 
-/obj/item/blueprint_planner/ui_data(mob/user)
+/proc/get_blueprint_tgui_data()
 	var/list/data = list()
 	var/list/types_data = list()
 
@@ -1370,8 +1351,8 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 		var/list/info = GLOB.blueprint_buildable_types[key]
 		var/atom/build_path = info["path"]
 
-		var/i_file = info["icon_file"] || initial(build_path:icon)
-		var/i_state = info["icon_state"] || initial(build_path:icon_state)
+		var/i_file = info["icon_file"] || initial(build_path.icon)
+		var/i_state = info["icon_state"] || initial(build_path.icon_state)
 
 		if(!info["image"])
 			var/icon/I = icon(i_file, i_state, SOUTH, 1)
@@ -1396,12 +1377,69 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	data["buildable_types"] = types_data
 	return data
 
+
+/obj/item/blueprint_planner
+	name = "архитектурный чертеж"
+	desc = "Позволяет спроектировать здание с мебелью и возвести его молотком."
+	icon_state = "skub"
+	w_class = WEIGHT_CLASS_SMALL
+	var/list/design_data = list()
+	var/is_designed = FALSE
+	var/max_floors = 2
+
+/proc/get_blueprint_target_turf(turf/origin, dx, dy, dz)
+	if(!origin) return null
+	var/turf/base_turf = locate(origin.x + dx, origin.y + dy, origin.z)
+	if(!base_turf) return null
+
+	var/turf/target_turf = base_turf
+	if(dz > 0)
+		for(var/i = 1 to dz)
+			var/turf/above = get_step_multiz(target_turf, UP)
+			if(!above)
+				above = locate(target_turf.x, target_turf.y, target_turf.z + 1)
+			target_turf = above
+			if(!target_turf || target_turf.z > world.maxz) break
+
+	if(target_turf && target_turf.z > world.maxz)
+		return null
+
+	return target_turf
+
+/obj/item/blueprint_planner/attack_self(mob/user)
+	if(is_designed)
+		to_chat(user, span_notice("Проект уже готов. Кликните по свободной земле для размещения стройплощадки."))
+		return
+	ui_interact(user)
+
+/obj/item/blueprint_planner/ui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui, "BlueprintPlanner")
+	if(!ui)
+		ui = new(user, src, "BlueprintPlanner", name)
+		ui.open()
+
+/obj/item/blueprint_planner/ui_data(mob/user)
+	return get_blueprint_tgui_data()
+
+
 /obj/item/blueprint_planner/ui_act(action, params)
 	. = ..()
 	if(.) return
 
 	if(action == "save_design")
-		design_data = params["grid_data"]
+		var/list/raw_data = params["grid_data"]
+		var/list/safe_data = list()
+
+		for(var/entry in raw_data)
+			var/dx = isnum(entry["x"]) ? entry["x"] : text2num(entry["x"])
+			var/dy = isnum(entry["y"]) ? entry["y"] : text2num(entry["y"])
+
+			if(abs(dx) > MAX_PLANNER_RADIUS || abs(dy) > MAX_PLANNER_RADIUS)
+				continue
+
+			safe_data += list(entry)
+
+		design_data = safe_data
 		max_floors = clamp(text2num(params["max_floors"]) || 2, 2, 4)
 		if(length(design_data))
 			is_designed = TRUE
@@ -1410,41 +1448,8 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 		return TRUE
 
 /obj/item/blueprint_planner/proc/can_place_blueprint(turf/origin_turf, mob/user)
-	if(!length(design_data))
-		return FALSE
+	return check_blueprint_placement_valid(origin_turf, user, design_data, max_floors)
 
-	for(var/entry in design_data)
-		var/dx = isnum(entry["x"]) ? entry["x"] : text2num(entry["x"])
-		var/dy = isnum(entry["y"]) ? entry["y"] : text2num(entry["y"])
-		var/dz = isnum(entry["z"]) ? entry["z"] : (text2num(entry["z"]) || 0)
-
-		if(dz >= max_floors) continue
-
-		var/turf/target_turf = get_blueprint_target_turf(origin_turf, dx, dy, dz)
-		if(!target_turf)
-			to_chat(user, span_warning("Недостаточно места: проект выходит за границы карты!"))
-			return FALSE
-
-		if(isclosedturf(target_turf))
-			to_chat(user, span_warning("Нельзя строить: на клетке ([target_turf.x], [target_turf.y]) уже стоит стена ([target_turf.name])!"))
-			return FALSE
-
-		if(dz == 0)
-			if(istype(target_turf, /turf/open/water) || istype(target_turf, /turf/open/transparent/openspace))
-				to_chat(user, span_warning("Нельзя строить: основание дома попадает на воду или пропасть!"))
-				return FALSE
-
-		for(var/obj/structure/S in target_turf)
-			if(S.density || istype(S, /obj/structure/mineral_door) || istype(S, /obj/structure/stairs) || istype(S, /obj/structure/blueprint_site))
-				to_chat(user, span_warning("Недостаточно места: на клетке ([target_turf.x], [target_turf.y]) находится препятствие ([S.name])!"))
-				return FALSE
-
-		for(var/obj/machinery/M in target_turf)
-			if(M.density)
-				to_chat(user, span_warning("Недостаточно места: на пути находится станок ([M.name])!"))
-				return FALSE
-
-	return TRUE
 
 /obj/item/blueprint_planner/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag || !is_designed) return
@@ -1586,7 +1591,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 				missing += "[initial(temp.name)]: [required_resources[res]] шт. "
 
 		if(missing != "")
-			to_chat(user, span_warning("Не хватает ресурсов! Положите рядом: [missing]"))
+			to_chat(user, span_warning("Не хватает ресурсов! Положите рядом на пол: [missing]"))
 			playsound(src, 'sound/items/bsmithfail.ogg', 50, 1)
 			return TRUE
 
@@ -1659,8 +1664,8 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	if(!info) return
 
 	var/atom/build_path = info["path"]
-	var/i_file = info["icon_file"] || initial(build_path:icon)
-	var/i_state = info["icon_state"] || initial(build_path:icon_state)
+	var/i_file = info["icon_file"] || initial(build_path.icon)
+	var/i_state = info["icon_state"] || initial(build_path.icon_state)
 
 	var/turf/target_turf = get_blueprint_target_turf(get_turf(src), dx, dy, dz)
 	if(target_turf)
@@ -1710,29 +1715,35 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 			new /obj/effect/decal/cleanable/debris/stony(target_turf)
 
 /obj/structure/blueprint_site/proc/pull_resources()
-	for(var/res_path in required_resources)
-		var/needed = required_resources[res_path]
-		if(needed <= 0) continue
+	var/has_needed = FALSE
+	for(var/res in required_resources)
+		if(required_resources[res] > 0)
+			has_needed = TRUE
+			break
+	if(!has_needed) return
 
-		for(var/obj/item/I in range(1, src))
-			if(needed <= 0) break
+	for(var/obj/item/I in range(3, src))
+		if(!isturf(I.loc))
+			continue
 
-			if(istype(I, /obj/item/natural/bundle))
-				var/obj/item/natural/bundle/B = I
-				if(B.stacktype == res_path)
-					var/take = min(B.amount, needed)
-					B.amount -= take
-					needed -= take
-					if(B.amount <= 0)
-						qdel(B)
-					else
-						B.update_bundle()
+		if(istype(I, /obj/item/natural/bundle))
+			var/obj/item/natural/bundle/B = I
+			if(required_resources[B.stacktype] && required_resources[B.stacktype] > 0)
+				var/needed = required_resources[B.stacktype]
+				var/take = min(B.amount, needed)
+				B.amount -= take
+				required_resources[B.stacktype] -= take
+				if(B.amount <= 0)
+					qdel(B)
+				else
+					B.update_bundle()
 
-			else if(istype(I, res_path))
-				needed -= 1
-				qdel(I)
-
-		required_resources[res_path] = needed
+		else
+			for(var/res_path in required_resources)
+				if(required_resources[res_path] > 0 && istype(I, res_path))
+					required_resources[res_path] -= 1
+					qdel(I)
+					break
 
 /obj/structure/blueprint_site/proc/finish_site(mob/user)
 	visible_message(span_notice("<b>[src] завершена! Здание полностью возведено!</b>"))
@@ -1788,38 +1799,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 		ui.open()
 
 /datum/action/cooldown/spell/architect_plan/ui_data(mob/user)
-	var/list/data = list()
-	var/list/types_data = list()
-
-	for(var/key in GLOB.blueprint_buildable_types)
-		var/list/info = GLOB.blueprint_buildable_types[key]
-		var/atom/build_path = info["path"]
-
-		var/i_file = info["icon_file"] || initial(build_path:icon)
-		var/i_state = info["icon_state"] || initial(build_path:icon_state)
-
-		if(!info["image"])
-			var/icon/I = icon(i_file, i_state, SOUTH, 1)
-			info["image"] = icon2base64(I)
-
-		var/list/reqs_list = info["reqs"]
-		var/reqs_text = ""
-		for(var/r_path in reqs_list)
-			var/obj/item/temp = r_path
-			reqs_text += "[initial(temp.name)] x[reqs_list[r_path]], "
-		if(length(reqs_text) > 2)
-			reqs_text = copytext(reqs_text, 1, length(reqs_text) - 1)
-
-		types_data[key] = list(
-			"name" = info["name"],
-			"category" = info["category"],
-			"layer_type" = info["layer_type"],
-			"reqs_text" = reqs_text,
-			"image" = info["image"]
-		)
-
-	data["buildable_types"] = types_data
-	return data
+	return get_blueprint_tgui_data()
 
 /datum/action/cooldown/spell/architect_plan/ui_act(action, params)
 	. = ..()
@@ -1828,7 +1808,19 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	if(action == "save_design")
 		var/mob/living/L = owner || usr
 		if(istype(L))
-			L.arcyne_blueprint_data = params["grid_data"]
+			var/list/raw_data = params["grid_data"]
+			var/list/safe_data = list()
+
+			for(var/entry in raw_data)
+				var/dx = isnum(entry["x"]) ? entry["x"] : text2num(entry["x"])
+				var/dy = isnum(entry["y"]) ? entry["y"] : text2num(entry["y"])
+
+				if(abs(dx) > MAX_SPELL_RADIUS || abs(dy) > MAX_SPELL_RADIUS)
+					continue
+
+				safe_data += list(entry)
+
+			L.arcyne_blueprint_data = safe_data
 			L.arcyne_blueprint_floors = clamp(text2num(params["max_floors"]) || 2, 2, 4)
 			to_chat(L, span_notice("Архитектурный план на [L.arcyne_blueprint_floors] эт. запечатлен в вашей памяти! Используйте 'Материализацию Матрицы' для сотворения."))
 			L.balloon_alert(L, "План сохранен в памяти!")
@@ -1839,13 +1831,13 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	name = "Материализация Матрицы"
 	desc = "Сотворяет сохраненный строительный план на указанном участке земли."
 	button_icon = 'icons/mob/actions/roguespells.dmi'
-	button_icon_state = "spell0"
+	button_icon_state = "shieldsparkles"
 	panel = "Spells"
 	spell_color = "#00e1ff"
 	click_to_activate = TRUE
 	charge_required = FALSE
 	cast_range = 7
-	cooldown_time = 5 SECONDS
+	cooldown_time = 30 SECONDS
 	primary_resource_type = SPELL_COST_ENERGY
 	primary_resource_cost = 10
 	sound = 'sound/magic/charge_ready.ogg'
@@ -1858,16 +1850,8 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	if(!.) return FALSE
 	if(!owner) return FALSE
 
-	if(!length(owner.arcyne_blueprint_data))
-		owner.balloon_alert(owner, "Нет проекта в памяти!")
-		to_chat(owner, span_warning("У вас нет проекта в памяти! Сначала используйте 'Тайное Проектирование'."))
-		return FALSE
-
 	var/turf/T = get_turf(cast_on)
 	if(!isturf(T))
-		return FALSE
-
-	if(!can_place_spell_matrix(T, owner, owner.arcyne_blueprint_data, owner.arcyne_blueprint_floors))
 		return FALSE
 
 	return TRUE
@@ -1876,7 +1860,17 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	. = ..()
 	var/turf/T = get_turf(cast_on)
 	if(!T || !owner)
-		return FALSE
+		return
+
+	if(!length(owner.arcyne_blueprint_data))
+		owner.balloon_alert(owner, "Нет проекта в памяти!")
+		to_chat(owner, span_warning("Ваш разум пуст... Магическая энергия рассеялась впустую! Сначала используйте 'Тайное Проектирование'."))
+		return
+
+	if(!check_blueprint_placement_valid(T, owner, owner.arcyne_blueprint_data, owner.arcyne_blueprint_floors))
+		owner.balloon_alert(owner, "Ошибка материализации!")
+		to_chat(owner, span_warning("Неверное расположение! Матрица с треском разрушилась, потратив вашу энергию."))
+		return
 
 	var/obj/structure/blueprint_site/site = new(T)
 	site.max_floors = owner.arcyne_blueprint_floors
@@ -1885,20 +1879,38 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	owner.balloon_alert(owner, "Матрица создана!")
 	owner.visible_message(
 		span_notice("[owner] материализует строительную матрицу на [owner.arcyne_blueprint_floors] эт.!"),
-		span_notice("Вы сплели тайные потоки, материализовав матрицу на [owner.arcyne_blueprint_floors] эт.!")
+		span_notice("Вы сплели тайные потоки, успешно материализовав матрицу на [owner.arcyne_blueprint_floors] эт.!")
 	)
 	return TRUE
 
-/proc/can_place_spell_matrix(turf/origin_turf, mob/user, list/design_data, max_floors)
+
+/proc/check_blueprint_placement_valid(turf/origin_turf, mob/user, list/design_data, max_floors)
 	if(!origin_turf || !length(design_data))
 		return FALSE
+
+	var/list/future_grid = list()
+	for(var/entry in design_data)
+		var/dx = isnum(entry["x"]) ? entry["x"] : text2num(entry["x"])
+		var/dy = isnum(entry["y"]) ? entry["y"] : text2num(entry["y"])
+		var/dz = isnum(entry["z"]) ? entry["z"] : (text2num(entry["z"]) || 0)
+		if(dz >= max_floors) continue
+
+		var/list/info = GLOB.blueprint_buildable_types[entry["type"]]
+		if(!info) continue
+
+		var/key = "[dx]_[dy]_[dz]"
+		if(!future_grid[key]) future_grid[key] = list()
+		future_grid[key] += info["layer_type"]
 
 	for(var/entry in design_data)
 		var/dx = isnum(entry["x"]) ? entry["x"] : text2num(entry["x"])
 		var/dy = isnum(entry["y"]) ? entry["y"] : text2num(entry["y"])
 		var/dz = isnum(entry["z"]) ? entry["z"] : (text2num(entry["z"]) || 0)
-
 		if(dz >= max_floors) continue
+
+		var/list/info = GLOB.blueprint_buildable_types[entry["type"]]
+		if(!info) continue
+		var/layer = info["layer_type"]
 
 		var/turf/target_turf = get_blueprint_target_turf(origin_turf, dx, dy, dz)
 		if(!target_turf)
@@ -1906,13 +1918,8 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 			return FALSE
 
 		if(isclosedturf(target_turf))
-			to_chat(user, span_warning("Нельзя сотворить матрицу: на клетке ([target_turf.x], [target_turf.y]) уже стоит стена ([target_turf.name])!"))
+			to_chat(user, span_warning("Нельзя строить: на клетке ([target_turf.x], [target_turf.y]) уже стоит стена ([target_turf.name])!"))
 			return FALSE
-
-		if(dz == 0)
-			if(istype(target_turf, /turf/open/water) || istype(target_turf, /turf/open/transparent/openspace))
-				to_chat(user, span_warning("Нельзя строить: основание дома попадает на воду или в пропасть!"))
-				return FALSE
 
 		for(var/obj/structure/S in target_turf)
 			if(S.density || istype(S, /obj/structure/mineral_door) || istype(S, /obj/structure/stairs) || istype(S, /obj/structure/blueprint_site))
@@ -1924,4 +1931,93 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 				to_chat(user, span_warning("Недостаточно места: на пути находится станок ([M.name])!"))
 				return FALSE
 
+		var/is_air_or_water = (istype(target_turf, /turf/open/transparent/openspace) || istype(target_turf, /turf/open/water))
+
+		if(dz == 0 && is_air_or_water)
+			to_chat(user, span_warning("Нельзя строить: основание постройки ([target_turf.x], [target_turf.y]) попадает на воду или пропасть!"))
+			return FALSE
+
+		if(layer == "obj" || layer == "border")
+			var/will_have_floor = FALSE
+			if(future_grid["[dx]_[dy]_[dz]"])
+				if(("floor" in future_grid["[dx]_[dy]_[dz]"]) || ("wall" in future_grid["[dx]_[dy]_[dz]"]))
+					will_have_floor = TRUE
+
+			if(!will_have_floor && is_air_or_water)
+				to_chat(user, span_warning("Нельзя строить [info["name"]] в воздухе! (Клетка [target_turf.x], [target_turf.y] не имеет пола)"))
+				return FALSE
+
+		if(dz > 0 && (layer == "floor" || layer == "wall"))
+			var/is_supported = FALSE
+			var/max_overhang = 4
+
+			var/list/queue = list(list("x" = dx, "y" = dy))
+
+			var/array_size = (max_overhang * 2) + 3
+			var/list/visited = new/list(array_size, array_size)
+			var/center_offset = max_overhang + 2
+
+			visited[center_offset][center_offset] = TRUE
+
+			while(length(queue) > 0)
+				var/list/curr = queue[1]
+				queue.Cut(1, 2)
+
+				var/cx = curr["x"]
+				var/cy = curr["y"]
+
+				var/has_wall_below = FALSE
+				var/chk_below_key = "[cx]_[cy]_[dz-1]"
+
+				if(future_grid[chk_below_key] && ("wall" in future_grid[chk_below_key]))
+					has_wall_below = TRUE
+				else
+					var/turf/below_turf = get_blueprint_target_turf(origin_turf, cx, cy, dz - 1)
+					if(below_turf && isclosedturf(below_turf))
+						has_wall_below = TRUE
+
+				if(has_wall_below)
+					is_supported = TRUE
+					break
+
+				if(abs(cx - dx) + abs(cy - dy) >= max_overhang)
+					continue
+
+				var/list/dirs = list(
+					list("x" = cx, "y" = cy + 1),
+					list("x" = cx, "y" = cy - 1),
+					list("x" = cx + 1, "y" = cy),
+					list("x" = cx - 1, "y" = cy)
+				)
+
+				for(var/list/nxt in dirs)
+					var/nx = nxt["x"]
+					var/ny = nxt["y"]
+
+					var/vx = (nx - dx) + center_offset
+					var/vy = (ny - dy) + center_offset
+
+					if(visited[vx][vy]) continue
+
+					var/has_floor_here = FALSE
+					var/chk_here_key = "[nx]_[ny]_[dz]"
+
+					if(future_grid[chk_here_key] && (("floor" in future_grid[chk_here_key]) || ("wall" in future_grid[chk_here_key])))
+						has_floor_here = TRUE
+					else
+						var/turf/here_turf = get_blueprint_target_turf(origin_turf, nx, ny, dz)
+						if(here_turf && !istype(here_turf, /turf/open/transparent/openspace) && !istype(here_turf, /turf/open/water))
+							has_floor_here = TRUE
+
+					if(has_floor_here)
+						visited[vx][vy] = TRUE
+						queue += list(nxt)
+
+			if(!is_supported)
+				to_chat(user, span_warning("Нет опоры! Платформа/Крыша на [dz+1] этаже левитирует. Она должна соединяться с полом, под которым есть стена."))
+				return FALSE
+
 	return TRUE
+
+#undef MAX_PLANNER_RADIUS
+#undef MAX_SPELL_RADIUS

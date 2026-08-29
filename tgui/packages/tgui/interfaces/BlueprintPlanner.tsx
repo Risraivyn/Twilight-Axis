@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Box, Button, Input, Section, Stack, Tabs } from 'tgui-core/components';
+import { Box, Button, Input, Section, Stack, Tabs, Icon } from 'tgui-core/components';
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
 
@@ -30,11 +30,11 @@ const DIRS = {
   WEST: 8,
 };
 
-const DIR_ARROWS: Record<number, string> = {
-  1: '⬆',
-  2: '⬇',
-  4: '➡',
-  8: '⬅',
+const DIR_ICONS: Record<number, string> = {
+  1: 'arrow-up',
+  2: 'arrow-down',
+  4: 'arrow-right',
+  8: 'arrow-left',
 };
 
 const NEXT_DIR: Record<number, number> = {
@@ -53,76 +53,53 @@ export const BlueprintPlanner = () => {
   const [currentDir, setCurrentDir] = useState<number>(DIRS.SOUTH);
   const [totalFloors, setTotalFloors] = useState<number>(2);
   const [activeZ, setActiveZ] = useState<number>(0);
-  const [gridRadius, setGridRadius] = useState<number>(3); // 7x7
+  const [gridRadius, setGridRadius] = useState<number>(3);
 
   const [grid, setGrid] = useState<GridCell[]>([]);
+  const [hoveredCell, setHoveredCell] = useState<{ x: number; y: number } | null>(null);
 
   const buildableTypes = data.buildable_types || {};
 
   const handleCellClick = (x: number, y: number) => {
     setGrid((prev) => {
       if (!selectedBrush) {
-        const cellBorders = prev.filter(
-          (c) => c.x === x && c.y === y && c.z === activeZ && buildableTypes[c.type]?.layer_type === 'border'
-        );
-        if (cellBorders.length > 0) {
-          const matchingBorder = cellBorders.find((b) => b.dir === currentDir) || cellBorders[0];
-          return prev.filter((c) => c !== matchingBorder);
-        }
+        const cellItems = prev.filter((c) => c.x === x && c.y === y && c.z === activeZ);
+        if (cellItems.length === 0) return prev;
 
-        const hasObj = prev.some(
-          (c) => c.x === x && c.y === y && c.z === activeZ && buildableTypes[c.type]?.layer_type === 'obj'
-        );
-        if (hasObj) {
-          return prev.filter(
-            (c) => !(c.x === x && c.y === y && c.z === activeZ && buildableTypes[c.type]?.layer_type === 'obj')
-          );
-        }
+        const border = cellItems.find((c) => buildableTypes[c.type]?.layer_type === 'border' && c.dir === currentDir);
+        if (border) return prev.filter((c) => c !== border);
+
+        const obj = cellItems.find((c) => buildableTypes[c.type]?.layer_type === 'obj');
+        if (obj) return prev.filter((c) => c !== obj);
 
         return prev.filter((c) => !(c.x === x && c.y === y && c.z === activeZ));
       }
 
       const brushInfo = buildableTypes[selectedBrush];
       if (!brushInfo) return prev;
-
       const layer = brushInfo.layer_type;
 
       const hasWall = prev.some(
         (c) => c.x === x && c.y === y && c.z === activeZ && buildableTypes[c.type]?.layer_type === 'wall'
       );
 
-      if (layer === 'wall') {
-        const withoutOld = prev.filter((c) => !(c.x === x && c.y === y && c.z === activeZ));
-        return [...withoutOld, { x, y, z: activeZ, type: selectedBrush, dir: currentDir }];
-      }
-
-      if (hasWall) {
+      if (layer !== 'wall' && hasWall) {
         return prev;
       }
 
-      if (layer === 'border') {
-        const withoutMatchingBorder = prev.filter(
-          (c) => !(c.x === x && c.y === y && c.z === activeZ && buildableTypes[c.type]?.layer_type === 'border' && c.dir === currentDir)
-        );
-        return [...withoutMatchingBorder, { x, y, z: activeZ, type: selectedBrush, dir: currentDir }];
-      }
+      const newGrid = prev.filter((c) => {
+        if (c.x !== x || c.y !== y || c.z !== activeZ) return true;
 
-      if (layer === 'obj') {
-        const withoutOldObj = prev.filter(
-          (c) => !(c.x === x && c.y === y && c.z === activeZ && buildableTypes[c.type]?.layer_type === 'obj')
-        );
-        return [...withoutOldObj, { x, y, z: activeZ, type: selectedBrush, dir: currentDir }];
-      }
+        const cLayer = buildableTypes[c.type]?.layer_type;
+        if (layer === 'wall') return false;
+        if (layer === 'border' && cLayer === 'border' && c.dir === currentDir) return false;
+        if (layer === 'obj' && cLayer === 'obj') return false;
+        if (layer === 'floor' && cLayer === 'floor') return false;
 
-      if (layer === 'floor') {
-        const withoutOldFloor = prev.filter((c) => {
-          if (c.x !== x || c.y !== y || c.z !== activeZ) return true;
-          return buildableTypes[c.type]?.layer_type !== 'floor';
-        });
-        return [...withoutOldFloor, { x, y, z: activeZ, type: selectedBrush, dir: DIRS.SOUTH }];
-      }
+        return true;
+      });
 
-      return prev;
+      return [...newGrid, { x, y, z: activeZ, type: selectedBrush, dir: currentDir }];
     });
   };
 
@@ -145,11 +122,13 @@ export const BlueprintPlanner = () => {
     if (activeZ >= newCount) {
       setActiveZ(newCount - 1);
     }
+    setGrid((prev) => prev.filter((c) => c.z < newCount));
   };
 
   const changeGridRadius = (delta: number) => {
     const newRad = Math.max(1, Math.min(6, gridRadius + delta));
     setGridRadius(newRad);
+    setGrid((prev) => prev.filter((c) => Math.abs(c.x) <= newRad && Math.abs(c.y) <= newRad));
   };
 
   const saveDesign = () => {
@@ -165,12 +144,25 @@ export const BlueprintPlanner = () => {
     });
   };
 
-  const cells: { x: number; y: number }[] = [];
-  for (let y = gridRadius; y >= -gridRadius; y--) {
-    for (let x = -gridRadius; x <= gridRadius; x++) {
-      cells.push({ x, y });
+  const cells = useMemo(() => {
+    const result: { x: number; y: number }[] = [];
+    for (let y = gridRadius; y >= -gridRadius; y--) {
+      for (let x = -gridRadius; x <= gridRadius; x++) {
+        result.push({ x, y });
+      }
     }
-  }
+    return result;
+  }, [gridRadius]);
+
+  const cellMap = useMemo(() => {
+    const map: Record<string, GridCell[]> = {};
+    grid.forEach(c => {
+      const key = `${c.x}_${c.y}_${c.z}`;
+      if (!map[key]) map[key] = [];
+      map[key].push(c);
+    });
+    return map;
+  }, [grid]);
 
   const categories = useMemo(() => {
     const cats = new Set<string>();
@@ -184,11 +176,8 @@ export const BlueprintPlanner = () => {
   const filteredKeys = useMemo(() => {
     return Object.keys(buildableTypes).filter((key) => {
       const item = buildableTypes[key];
-      const matchCat =
-        selectedCategory === 'Все' || item.category === selectedCategory;
-      const matchSearch =
-        !searchText ||
-        item.name.toLowerCase().includes(searchText.toLowerCase());
+      const matchCat = selectedCategory === 'Все' || item.category === selectedCategory;
+      const matchSearch = !searchText || item.name.toLowerCase().includes(searchText.toLowerCase());
       return matchCat && matchSearch;
     });
   }, [buildableTypes, selectedCategory, searchText]);
@@ -214,7 +203,7 @@ export const BlueprintPlanner = () => {
                     fluid
                     placeholder="Поиск конструкции..."
                     value={searchText}
-                    onChange={(val) => setSearchText(val)}
+                    onChange={(e: any) => setSearchText(e.target.value)}
                   />
                 </Stack.Item>
 
@@ -250,29 +239,25 @@ export const BlueprintPlanner = () => {
                           Дир:
                         </Box>
                         <Button
+                          icon="arrow-up"
                           selected={currentDir === DIRS.NORTH}
                           onClick={() => setCurrentDir(DIRS.NORTH)}
-                        >
-                          ⬆
-                        </Button>
+                        />
                         <Button
+                          icon="arrow-right"
                           selected={currentDir === DIRS.EAST}
                           onClick={() => setCurrentDir(DIRS.EAST)}
-                        >
-                          ➡
-                        </Button>
+                        />
                         <Button
+                          icon="arrow-down"
                           selected={currentDir === DIRS.SOUTH}
                           onClick={() => setCurrentDir(DIRS.SOUTH)}
-                        >
-                          ⬇
-                        </Button>
+                        />
                         <Button
+                          icon="arrow-left"
                           selected={currentDir === DIRS.WEST}
                           onClick={() => setCurrentDir(DIRS.WEST)}
-                        >
-                          ⬅
-                        </Button>
+                        />
                       </Stack>
                     </Stack.Item>
                   </Stack>
@@ -416,6 +401,7 @@ export const BlueprintPlanner = () => {
 
                 <Stack.Item grow style={{ overflow: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Box
+                    onMouseLeave={() => setHoveredCell(null)}
                     style={{
                       display: 'grid',
                       gridTemplateColumns: `repeat(${gridRadius * 2 + 1}, 38px)`,
@@ -429,46 +415,17 @@ export const BlueprintPlanner = () => {
                     }}
                   >
                     {cells.map((cell) => {
-                      const floorTile = grid.find(
-                        (c) =>
-                          c.x === cell.x &&
-                          c.y === cell.y &&
-                          c.z === activeZ &&
-                          buildableTypes[c.type]?.layer_type === 'floor'
-                      );
+                      const currentLayerCells = cellMap[`${cell.x}_${cell.y}_${activeZ}`] || [];
+                      const lowerLayerCells = activeZ > 0 ? (cellMap[`${cell.x}_${cell.y}_${activeZ - 1}`] || []) : [];
 
-                      const wallTile = grid.find(
-                        (c) =>
-                          c.x === cell.x &&
-                          c.y === cell.y &&
-                          c.z === activeZ &&
-                          buildableTypes[c.type]?.layer_type === 'wall'
-                      );
+                      const floorTile = currentLayerCells.find(c => buildableTypes[c.type]?.layer_type === 'floor');
+                      const wallTile = currentLayerCells.find(c => buildableTypes[c.type]?.layer_type === 'wall');
+                      const objTile = currentLayerCells.find(c => buildableTypes[c.type]?.layer_type === 'obj');
+                      const borderTiles = currentLayerCells.filter(c => buildableTypes[c.type]?.layer_type === 'border');
 
-                      const objTile = grid.find(
-                        (c) =>
-                          c.x === cell.x &&
-                          c.y === cell.y &&
-                          c.z === activeZ &&
-                          buildableTypes[c.type]?.layer_type === 'obj'
-                      );
-
-                      const borderTiles = grid.filter(
-                        (c) =>
-                          c.x === cell.x &&
-                          c.y === cell.y &&
-                          c.z === activeZ &&
-                          buildableTypes[c.type]?.layer_type === 'border'
-                      );
-
-                      const lowerTile =
-                        activeZ > 0
-                          ? (
-                              grid.find((c) => c.x === cell.x && c.y === cell.y && c.z === activeZ - 1 && buildableTypes[c.type]?.layer_type === 'wall') ||
-                              grid.find((c) => c.x === cell.x && c.y === cell.y && c.z === activeZ - 1 && buildableTypes[c.type]?.layer_type === 'floor') ||
-                              grid.find((c) => c.x === cell.x && c.y === cell.y && c.z === activeZ - 1)
-                            )
-                          : null;
+                      const lowerTile = lowerLayerCells.find(c => buildableTypes[c.type]?.layer_type === 'wall') ||
+                                        lowerLayerCells.find(c => buildableTypes[c.type]?.layer_type === 'floor') ||
+                                        lowerLayerCells[0];
 
                       const hasNorthBorder = borderTiles.some((b) => b.dir === DIRS.NORTH);
                       const hasSouthBorder = borderTiles.some((b) => b.dir === DIRS.SOUTH);
@@ -476,6 +433,10 @@ export const BlueprintPlanner = () => {
                       const hasWestBorder = borderTiles.some((b) => b.dir === DIRS.WEST);
 
                       const isCenter = cell.x === 0 && cell.y === 0;
+
+                      const isHovered = hoveredCell?.x === cell.x && hoveredCell?.y === cell.y;
+                      const ghostInfo = (isHovered && selectedBrush) ? buildableTypes[selectedBrush] : null;
+
                       const floorInfo = floorTile ? buildableTypes[floorTile.type] : undefined;
                       const wallInfo = wallTile ? buildableTypes[wallTile.type] : undefined;
                       const objInfo = objTile ? buildableTypes[objTile.type] : undefined;
@@ -487,13 +448,12 @@ export const BlueprintPlanner = () => {
                           key={`${cell.x}_${cell.y}_${activeZ}`}
                           onClick={() => handleCellClick(cell.x, cell.y)}
                           onContextMenu={(e) => handleCellContextMenu(e, cell.x, cell.y)}
+                          onMouseEnter={() => setHoveredCell({ x: cell.x, y: cell.y })}
                           style={{
                             width: '38px',
                             height: '38px',
                             backgroundColor: '#151515',
-                            border: isCenter
-                              ? '2px solid #e74c3c'
-                              : '1px solid #2a2a2a',
+                            border: isCenter ? '2px solid #e74c3c' : '1px solid #2a2a2a',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
@@ -570,60 +530,16 @@ export const BlueprintPlanner = () => {
                           )}
 
                           {hasNorthBorder && (
-                            <div
-                              style={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                height: '3px',
-                                backgroundColor: '#00ffcc',
-                                boxShadow: '0 0 4px #00ffcc',
-                                pointerEvents: 'none',
-                              }}
-                            />
+                            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', backgroundColor: '#00ffcc', boxShadow: '0 0 4px #00ffcc', pointerEvents: 'none' }} />
                           )}
                           {hasSouthBorder && (
-                            <div
-                              style={{
-                                position: 'absolute',
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                height: '3px',
-                                backgroundColor: '#00ffcc',
-                                boxShadow: '0 0 4px #00ffcc',
-                                pointerEvents: 'none',
-                              }}
-                            />
+                            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3px', backgroundColor: '#00ffcc', boxShadow: '0 0 4px #00ffcc', pointerEvents: 'none' }} />
                           )}
                           {hasEastBorder && (
-                            <div
-                              style={{
-                                position: 'absolute',
-                                top: 0,
-                                bottom: 0,
-                                right: 0,
-                                width: '3px',
-                                backgroundColor: '#00ffcc',
-                                boxShadow: '0 0 4px #00ffcc',
-                                pointerEvents: 'none',
-                              }}
-                            />
+                            <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: '3px', backgroundColor: '#00ffcc', boxShadow: '0 0 4px #00ffcc', pointerEvents: 'none' }} />
                           )}
                           {hasWestBorder && (
-                            <div
-                              style={{
-                                position: 'absolute',
-                                top: 0,
-                                bottom: 0,
-                                left: 0,
-                                width: '3px',
-                                backgroundColor: '#00ffcc',
-                                boxShadow: '0 0 4px #00ffcc',
-                                pointerEvents: 'none',
-                              }}
-                            />
+                            <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: '3px', backgroundColor: '#00ffcc', boxShadow: '0 0 4px #00ffcc', pointerEvents: 'none' }} />
                           )}
 
                           {objTile && objTile.dir && (
@@ -633,26 +549,33 @@ export const BlueprintPlanner = () => {
                                 top: '1px',
                                 right: '2px',
                                 fontSize: '11px',
-                                fontWeight: 'bold',
                                 color: '#00ffcc',
-                                textShadow: '0 0 3px black',
+                                filter: 'drop-shadow(0 0 2px black)',
                                 pointerEvents: 'none',
                               }}
                             >
-                              {DIR_ARROWS[objTile.dir] || '⬇'}
+                              <Icon name={DIR_ICONS[objTile.dir] || 'arrow-down'} />
                             </span>
                           )}
 
                           {isCenter && !floorInfo && !wallInfo && !objInfo && borderTiles.length === 0 && !lowerInfo && (
-                            <span
+                            <span style={{ color: '#e74c3c', fontSize: '11px', fontWeight: 'bold' }}>X</span>
+                          )}
+
+                          {ghostInfo?.image && (
+                            <img
+                              src={`data:image/png;base64,${ghostInfo.image}`}
                               style={{
-                                color: '#e74c3c',
-                                fontSize: '11px',
-                                fontWeight: 'bold',
+                                width: ghostInfo.layer_type === 'border' ? '28px' : '32px',
+                                height: ghostInfo.layer_type === 'border' ? '28px' : '32px',
+                                position: 'absolute',
+                                pointerEvents: 'none',
+                                imageRendering: 'pixelated',
+                                opacity: 0.5,
+                                zIndex: 10,
+                                filter: 'brightness(1.5) drop-shadow(0 0 2px #00ffcc)'
                               }}
-                            >
-                              X
-                            </span>
+                            />
                           )}
                         </div>
                       );
