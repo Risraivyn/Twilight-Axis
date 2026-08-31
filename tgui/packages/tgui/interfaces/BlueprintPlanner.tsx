@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { Box, Button, Input, Section, Stack, Tabs, Icon } from 'tgui-core/components';
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
@@ -12,7 +12,9 @@ type BuildableType = {
 };
 
 type Data = {
-  buildable_types: Record<string, BuildableType>;
+  buildable_types?: Record<string, BuildableType>;
+  saved_grid?: GridCell[];
+  saved_floors?: number;
 };
 
 type GridCell = {
@@ -57,6 +59,20 @@ export const BlueprintPlanner = () => {
 
   const [grid, setGrid] = useState<GridCell[]>([]);
   const [hoveredCell, setHoveredCell] = useState<{ x: number; y: number } | null>(null);
+
+  const [confirmClear, setConfirmClear] = useState<boolean>(false);
+
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (!initialized.current && data.saved_grid !== undefined) {
+      setGrid(data.saved_grid);
+      if (data.saved_floors) {
+        setTotalFloors(data.saved_floors);
+      }
+      initialized.current = true;
+    }
+  }, [data.saved_grid, data.saved_floors]);
 
   const buildableTypes = data.buildable_types || {};
 
@@ -140,8 +156,19 @@ export const BlueprintPlanner = () => {
     );
     act('save_design', {
       grid_data: filteredGrid,
-      max_floors: totalFloors
+      max_floors: totalFloors,
     });
+  };
+
+  const handleClear = () => {
+    if (!confirmClear) {
+      setConfirmClear(true);
+      setTimeout(() => setConfirmClear(false), 3000);
+    } else {
+      setGrid([]);
+      act('clear_design');
+      setConfirmClear(false);
+    }
   };
 
   const cells = useMemo(() => {
@@ -156,7 +183,7 @@ export const BlueprintPlanner = () => {
 
   const cellMap = useMemo(() => {
     const map: Record<string, GridCell[]> = {};
-    grid.forEach(c => {
+    grid.forEach((c) => {
       const key = `${c.x}_${c.y}_${c.z}`;
       if (!map[key]) map[key] = [];
       map[key].push(c);
@@ -331,9 +358,18 @@ export const BlueprintPlanner = () => {
               title="Рабочая плоскость (ПКМ для поворота мебели)"
               fill
               buttons={
-                <Button color="good" icon="save" onClick={saveDesign}>
-                  Завершить чертеж
-                </Button>
+                <Stack align="center">
+                  <Button
+                    color={confirmClear ? "bad" : "danger"}
+                    icon="trash"
+                    onClick={handleClear}
+                  >
+                    {confirmClear ? "Точно очистить?" : "Очистить"}
+                  </Button>
+                  <Button color="good" icon="save" onClick={saveDesign}>
+                    Завершить чертеж
+                  </Button>
+                </Stack>
               }
             >
               <Stack vertical fill>
@@ -418,14 +454,15 @@ export const BlueprintPlanner = () => {
                       const currentLayerCells = cellMap[`${cell.x}_${cell.y}_${activeZ}`] || [];
                       const lowerLayerCells = activeZ > 0 ? (cellMap[`${cell.x}_${cell.y}_${activeZ - 1}`] || []) : [];
 
-                      const floorTile = currentLayerCells.find(c => buildableTypes[c.type]?.layer_type === 'floor');
-                      const wallTile = currentLayerCells.find(c => buildableTypes[c.type]?.layer_type === 'wall');
-                      const objTile = currentLayerCells.find(c => buildableTypes[c.type]?.layer_type === 'obj');
-                      const borderTiles = currentLayerCells.filter(c => buildableTypes[c.type]?.layer_type === 'border');
+                      const floorTile = currentLayerCells.find((c) => buildableTypes[c.type]?.layer_type === 'floor');
+                      const wallTile = currentLayerCells.find((c) => buildableTypes[c.type]?.layer_type === 'wall');
+                      const objTile = currentLayerCells.find((c) => buildableTypes[c.type]?.layer_type === 'obj');
+                      const borderTiles = currentLayerCells.filter((c) => buildableTypes[c.type]?.layer_type === 'border');
 
-                      const lowerTile = lowerLayerCells.find(c => buildableTypes[c.type]?.layer_type === 'wall') ||
-                                        lowerLayerCells.find(c => buildableTypes[c.type]?.layer_type === 'floor') ||
-                                        lowerLayerCells[0];
+                      const lowerTile =
+                        lowerLayerCells.find((c) => buildableTypes[c.type]?.layer_type === 'wall') ||
+                        lowerLayerCells.find((c) => buildableTypes[c.type]?.layer_type === 'floor') ||
+                        lowerLayerCells[0];
 
                       const hasNorthBorder = borderTiles.some((b) => b.dir === DIRS.NORTH);
                       const hasSouthBorder = borderTiles.some((b) => b.dir === DIRS.SOUTH);
@@ -435,7 +472,7 @@ export const BlueprintPlanner = () => {
                       const isCenter = cell.x === 0 && cell.y === 0;
 
                       const isHovered = hoveredCell?.x === cell.x && hoveredCell?.y === cell.y;
-                      const ghostInfo = (isHovered && selectedBrush) ? buildableTypes[selectedBrush] : null;
+                      const ghostInfo = isHovered && selectedBrush ? buildableTypes[selectedBrush] : null;
 
                       const floorInfo = floorTile ? buildableTypes[floorTile.type] : undefined;
                       const wallInfo = wallTile ? buildableTypes[wallTile.type] : undefined;
@@ -573,7 +610,7 @@ export const BlueprintPlanner = () => {
                                 imageRendering: 'pixelated',
                                 opacity: 0.5,
                                 zIndex: 10,
-                                filter: 'brightness(1.5) drop-shadow(0 0 2px #00ffcc)'
+                                filter: 'brightness(1.5) drop-shadow(0 0 2px #00ffcc)',
                               }}
                             />
                           )}

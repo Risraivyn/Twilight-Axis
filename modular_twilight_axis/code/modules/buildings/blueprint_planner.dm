@@ -376,7 +376,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	"window_glass_static" = list(
 		"name" = "Окно со стеклом (Глухое)",
 		"category" = "Окна и Витражи",
-		"layer_type" = "wall",
+		"layer_type" = "obj",
 		"build_order" = 2,
 		"path" = /obj/structure/roguewindow,
 		"reqs" = list(/obj/item/grown/log/tree/small = 2, /obj/item/natural/glass = 1),
@@ -386,7 +386,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	"window_glass_openable" = list(
 		"name" = "Открывающееся окно",
 		"category" = "Окна и Витражи",
-		"layer_type" = "wall",
+		"layer_type" = "obj",
 		"build_order" = 2,
 		"path" = /obj/structure/roguewindow/openclose,
 		"reqs" = list(/obj/item/grown/log/tree/small = 2, /obj/item/natural/glass = 1),
@@ -396,7 +396,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	"window_glass_reinforced" = list(
 		"name" = "Усиленное решеткой окно",
 		"category" = "Окна и Витражи",
-		"layer_type" = "wall",
+		"layer_type" = "obj",
 		"build_order" = 2,
 		"path" = /obj/structure/roguewindow/openclose/reinforced,
 		"reqs" = list(/obj/item/grown/log/tree/small = 2, /obj/item/ingot/iron = 1, /obj/item/natural/glass = 1, /obj/item/natural/dirtclod = 1),
@@ -406,7 +406,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	"window_stained_psydon" = list(
 		"name" = "Витраж Псидонии (Серебро)",
 		"category" = "Окна и Витражи",
-		"layer_type" = "wall",
+		"layer_type" = "obj",
 		"build_order" = 2,
 		"path" = /obj/structure/roguewindow/stained/silver,
 		"reqs" = list(/obj/item/natural/stone = 2, /obj/item/natural/glass = 1),
@@ -416,7 +416,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	"window_stained_astrata" = list(
 		"name" = "Витраж Астраты (Золото)",
 		"category" = "Окна и Витражи",
-		"layer_type" = "wall",
+		"layer_type" = "obj",
 		"build_order" = 2,
 		"path" = /obj/structure/roguewindow/stained/yellow,
 		"reqs" = list(/obj/item/natural/stone = 2, /obj/item/natural/glass = 1),
@@ -426,7 +426,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	"window_stained_zizo" = list(
 		"name" = "Витраж Зизо",
 		"category" = "Окна и Витражи",
-		"layer_type" = "wall",
+		"layer_type" = "obj",
 		"build_order" = 2,
 		"path" = /obj/structure/roguewindow/stained/zizo,
 		"reqs" = list(/obj/item/natural/stone = 2, /obj/item/natural/glass = 1),
@@ -1407,19 +1407,23 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	return target_turf
 
 /obj/item/blueprint_planner/attack_self(mob/user)
-	if(is_designed)
-		to_chat(user, span_notice("Проект уже готов. Кликните по свободной земле для размещения стройплощадки."))
-		return
 	ui_interact(user)
 
 /obj/item/blueprint_planner/ui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui, "BlueprintPlanner")
+	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "BlueprintPlanner", name)
 		ui.open()
 
+/obj/item/blueprint_planner/ui_static_data(mob/user)
+	return get_blueprint_static_tgui_data()
+
+
 /obj/item/blueprint_planner/ui_data(mob/user)
-	return get_blueprint_tgui_data()
+	var/list/data = list()
+	data["saved_grid"] = design_data
+	data["saved_floors"] = max_floors
+	return data
 
 
 /obj/item/blueprint_planner/ui_act(action, params)
@@ -1443,8 +1447,17 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 		max_floors = clamp(text2num(params["max_floors"]) || 2, 2, 4)
 		if(length(design_data))
 			is_designed = TRUE
-			to_chat(usr, span_notice("Проект на [max_floors] эт. сохранен! Кликните им по земле."))
+			to_chat(usr, span_notice("Проект на [max_floors] эт. сохранен! Кликните им по земле для размещения."))
 			SStgui.close_uis(src)
+		else
+			is_designed = FALSE
+			to_chat(usr, span_warning("Чертеж пуст."))
+		return TRUE
+
+	if(action == "clear_design")
+		design_data = list()
+		is_designed = FALSE
+		to_chat(usr, span_notice("Чертеж очищен."))
 		return TRUE
 
 /obj/item/blueprint_planner/proc/can_place_blueprint(turf/origin_turf, mob/user)
@@ -1798,33 +1811,47 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 		ui = new(user, src, "BlueprintPlanner", name)
 		ui.open()
 
+/datum/action/cooldown/spell/architect_plan/ui_static_data(mob/user)
+	return get_blueprint_static_tgui_data()
+
 /datum/action/cooldown/spell/architect_plan/ui_data(mob/user)
-	return get_blueprint_tgui_data()
+	var/mob/living/L = owner || user
+	var/list/data = list()
+	if(istype(L))
+		data["saved_grid"] = L.arcyne_blueprint_data
+		data["saved_floors"] = L.arcyne_blueprint_floors
+	return data
 
 /datum/action/cooldown/spell/architect_plan/ui_act(action, params)
 	. = ..()
 	if(.) return
 
+	var/mob/living/L = owner || usr
+	if(!istype(L)) return
+
 	if(action == "save_design")
-		var/mob/living/L = owner || usr
-		if(istype(L))
-			var/list/raw_data = params["grid_data"]
-			var/list/safe_data = list()
+		var/list/raw_data = params["grid_data"]
+		var/list/safe_data = list()
 
-			for(var/entry in raw_data)
-				var/dx = isnum(entry["x"]) ? entry["x"] : text2num(entry["x"])
-				var/dy = isnum(entry["y"]) ? entry["y"] : text2num(entry["y"])
+		for(var/entry in raw_data)
+			var/dx = isnum(entry["x"]) ? entry["x"] : text2num(entry["x"])
+			var/dy = isnum(entry["y"]) ? entry["y"] : text2num(entry["y"])
 
-				if(abs(dx) > MAX_SPELL_RADIUS || abs(dy) > MAX_SPELL_RADIUS)
-					continue
+			if(abs(dx) > MAX_SPELL_RADIUS || abs(dy) > MAX_SPELL_RADIUS)
+				continue
 
-				safe_data += list(entry)
+			safe_data += list(entry)
 
-			L.arcyne_blueprint_data = safe_data
-			L.arcyne_blueprint_floors = clamp(text2num(params["max_floors"]) || 2, 2, 4)
-			to_chat(L, span_notice("Архитектурный план на [L.arcyne_blueprint_floors] эт. запечатлен в вашей памяти! Используйте 'Материализацию Матрицы' для сотворения."))
-			L.balloon_alert(L, "План сохранен в памяти!")
-			SStgui.close_uis(src)
+		L.arcyne_blueprint_data = safe_data
+		L.arcyne_blueprint_floors = clamp(text2num(params["max_floors"]) || 2, 2, 4)
+		to_chat(L, span_notice("Архитектурный план сохранен в памяти!"))
+		L.balloon_alert(L, "План сохранен в памяти!")
+		SStgui.close_uis(src)
+		return TRUE
+
+	if(action == "clear_design")
+		L.arcyne_blueprint_data = list()
+		to_chat(L, span_notice("План в памяти стерт."))
 		return TRUE
 
 /datum/action/cooldown/spell/architect_conjure
@@ -1889,18 +1916,24 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 		return FALSE
 
 	var/list/future_grid = list()
+	var/list/future_types = list()
+
 	for(var/entry in design_data)
 		var/dx = isnum(entry["x"]) ? entry["x"] : text2num(entry["x"])
 		var/dy = isnum(entry["y"]) ? entry["y"] : text2num(entry["y"])
 		var/dz = isnum(entry["z"]) ? entry["z"] : (text2num(entry["z"]) || 0)
 		if(dz >= max_floors) continue
 
-		var/list/info = GLOB.blueprint_buildable_types[entry["type"]]
+		var/b_type = entry["type"]
+		var/list/info = GLOB.blueprint_buildable_types[b_type]
 		if(!info) continue
 
 		var/key = "[dx]_[dy]_[dz]"
-		if(!future_grid[key]) future_grid[key] = list()
+		if(!future_grid[key])
+			future_grid[key] = list()
+			future_types[key] = list()
 		future_grid[key] += info["layer_type"]
+		future_types[key] += b_type
 
 	for(var/entry in design_data)
 		var/dx = isnum(entry["x"]) ? entry["x"] : text2num(entry["x"])
@@ -1908,13 +1941,14 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 		var/dz = isnum(entry["z"]) ? entry["z"] : (text2num(entry["z"]) || 0)
 		if(dz >= max_floors) continue
 
-		var/list/info = GLOB.blueprint_buildable_types[entry["type"]]
+		var/b_type = entry["type"]
+		var/list/info = GLOB.blueprint_buildable_types[b_type]
 		if(!info) continue
 		var/layer = info["layer_type"]
 
 		var/turf/target_turf = get_blueprint_target_turf(origin_turf, dx, dy, dz)
 		if(!target_turf)
-			to_chat(user, span_warning("Недостаточно места: границы плана выходят за пределы мира!"))
+			to_chat(user, span_warning("Недостаточно места: план выходит за пределы мира!"))
 			return FALSE
 
 		if(isclosedturf(target_turf))
@@ -1939,25 +1973,25 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 
 		if(layer == "obj" || layer == "border")
 			var/will_have_floor = FALSE
-			if(future_grid["[dx]_[dy]_[dz]"])
-				if(("floor" in future_grid["[dx]_[dy]_[dz]"]) || ("wall" in future_grid["[dx]_[dy]_[dz]"]))
+			var/curr_key = "[dx]_[dy]_[dz]"
+			if(future_grid[curr_key])
+				if(("floor" in future_grid[curr_key]) || ("wall" in future_grid[curr_key]))
 					will_have_floor = TRUE
+
+			if(findtext(b_type, "stairs") || findtext(b_type, "ladder"))
+				will_have_floor = TRUE
 
 			if(!will_have_floor && is_air_or_water)
 				to_chat(user, span_warning("Нельзя строить [info["name"]] в воздухе! (Клетка [target_turf.x], [target_turf.y] не имеет пола)"))
 				return FALSE
 
-		if(dz > 0 && (layer == "floor" || layer == "wall"))
+		if(dz > 0 && (layer == "floor" || layer == "wall" || findtext(b_type, "stairs") || findtext(b_type, "ladder")))
 			var/is_supported = FALSE
 			var/max_overhang = 4
 
 			var/list/queue = list(list("x" = dx, "y" = dy))
-
-			var/array_size = (max_overhang * 2) + 3
-			var/list/visited = new/list(array_size, array_size)
-			var/center_offset = max_overhang + 2
-
-			visited[center_offset][center_offset] = TRUE
+			var/list/visited = list()
+			visited["[dx]_[dy]"] = TRUE
 
 			while(length(queue) > 0)
 				var/list/curr = queue[1]
@@ -1965,59 +1999,119 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 
 				var/cx = curr["x"]
 				var/cy = curr["y"]
+				var/has_support_below = FALSE
 
-				var/has_wall_below = FALSE
-				var/chk_below_key = "[cx]_[cy]_[dz-1]"
+				for(var/ox in -1 to 1)
+					for(var/oy in -1 to 1)
+						var/nx = cx + ox
+						var/ny = cy + oy
+						var/adj_key = "[nx]_[ny]_[dz-1]"
 
-				if(future_grid[chk_below_key] && ("wall" in future_grid[chk_below_key]))
-					has_wall_below = TRUE
-				else
-					var/turf/below_turf = get_blueprint_target_turf(origin_turf, cx, cy, dz - 1)
-					if(below_turf && isclosedturf(below_turf))
-						has_wall_below = TRUE
+						if(future_grid[adj_key] && ("wall" in future_grid[adj_key]))
+							has_support_below = TRUE
+						else if(future_types[adj_key])
+							for(var/sub_t in future_types[adj_key])
+								if(findtext(sub_t, "stairs") || findtext(sub_t, "ladder"))
+									has_support_below = TRUE
+									break
 
-				if(has_wall_below)
+						if(!has_support_below)
+							var/turf/adj_turf = get_blueprint_target_turf(origin_turf, nx, ny, dz - 1)
+							if(adj_turf)
+								if(isclosedturf(adj_turf))
+									has_support_below = TRUE
+								else
+									for(var/obj/structure/stairs/ST in adj_turf)
+										has_support_below = TRUE
+										break
+									if(!has_support_below)
+										for(var/obj/structure/wallladder/WL in adj_turf)
+											has_support_below = TRUE
+											break
+
+						if(has_support_below) break
+					if(has_support_below) break
+
+				if(has_support_below)
 					is_supported = TRUE
 					break
 
 				if(abs(cx - dx) + abs(cy - dy) >= max_overhang)
 					continue
 
-				var/list/dirs = list(
+				var/list/adjacents = list(
 					list("x" = cx, "y" = cy + 1),
 					list("x" = cx, "y" = cy - 1),
 					list("x" = cx + 1, "y" = cy),
 					list("x" = cx - 1, "y" = cy)
 				)
 
-				for(var/list/nxt in dirs)
+				for(var/list/nxt in adjacents)
 					var/nx = nxt["x"]
 					var/ny = nxt["y"]
+					var/n_pos_key = "[nx]_[ny]"
 
-					var/vx = (nx - dx) + center_offset
-					var/vy = (ny - dy) + center_offset
-
-					if(visited[vx][vy]) continue
+					if(visited[n_pos_key])
+						continue
 
 					var/has_floor_here = FALSE
 					var/chk_here_key = "[nx]_[ny]_[dz]"
 
-					if(future_grid[chk_here_key] && (("floor" in future_grid[chk_here_key]) || ("wall" in future_grid[chk_here_key])))
-						has_floor_here = TRUE
+					if(future_grid[chk_here_key])
+						if(("floor" in future_grid[chk_here_key]) || ("wall" in future_grid[chk_here_key]))
+							has_floor_here = TRUE
+						else
+							for(var/sub_t in future_types[chk_here_key])
+								if(findtext(sub_t, "stairs") || findtext(sub_t, "ladder"))
+									has_floor_here = TRUE
+									break
 					else
 						var/turf/here_turf = get_blueprint_target_turf(origin_turf, nx, ny, dz)
 						if(here_turf && !istype(here_turf, /turf/open/transparent/openspace) && !istype(here_turf, /turf/open/water))
 							has_floor_here = TRUE
 
 					if(has_floor_here)
-						visited[vx][vy] = TRUE
+						visited[n_pos_key] = TRUE
 						queue += list(nxt)
 
 			if(!is_supported)
-				to_chat(user, span_warning("Нет опоры! Платформа/Крыша на [dz+1] этаже левитирует. Она должна соединяться с полом, под которым есть стена."))
+				to_chat(user, span_warning("Нет опоры! Конструкция на [dz+1] этаже левитирует. В радиусе 1 тайла снизу должна быть стена или лестница."))
 				return FALSE
 
 	return TRUE
 
+/proc/get_blueprint_static_tgui_data()
+	var/list/data = list()
+	var/list/types_data = list()
+
+	for(var/key in GLOB.blueprint_buildable_types)
+		var/list/info = GLOB.blueprint_buildable_types[key]
+		var/atom/build_path = info["path"]
+
+		var/i_file = info["icon_file"] || initial(build_path.icon)
+		var/i_state = info["icon_state"] || initial(build_path.icon_state)
+
+		if(!info["image"])
+			var/icon/I = icon(i_file, i_state, SOUTH, 1)
+			info["image"] = icon2base64(I)
+
+		var/list/reqs_list = info["reqs"]
+		var/reqs_text = ""
+		for(var/r_path in reqs_list)
+			var/obj/item/temp = r_path
+			reqs_text += "[initial(temp.name)] x[reqs_list[r_path]], "
+		if(length(reqs_text) > 2)
+			reqs_text = copytext(reqs_text, 1, length(reqs_text) - 1)
+
+		types_data[key] = list(
+			"name" = info["name"],
+			"category" = info["category"],
+			"layer_type" = info["layer_type"],
+			"reqs_text" = reqs_text,
+			"image" = info["image"]
+		)
+
+	data["buildable_types"] = types_data
+	return data
 #undef MAX_PLANNER_RADIUS
 #undef MAX_SPELL_RADIUS
