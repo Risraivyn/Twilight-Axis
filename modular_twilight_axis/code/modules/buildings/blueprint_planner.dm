@@ -1931,7 +1931,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 				to_chat(user, span_warning("Недостаточно места: на пути находится станок ([M.name])!"))
 				return FALSE
 
-		var/is_air_or_water = (istype(target_turf, /turf/open/transparent/openspace) || istype(target_turf, /turf/open/water))
+		var/is_air_or_water = (istype(target_turf, /turf/open/openspace) || istype(target_turf, /turf/open/water))
 
 		if(dz == 0 && is_air_or_water)
 			to_chat(user, span_warning("Нельзя строить: основание постройки ([target_turf.x], [target_turf.y]) попадает на воду или пропасть!"))
@@ -2006,7 +2006,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 						has_floor_here = TRUE
 					else
 						var/turf/here_turf = get_blueprint_target_turf(origin_turf, nx, ny, dz)
-						if(here_turf && !istype(here_turf, /turf/open/transparent/openspace) && !istype(here_turf, /turf/open/water))
+						if(here_turf && !istype(here_turf, /turf/open/openspace) && !istype(here_turf, /turf/open/water))
 							has_floor_here = TRUE
 
 					if(has_floor_here)
