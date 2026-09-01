@@ -1386,6 +1386,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	var/list/design_data = list()
 	var/is_designed = FALSE
 	var/max_floors = 2
+	var/list/scanned_grid = list()
 
 /proc/get_blueprint_target_turf(turf/origin, dx, dy, dz)
 	if(!origin) return null
@@ -1423,12 +1424,41 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	var/list/data = list()
 	data["saved_grid"] = design_data
 	data["saved_floors"] = max_floors
+	data["scanned_grid"] = scanned_grid
 	return data
 
 
 /obj/item/blueprint_planner/ui_act(action, params)
 	. = ..()
 	if(.) return
+
+	if(action == "scan_terrain")
+		var/radius = min(params["radius"] || 6, MAX_PLANNER_RADIUS)
+		var/max_z = clamp(text2num(params["max_floors"]) || 2, 2, 4)
+		var/turf/center = get_turf(src)
+		var/list/scanned = list()
+		for(var/dx in -radius to radius)
+			for(var/dy in -radius to radius)
+				for(var/dz in 0 to max_z - 1)
+					var/turf/T = get_blueprint_target_turf(center, dx, dy, dz)
+					if(!T) continue
+
+					var/is_blocked = FALSE
+					if(isclosedturf(T))
+						is_blocked = TRUE
+					else
+						for(var/obj/O in T)
+							if(O.density && (istype(O, /obj/structure) || istype(O, /obj/machinery)))
+								is_blocked = TRUE
+								break
+
+					if(is_blocked)
+						scanned += list(list("x"=dx, "y"=dy, "z"=dz, "layer"="wall"))
+					else if(!istype(T, /turf/open/openspace) && !istype(T, /turf/open/water))
+						scanned += list(list("x"=dx, "y"=dy, "z"=dz, "layer"="floor"))
+
+		scanned_grid = scanned
+		return TRUE
 
 	if(action == "save_design")
 		var/list/raw_data = params["grid_data"]
@@ -1785,6 +1815,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	cooldown_time = 0
 	primary_resource_type = SPELL_COST_NONE
 	spell_flags = SPELL_IGNORE_SPELLBLOCK
+	var/list/scanned_grid = list()
 
 /datum/action/cooldown/spell/architect_plan/ui_host(mob/user)
 	return user || owner
@@ -1820,6 +1851,7 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 	if(istype(L))
 		data["saved_grid"] = L.arcyne_blueprint_data
 		data["saved_floors"] = L.arcyne_blueprint_floors
+		data["scanned_grid"] = scanned_grid
 	return data
 
 /datum/action/cooldown/spell/architect_plan/ui_act(action, params)
@@ -1828,6 +1860,34 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 
 	var/mob/living/L = owner || usr
 	if(!istype(L)) return
+
+	if(action == "scan_terrain")
+		var/radius = min(params["radius"] || 13, MAX_SPELL_RADIUS)
+		var/max_z = clamp(text2num(params["max_floors"]) || 2, 2, 4)
+		var/turf/center = get_turf(L)
+		var/list/scanned = list()
+		for(var/dx in -radius to radius)
+			for(var/dy in -radius to radius)
+				for(var/dz in 0 to max_z - 1)
+					var/turf/T = get_blueprint_target_turf(center, dx, dy, dz)
+					if(!T) continue
+
+					var/is_blocked = FALSE
+					if(isclosedturf(T))
+						is_blocked = TRUE
+					else
+						for(var/obj/O in T)
+							if(O.density && (istype(O, /obj/structure) || istype(O, /obj/machinery)))
+								is_blocked = TRUE
+								break
+
+					if(is_blocked)
+						scanned += list(list("x"=dx, "y"=dy, "z"=dz, "layer"="wall"))
+					else if(!istype(T, /turf/open/openspace) && !istype(T, /turf/open/water))
+						scanned += list(list("x"=dx, "y"=dy, "z"=dz, "layer"="floor"))
+
+		scanned_grid = scanned
+		return TRUE
 
 	if(action == "save_design")
 		var/list/raw_data = params["grid_data"]
@@ -1944,7 +2004,6 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 		var/b_type = entry["type"]
 		var/list/info = GLOB.blueprint_buildable_types[b_type]
 		if(!info) continue
-		var/layer = info["layer_type"]
 
 		var/turf/target_turf = get_blueprint_target_turf(origin_turf, dx, dy, dz)
 		if(!target_turf)
@@ -1963,119 +2022,6 @@ GLOBAL_LIST_INIT(blueprint_buildable_types, list(
 		for(var/obj/machinery/M in target_turf)
 			if(M.density)
 				to_chat(user, span_warning("Недостаточно места: на пути находится станок ([M.name])!"))
-				return FALSE
-
-		var/is_air_or_water = (istype(target_turf, /turf/open/openspace) || istype(target_turf, /turf/open/water))
-
-		if(dz == 0 && is_air_or_water)
-			to_chat(user, span_warning("Нельзя строить: основание постройки ([target_turf.x], [target_turf.y]) попадает на воду или пропасть!"))
-			return FALSE
-
-		if(layer == "obj" || layer == "border")
-			var/will_have_floor = FALSE
-			var/curr_key = "[dx]_[dy]_[dz]"
-			if(future_grid[curr_key])
-				if(("floor" in future_grid[curr_key]) || ("wall" in future_grid[curr_key]))
-					will_have_floor = TRUE
-
-			if(findtext(b_type, "stairs") || findtext(b_type, "ladder"))
-				will_have_floor = TRUE
-
-			if(!will_have_floor && is_air_or_water)
-				to_chat(user, span_warning("Нельзя строить [info["name"]] в воздухе! (Клетка [target_turf.x], [target_turf.y] не имеет пола)"))
-				return FALSE
-
-		if(dz > 0 && (layer == "floor" || layer == "wall" || findtext(b_type, "stairs") || findtext(b_type, "ladder")))
-			var/is_supported = FALSE
-			var/max_overhang = 4
-
-			var/list/queue = list(list("x" = dx, "y" = dy))
-			var/list/visited = list()
-			visited["[dx]_[dy]"] = TRUE
-
-			while(length(queue) > 0)
-				var/list/curr = queue[1]
-				queue.Cut(1, 2)
-
-				var/cx = curr["x"]
-				var/cy = curr["y"]
-				var/has_support_below = FALSE
-
-				for(var/ox in -1 to 1)
-					for(var/oy in -1 to 1)
-						var/nx = cx + ox
-						var/ny = cy + oy
-						var/adj_key = "[nx]_[ny]_[dz-1]"
-
-						if(future_grid[adj_key] && ("wall" in future_grid[adj_key]))
-							has_support_below = TRUE
-						else if(future_types[adj_key])
-							for(var/sub_t in future_types[adj_key])
-								if(findtext(sub_t, "stairs") || findtext(sub_t, "ladder"))
-									has_support_below = TRUE
-									break
-
-						if(!has_support_below)
-							var/turf/adj_turf = get_blueprint_target_turf(origin_turf, nx, ny, dz - 1)
-							if(adj_turf)
-								if(isclosedturf(adj_turf))
-									has_support_below = TRUE
-								else
-									for(var/obj/structure/stairs/ST in adj_turf)
-										has_support_below = TRUE
-										break
-									if(!has_support_below)
-										for(var/obj/structure/wallladder/WL in adj_turf)
-											has_support_below = TRUE
-											break
-
-						if(has_support_below) break
-					if(has_support_below) break
-
-				if(has_support_below)
-					is_supported = TRUE
-					break
-
-				if(abs(cx - dx) + abs(cy - dy) >= max_overhang)
-					continue
-
-				var/list/adjacents = list(
-					list("x" = cx, "y" = cy + 1),
-					list("x" = cx, "y" = cy - 1),
-					list("x" = cx + 1, "y" = cy),
-					list("x" = cx - 1, "y" = cy)
-				)
-
-				for(var/list/nxt in adjacents)
-					var/nx = nxt["x"]
-					var/ny = nxt["y"]
-					var/n_pos_key = "[nx]_[ny]"
-
-					if(visited[n_pos_key])
-						continue
-
-					var/has_floor_here = FALSE
-					var/chk_here_key = "[nx]_[ny]_[dz]"
-
-					if(future_grid[chk_here_key])
-						if(("floor" in future_grid[chk_here_key]) || ("wall" in future_grid[chk_here_key]))
-							has_floor_here = TRUE
-						else
-							for(var/sub_t in future_types[chk_here_key])
-								if(findtext(sub_t, "stairs") || findtext(sub_t, "ladder"))
-									has_floor_here = TRUE
-									break
-					else
-						var/turf/here_turf = get_blueprint_target_turf(origin_turf, nx, ny, dz)
-						if(here_turf && !istype(here_turf, /turf/open/openspace) && !istype(here_turf, /turf/open/water))
-							has_floor_here = TRUE
-
-					if(has_floor_here)
-						visited[n_pos_key] = TRUE
-						queue += list(nxt)
-
-			if(!is_supported)
-				to_chat(user, span_warning("Нет опоры! Конструкция на [dz+1] этаже левитирует. В радиусе 1 тайла снизу должна быть стена или лестница."))
 				return FALSE
 
 	return TRUE

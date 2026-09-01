@@ -11,18 +11,26 @@ type BuildableType = {
   image: string;
 };
 
-type Data = {
-  buildable_types?: Record<string, BuildableType>;
-  saved_grid?: GridCell[];
-  saved_floors?: number;
-};
-
 type GridCell = {
   x: number;
   y: number;
   z: number;
   type: string;
   dir?: number;
+};
+
+type ScannedCell = {
+  x: number;
+  y: number;
+  z: number;
+  layer: 'wall' | 'floor';
+};
+
+type Data = {
+  buildable_types?: Record<string, BuildableType>;
+  saved_grid?: GridCell[];
+  saved_floors?: number;
+  scanned_grid?: ScannedCell[];
 };
 
 const DIRS = {
@@ -142,20 +150,21 @@ export const BlueprintPlanner = () => {
   };
 
   const changeGridRadius = (delta: number) => {
-    const newRad = Math.max(1, Math.min(6, gridRadius + delta));
+    const newRad = Math.max(1, Math.min(13, gridRadius + delta));
     setGridRadius(newRad);
-    setGrid((prev) => prev.filter((c) => Math.abs(c.x) <= newRad && Math.abs(c.y) <= newRad));
   };
 
   const saveDesign = () => {
-    const filteredGrid = grid.filter(
-      (c) =>
-        Math.abs(c.x) <= gridRadius &&
-        Math.abs(c.y) <= gridRadius &&
-        c.z < totalFloors
-    );
+    const filteredGrid = grid.filter((c) => c.z < totalFloors);
     act('save_design', {
       grid_data: filteredGrid,
+      max_floors: totalFloors,
+    });
+  };
+
+  const handleScan = () => {
+    act('scan_terrain', {
+      radius: 13,
       max_floors: totalFloors,
     });
   };
@@ -190,6 +199,14 @@ export const BlueprintPlanner = () => {
     });
     return map;
   }, [grid]);
+
+  const scannedMap = useMemo(() => {
+    const map: Record<string, ScannedCell> = {};
+    (data.scanned_grid || []).forEach((c) => {
+      map[`${c.x}_${c.y}_${c.z}`] = c;
+    });
+    return map;
+  }, [data.scanned_grid]);
 
   const categories = useMemo(() => {
     const cats = new Set<string>();
@@ -359,6 +376,9 @@ export const BlueprintPlanner = () => {
               fill
               buttons={
                 <Stack align="center">
+                  <Button color="blue" icon="satellite-dish" onClick={handleScan}>
+                    Скан местности
+                  </Button>
                   <Button
                     color={confirmClear ? "bad" : "danger"}
                     icon="trash"
@@ -404,7 +424,7 @@ export const BlueprintPlanner = () => {
                           {currentGridDimension}
                         </Box>
                         <Button
-                          disabled={gridRadius >= 6}
+                          disabled={gridRadius >= 13}
                           onClick={() => changeGridRadius(1)}
                         >
                           +
@@ -454,6 +474,8 @@ export const BlueprintPlanner = () => {
                       const currentLayerCells = cellMap[`${cell.x}_${cell.y}_${activeZ}`] || [];
                       const lowerLayerCells = activeZ > 0 ? (cellMap[`${cell.x}_${cell.y}_${activeZ - 1}`] || []) : [];
 
+                      const scannedCell = scannedMap[`${cell.x}_${cell.y}_${activeZ}`];
+
                       const floorTile = currentLayerCells.find((c) => buildableTypes[c.type]?.layer_type === 'floor');
                       const wallTile = currentLayerCells.find((c) => buildableTypes[c.type]?.layer_type === 'wall');
                       const objTile = currentLayerCells.find((c) => buildableTypes[c.type]?.layer_type === 'obj');
@@ -499,6 +521,26 @@ export const BlueprintPlanner = () => {
                             userSelect: 'none',
                           }}
                         >
+                          {scannedCell?.layer === 'wall' && (
+                            <div style={{
+                              position: 'absolute',
+                              width: '100%',
+                              height: '100%',
+                              backgroundColor: 'rgba(200, 200, 200, 0.25)',
+                              boxShadow: 'inset 0 0 4px rgba(0,0,0,0.8)',
+                              pointerEvents: 'none'
+                            }} />
+                          )}
+                          {scannedCell?.layer === 'floor' && (
+                            <div style={{
+                              position: 'absolute',
+                              width: '100%',
+                              height: '100%',
+                              backgroundColor: 'rgba(100, 150, 100, 0.2)',
+                              pointerEvents: 'none'
+                            }} />
+                          )}
+
                           {!floorInfo && !wallInfo && !objInfo && borderTiles.length === 0 && lowerInfo?.image && (
                             <img
                               src={`data:image/png;base64,${lowerInfo.image}`}
@@ -595,7 +637,7 @@ export const BlueprintPlanner = () => {
                             </span>
                           )}
 
-                          {isCenter && !floorInfo && !wallInfo && !objInfo && borderTiles.length === 0 && !lowerInfo && (
+                          {isCenter && !floorInfo && !wallInfo && !objInfo && borderTiles.length === 0 && !lowerInfo && !scannedCell && (
                             <span style={{ color: '#e74c3c', fontSize: '11px', fontWeight: 'bold' }}>X</span>
                           )}
 
