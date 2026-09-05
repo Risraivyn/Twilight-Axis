@@ -37,6 +37,10 @@
 	if(!storage_comp)
 		return
 
+	// TA EDIT
+	if(target_coin in storage_comp.contents())
+		return
+
 	var/original_target_quantity = target_coin.quantity	// Store original quantity for verification
 	var/coins_to_collect = original_target_quantity
 
@@ -349,6 +353,7 @@
 	icon_state = "smokebox"
 	item_state = "smokebox"
 	component_type = /datum/component/storage/concrete/roguetown/zig_box
+	dropshrink = 0.5
 
 /obj/item/storage/belt/rogue/pouch/zigarrete/nicotine/PopulateContents()
 	new /obj/item/clothing/mask/cigarette/rollie/nicotine(src)
