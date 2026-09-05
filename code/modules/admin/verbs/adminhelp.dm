@@ -1251,13 +1251,11 @@ GLOBAL_DATUM_INIT(ahelp_tickets, /datum/admin_help_tickets, new)
 		C = what
 	if(istype(C) && C.current_ticket)
 		var/datum/admin_help/AH = C.current_ticket
-		AH.AddInteraction(message, player_message)
 		log_admin("Ticket #[AH.id]: [message]")
 		return AH
 	if(istext(what))	//ckey
 		var/datum/admin_help/AH = GLOB.ahelp_tickets.CKey2ActiveTicket(what)
 		if(AH)
-			AH.AddInteraction(message, player_message)
 			log_admin("Ticket #[AH.id]: [message]")
 			return AH
 

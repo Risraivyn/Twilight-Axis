@@ -180,10 +180,14 @@
 				var/datum/admin_help/sender_ticket = admin_ticket_log(src,
 					interaction_message,
 					player_message = player_interaction_message)
-				if(recipient != src && recipient.current_ticket != sender_ticket)
-					admin_ticket_log(recipient,
+				if(sender_ticket)
+					sender_ticket.AddInteraction(interaction_message, player_interaction_message)
+				if(recipient != src)
+					var/datum/admin_help/recipient_ticket = admin_ticket_log(recipient,
 						interaction_message,
 						player_message = player_interaction_message)
+					if(recipient_ticket && recipient_ticket != sender_ticket)
+						recipient_ticket.AddInteraction(interaction_message, player_interaction_message)
 
 			else		//recipient is an admin but sender is not
 				if(current_ticket)
@@ -217,7 +221,7 @@
 
 			message_admins_without(span_notice("Admin PM from <b>[name_key_with_link]</b> to-<b>[key_name(recipient)]</b>: <span class='linkify'>[msg]</span>"), src) // TA EDIT
 
-			log_admin("Ticket #[created_ticket.id]: <font color='purple'>PM From [name_key_with_link]: [keywordparsedmsg]</font>") // TA EDIT
+			admin_ticket_log(recipient, "<font color='purple'>PM From [name_key_with_link]: [keywordparsedmsg]</font>") // TA EDIT
 			//always play non-admin recipients the adminhelp sound
 			SEND_SOUND(recipient, sound('sound/adminhelp.ogg'))
 
@@ -239,8 +243,8 @@
 					"admin"= "1",
 					"message"= discord_sanitize_ahelp(msg)
 				)
-				send2discordwh(data)
-
+				send2discordwh(data)  
+			
 		else		//neither are admins
 			to_chat(src, span_danger("Error: Admin-PM: Non-admin to non-admin PM communication is forbidden."))
 			return
