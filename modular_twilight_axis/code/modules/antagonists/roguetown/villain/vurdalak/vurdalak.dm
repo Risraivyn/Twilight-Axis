@@ -8,10 +8,11 @@
 	var/vurdalak_is_big = FALSE
 	var/vurdalak_corpses_devoured = 0
 	var/vurdalak_ascended = FALSE
+	var/vurdalak_in_sun = FALSE
 
 
-/mob/living/carbon/human/proc/is_in_vurdalak_zone()
-	var/area/A = get_area(src)
+/mob/living/carbon/human/proc/is_in_vurdalak_zone(area/check_area)
+	var/area/A = check_area || get_area(src)
 	if(!A)
 		return FALSE
 	if(istype(A, /area/rogue/outdoors/bog) || \
@@ -97,10 +98,7 @@
 	remove_movespeed_modifier(MOVESPEED_ID_DAMAGE_SLOWDOWN_FLYING)
 
 /mob/living/carbon/human/species/vurdalak/death(gibbed, nocutscene = FALSE)
-	var/already_dead = (stat == DEAD)
 	. = ..(gibbed, nocutscene)
-	if(!already_dead && !gibbed)
-		replace_with_vurdalak_corpse(src)
 
 /mob/living/carbon/human/species/vurdalak/male
 	gender = MALE
@@ -114,7 +112,7 @@
 	id = "vurdalak"
 	custom_rotation_icon = TRUE
 	custom_base_icon = "vurdalak"
-	species_traits = list(NO_UNDERWEAR, NO_ORGAN_FEATURES, NO_BODYPART_FEATURES)
+	species_traits = list(NO_UNDERWEAR, NO_ORGAN_FEATURES, NO_BODYPART_FEATURES, NOBLOOD)
 	inherent_traits = list(
 		TRAIT_LONGSTRIDER,
 		TRAIT_ZOMBIE_IMMUNE,
@@ -165,7 +163,8 @@
 		ORGAN_SLOT_LIVER = /obj/item/organ/liver,
 		ORGAN_SLOT_STOMACH = /obj/item/organ/stomach,
 		ORGAN_SLOT_APPENDIX = /obj/item/organ/appendix,
-		)
+		ORGAN_SLOT_GUTS = /obj/item/organ/guts,
+	)
 	languages = list(
 		/datum/language/vurdalak
 	)
@@ -208,6 +207,78 @@
 	RegisterSignal(C, COMSIG_MOB_SAY, PROC_REF(handle_speech))
 	C.grant_language(/datum/language/vurdalak)
 
+	if(ishuman(C))
+		var/mob/living/carbon/human/H = C
+		var/obj/item/organ/taur_organ = H.getorganslot(ORGAN_SLOT_TAUR_BODY)
+		if(taur_organ)
+			qdel(taur_organ)
+
+		for(var/obj/item/bodypart/BP in H.bodyparts)
+			if(BP.body_zone == BODY_ZONE_TAUR || istype(BP, /obj/item/bodypart/taur))
+				H.bodyparts -= BP
+				qdel(BP)
+
+		H.remove_overlay(BODYPARTS_LAYER)
+		H.update_body_parts(TRUE)
+
+	RegisterSignal(C, COMSIG_ENTER_AREA, PROC_REF(on_enter_area))
+
+	if(ishuman(C))
+		check_area_buff(C, get_area(C))
+
+/datum/species/vurdalak/on_species_loss(mob/living/carbon/C)
+	. = ..()
+	UnregisterSignal(C, COMSIG_ENTER_AREA)
+	if(ishuman(C))
+		remove_bog_buff(C)
+
+/datum/species/vurdalak/proc/check_area_buff(mob/living/carbon/human/H, area/A)
+	if(!A)
+		remove_bog_buff(H)
+		return
+
+	if(H.is_in_vurdalak_zone(A))
+		apply_bog_buff(H)
+	else
+		remove_bog_buff(H)
+
+/datum/species/vurdalak/proc/on_enter_area(mob/living/carbon/human/H, area/new_area)
+	SIGNAL_HANDLER
+	if(!istype(H) || H.stat == DEAD)
+		return
+	check_area_buff(H, new_area)
+
+/datum/species/vurdalak/proc/apply_bog_buff(mob/living/carbon/human/H)
+	if(H.vurdalak_str_mod > 0)
+		return
+
+	var/buff_amount = 3
+	H.STASTR += buff_amount
+	H.STASPD += buff_amount
+	H.STACON += buff_amount
+	H.STAPER += buff_amount
+	H.STAWIL += buff_amount
+
+	H.vurdalak_str_mod = buff_amount
+	to_chat(H, span_notice("Вы чувствуете силу родных болот! Ваши мышцы наполняются яростью."))
+
+/datum/species/vurdalak/proc/remove_bog_buff(mob/living/carbon/human/H)
+	if(H.vurdalak_str_mod <= 0)
+		return
+
+	var/buff_amount = H.vurdalak_str_mod
+	H.STASTR -= buff_amount
+	H.STASPD -= buff_amount
+	H.STACON -= buff_amount
+	H.STAPER -= buff_amount
+	H.STAWIL -= buff_amount
+
+	H.vurdalak_str_mod = 0
+	to_chat(H, span_warning("Вы покинули родные топи... Сила болот покидает ваше тело."))
+
+/datum/species/vurdalak/get_taur_list()
+	return list()
+
 /datum/species/vurdalak/update_damage_overlays(mob/living/carbon/human/H)
 	H.remove_overlay(DAMAGE_LAYER)
 	return TRUE
@@ -219,53 +290,33 @@
 	..()
 	if(H.stat == DEAD)
 		return
+	var/is_exposed = H.is_exposed_to_daylight()
 
-	var/desired_str_mod = 0
-	var/desired_spd_mod = 0
-	var/desired_con_mod = 0
-	var/desired_per_mod = 0
-	var/desired_wil_mod = 0
+	if(is_exposed && !H.vurdalak_in_sun)
+		H.vurdalak_in_sun = TRUE
+		H.STASTR -= 5
+		H.STASPD -= 5
+		H.STACON -= 5
+		H.STAPER -= 5
+		H.STAWIL -= 5
+		to_chat(H, span_userdanger("Солнечный свет давит на вас! Ваши силы тают!"))
 
-	if(!H.is_exposed_to_daylight())
+	else if(!is_exposed && H.vurdalak_in_sun)
+		H.vurdalak_in_sun = FALSE
+		H.STASTR += 5
+		H.STASPD += 5
+		H.STACON += 5
+		H.STAPER += 5
+		H.STAWIL += 5
+		to_chat(H, span_notice("Тень укрывает вас... Силы возвращаются в норму."))
+
+	if(!is_exposed)
 		H.adjustBruteLoss(-0.4)
 		H.adjustFireLoss(-0.4)
-
-	if(H.is_in_vurdalak_zone())
-		desired_str_mod += 3
-		desired_spd_mod += 3
-		desired_con_mod += 3
-		desired_per_mod += 3
-		desired_wil_mod += 3
-
-	if(H.is_exposed_to_daylight())
-		desired_str_mod -= 5
-		desired_spd_mod -= 5
-		desired_con_mod -= 5
-		desired_per_mod -= 5
-		desired_wil_mod -= 5
+	else
 		if(prob(4))
 			to_chat(H, span_userdanger("Солнечный свет сжигает вашу проклятую кожу! Немедленно найдите тень!"))
 			H.adjustFireLoss(1)
-
-	if(H.vurdalak_str_mod != desired_str_mod)
-		H.STASTR += (desired_str_mod - H.vurdalak_str_mod)
-		H.vurdalak_str_mod = desired_str_mod
-
-	if(H.vurdalak_spd_mod != desired_spd_mod)
-		H.STASPD += (desired_spd_mod - H.vurdalak_spd_mod)
-		H.vurdalak_spd_mod = desired_spd_mod
-
-	if(H.vurdalak_con_mod != desired_con_mod)
-		H.STACON += (desired_con_mod - H.vurdalak_con_mod)
-		H.vurdalak_con_mod = desired_con_mod
-
-	if(H.vurdalak_per_mod != desired_per_mod)
-		H.STAPER += (desired_per_mod - H.vurdalak_per_mod)
-		H.vurdalak_per_mod = desired_per_mod
-
-	if(H.vurdalak_wil_mod != desired_wil_mod)
-		H.STAWIL += (desired_wil_mod - H.vurdalak_wil_mod)
-		H.vurdalak_wil_mod = desired_wil_mod
 
 
 /obj/item/clothing/suit/roguetown/armor/regenerating/skin/vurdalak_skin
@@ -306,7 +357,6 @@
 	var/mob/living/carbon/human/H = owner.current
 	if(istype(H))
 		owner.special_role = name
-		H.set_species(/datum/species/vurdalak)
 
 		H.STASTR = 10
 		H.STAPER = 8
@@ -315,6 +365,20 @@
 		H.STACON = 10
 		H.STASPD = 9
 		H.STALUC = 10
+
+		if(istype(H.dna?.species, /datum/species/dullahan))
+			var/datum/species/dullahan/D = H.dna.species
+			if(D.my_head)
+				UnregisterSignal(D.my_head, COMSIG_QDELETING)
+				D.my_head = null
+
+		var/obj/item/bodypart/head/dullahan/DH = H.get_bodypart(BODY_ZONE_HEAD)
+		if(istype(DH))
+			UnregisterSignal(DH, COMSIG_QDELETING)
+
+		H.status_flags |= GODMODE
+		H.set_species(/datum/species/vurdalak)
+		addtimer(CALLBACK(src, PROC_REF(remove_vurdalak_godmode), H), 2)
 
 		H.fully_replace_character_name(H.real_name, "Vurdalak")
 		H.adjust_skillrank_up_to(/datum/skill/combat/unarmed, SKILL_LEVEL_EXPERT, TRUE)
@@ -338,8 +402,20 @@
 		var/obj/item/clothing/suit/roguetown/armor/regenerating/skin/vurdalak_skin/hide = new(H)
 		H.skin_armor = hide
 		H.update_inv_armor_special()
-		H.AddComponent(/datum/component/vurdalak_death_loot)
 		addtimer(CALLBACK(src, PROC_REF(purge_and_set_vurdalak_language), H), 1 SECONDS)
+		greet(H)
+
+/datum/antagonist/vurdalak/proc/remove_vurdalak_godmode(mob/living/carbon/human/H)
+	if(H && !QDELETED(H))
+		H.status_flags &= ~GODMODE
+
+/datum/antagonist/vurdalak/greet(mob/living/carbon/human/H)
+	if(!H || !H.client)
+		return
+
+	H.playsound_local(get_turf(H), 'sound/vo/mobs/vurdalak/vurdalak_spawn_near.ogg', 100, FALSE)
+
+	to_chat(H, {"<div style='border: 2px solid #551a1a; background-color: #1a0808; color: #d1b8b8; padding: 8px; margin: 4px 0; font-size: 12px; line-height: 1.3;'><div style='color: #df1919; font-weight: bold; font-size: 14px; text-align: center; margin: 0 0 4px 0;'>ВЫ — БОЛОТНЫЙ ВУРДАЛАК</div><div style='font-style: italic; margin: 0 0 6px 0;'>Черные топи Террорбога исторгли вас обратно в мир живых. Вы — вечно голодный мертвец, движимый жаждой плоти и люкса. Для вас нет союзников кроме таких же вурдалаков.</div><hr style='border: 0; border-top: 1px solid #551a1a; margin: 4px 0;'><div style='color: #ff6666; font-weight: bold; margin: 4px 0 2px 0;'>ОСОБЕННОСТИ И СЛАБОСТИ:</div><div style='margin: 0 0 2px 0;'>• <b>Дневной свет сжигает:</b> Прячьтесь в тени, домах и пещерах. Солнце лишает сил и обжигает вас.</div><div style='margin: 0 0 2px 0;'>• <b>Сила болот:</b> В родных топях и пещерах вы получаете +3 ко всем характеристикам и регенерацию в тени.</div><div style='margin: 0 0 2px 0;'>• <b>Пожирание Люкса:</b> Пейте Люкс из трупов (<i>Devour Lux</i>). Поглотив 3 души, вы <b>Возвыситесь</b> до великого вурдалака.</div><div style='margin: 0 0 2px 0;'>• <b>Охота и засада:</b> Чувствуйте биение сердец (<i>Seek Brain</i>) и закапывайтесь в землю (<i>Ambush</i>) для внезапного удара.</div><div style='margin: 0 0 2px 0;'>• <b>Размножение:</b> Заливайте Люкс в ямы грязи (<i>Animate Corpse</i>), чтобы вырастить нового сородича для призрака.</div><hr style='border: 0; border-top: 1px solid #551a1a; margin: 4px 0;'><div style='text-align: center; color: #ff4444; font-weight: bold; margin: 4px 0 0 0;'>Рвите их на куски. Не оставляйте никого в живых.</div></div>"})
 
 /datum/antagonist/vurdalak/on_removal()
 	if(owner)
@@ -355,6 +431,10 @@
 	if(H.language_holder)
 		H.language_holder.selected_default_language = /datum/language/vurdalak
 
+	if(H.dna?.species)
+		H.dna.species.soundpack_m = new /datum/voicepack/vurdalak()
+		H.dna.species.soundpack_f = new /datum/voicepack/vurdalak()
+	H.voice_type = null
 
 /mob/living/simple_animal/hostile/retaliate/rogue/vurdalak_corpse
 	name = "dead vurdalak"
@@ -374,6 +454,7 @@
 
 	butcher_results = list(
 		/obj/item/vurdalak_head = 1,
+		/obj/item/organ/heart/vurdalak = 1,
 		/obj/item/natural/bone = 3
 	)
 	guaranteed_butcher_results = list()
@@ -398,6 +479,7 @@
 		C.name = "dead great vurdalak"
 		C.butcher_results = list(
 			/obj/item/vurdalak_head/big = 1,
+			/obj/item/organ/heart/vurdalak = 1,
 			/obj/item/natural/bone = 5
 		)
 
@@ -406,25 +488,6 @@
 	H.forceMove(null)
 	H.alpha = 0
 	QDEL_IN(H, 1)
-
-
-/datum/component/vurdalak_death_loot
-	var/death_loot_given = FALSE
-
-/datum/component/vurdalak_death_loot/Initialize()
-	if(!isliving(parent))
-		return COMPONENT_INCOMPATIBLE
-	RegisterSignal(parent, COMSIG_LIVING_DEATH, PROC_REF(on_death))
-
-/datum/component/vurdalak_death_loot/proc/on_death()
-	SIGNAL_HANDLER
-	if(death_loot_given)
-		return
-	var/mob/living/carbon/human/H = parent
-	if(!istype(H))
-		return
-	death_loot_given = TRUE
-	replace_with_vurdalak_corpse(H)
 
 
 /obj/item/vurdalak_head
@@ -452,8 +515,9 @@
 /obj/item/organ/heart/vurdalak
 	name = "vurdalak's heart"
 	desc = "Почерневшее болотное сердце, покрытое странными венами. Оно до сих пор бьется медленным, тяжелым ритмом."
-	icon_state = "heart-blood"
-
+	icon = 'icons/obj/surgery.dmi'
+	icon_state = "cursedheart-on"
+	sellprice = 50
 
 /datum/job/roguetown/vurdalak
 	title = "Vurdalak"
@@ -468,7 +532,7 @@
 	spawn_positions = 4
 	min_pq = 0
 	max_pq = null
-	bypass_jobban = TRUE
+	bypass_jobban = FALSE
 	always_show_on_latechoices = TRUE
 	advclass_cat_rolls = list("vurdalak" = 20)
 	job_subclasses = list(
@@ -511,6 +575,12 @@
 
 /datum/job/roguetown/vurdalak/after_spawn(mob/living/H, mob/M, latejoin = FALSE)
 	. = ..()
+	if(ishuman(H))
+		var/mob/living/carbon/human/vurd = H
+		if(vurd.dna?.species)
+			vurd.dna.species.soundpack_m = new /datum/voicepack/vurdalak()
+			vurd.dna.species.soundpack_f = new /datum/voicepack/vurdalak()
+		vurd.voice_type = null
 
 /datum/job/roguetown/vurdalak/override_latejoin_spawn(mob/living/carbon/human/H)
 	if(istype(H.loc, /obj/structure/vurdalak_ambush_mound) || istype(H.loc, /obj/structure/closet/dirthole))

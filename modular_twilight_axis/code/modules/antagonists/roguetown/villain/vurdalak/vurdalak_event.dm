@@ -239,7 +239,14 @@ GLOBAL_VAR_INIT(vurdalak_consumed_slots, 0)
 	if(SSmapping.config?.map_name != "Rockhill" && SSmapping.config?.map_name != "Roguetest")
 		return MAP_ERROR
 
-	var/list/candidates = get_candidates(ROLE_WEREWOLF, null, ROLE_WEREWOLF)
+	var/list/candidates = pollGhostCandidates(
+		"Болотные топи зовут вас... Хотите восстать в роли ужасного Вурдалака?",
+		"Vurdalak",
+		null,
+		0,
+		30 SECONDS
+	)
+
 	if(!length(candidates))
 		return NOT_ENOUGH_PLAYERS
 
@@ -254,8 +261,9 @@ GLOBAL_VAR_INIT(vurdalak_consumed_slots, 0)
 	for(var/i in 1 to spawn_count)
 		if(!length(candidates))
 			break
-		var/mob/dead/observer/ghost = candidates[1]
-		candidates -= ghost
+		var/mob/ghost = pick_n_take(candidates)
+		if(!ghost || !ghost.key)
+			continue
 
 		var/turf/spawn_loc = get_vurdalak_spawn_location()
 		if(!spawn_loc)
