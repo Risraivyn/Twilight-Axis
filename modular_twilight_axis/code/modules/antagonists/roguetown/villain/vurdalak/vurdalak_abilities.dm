@@ -200,6 +200,7 @@
 	spell_requirements = NONE
 	primary_resource_type = SPELL_COST_NONE
 	var/is_burrowed = FALSE
+	var/forced_unburrow = FALSE
 	var/turf/origin_turf
 	var/obj/effect/dummy/vurdalak_burrow/burrow_dummy
 	var/obj/structure/vurdalak_ambush_mound/ambush_mound
@@ -303,20 +304,30 @@
 		new /obj/structure/closet/dirthole(destination)
 
 		playsound(destination, 'sound/foley/breaksound.ogg', 100, TRUE)
-		playsound(destination, 'sound/vo/mobs/vurdalak/vurd_death.ogg', 100, FALSE)
-		user.visible_message(
-			span_userdanger("[user] с диким ревом вырывается из-под земли, разрывая почву!"),
-			span_boldnotice("Вы выпрыгиваете из-под земли, ошеломляя всех вокруг!")
-		)
 
-		for(var/mob/living/L in range(3, destination))
-			if(L == user || L.stat == DEAD)
-				continue
-			to_chat(L, span_userdanger("Внезапный прорыв вурдалака из-под земли сбивает вас с ног и повергает в шок!"))
-			L.emote("gasp")
-			L.apply_status_effect(/datum/status_effect/debuff/exposed, 4 SECONDS)
-			L.apply_status_effect(/datum/status_effect/debuff/clickcd, 2 SECONDS)
-			L.Knockdown(30)
+
+		if(!forced_unburrow)
+			playsound(destination, 'sound/vo/mobs/vurdalak/vurdalak_ambush.ogg', 100, FALSE)
+			user.visible_message(
+				span_userdanger("[user] с диким ревом вырывается из-под земли, разрывая почву!"),
+				span_boldnotice("Вы выпрыгиваете из-под земли, ошеломляя всех вокруг!")
+			)
+
+			for(var/mob/living/L in range(3, destination))
+				if(L == user || L.stat == DEAD)
+					continue
+				to_chat(L, span_userdanger("Внезапный прорыв вурдалака из-под земли сбивает вас с ног и повергает в шок!"))
+				L.emote("gasp")
+				L.apply_status_effect(/datum/status_effect/debuff/exposed, 4 SECONDS)
+				L.apply_status_effect(/datum/status_effect/debuff/clickcd, 2 SECONDS)
+				L.Knockdown(30)
+
+
+		else
+			user.visible_message(
+				span_warning("[user] вываливается на поверхность из разрушенной ямы!"),
+				span_warning("Ваше укрытие разрушено! Вас насильно выбросило на поверхность!")
+			)
 
 		origin_turf = null
 		return TRUE
@@ -325,7 +336,9 @@
 	if(!is_burrowed)
 		return
 	var/turf/dest = burrow_dummy ? get_turf(burrow_dummy) : get_turf(user)
+	forced_unburrow = TRUE
 	cast(dest)
+	forced_unburrow = FALSE
 
 /datum/action/cooldown/spell/vurdalak_devour
 	name = "Devour Lux"
@@ -519,6 +532,14 @@
 
 	user.setStaminaLoss(0)
 	user.apply_status_effect(/datum/status_effect/buff/adrenaline_rush)
+	user.SetKnockdown(0)
+	user.SetStun(0)
+	user.SetUnconscious(0)
+	user.SetImmobilized(0)
+	user.SetParalyzed(0)
+	user.resting = FALSE
+	user.update_mobility()
+
 	return TRUE
 
 

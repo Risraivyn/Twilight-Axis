@@ -50,7 +50,6 @@ GLOBAL_VAR_INIT(vurdalak_consumed_slots, 0)
 		vurdalak_soundloop = new /datum/looping_sound/boneloop(src, FALSE)
 		vurdalak_soundloop.start()
 
-	playsound(src, 'sound/vo/mobs/vurdalak/vurdalak_spawn_far.ogg', 80, FALSE)
 
 	notify_ghosts(
 		"Оскверненная болотная могила созрела!",
@@ -74,7 +73,7 @@ GLOBAL_VAR_INIT(vurdalak_consumed_slots, 0)
 
 		GLOB.vurdalak_animated_graves -= src
 
-		new /obj/item/reagent_containers/lux(get_turf(src))
+		new /obj/item/reagent_containers/lux_impure(get_turf(src))
 		visible_message(span_notice("Темная болотная магия рассеивается от раскопок! Из земли выпадает сгусток Люкса!"))
 
 /obj/structure/vurdalak_ambush_mound/proc/vurdalak_emerge_sequence(mob/living/carbon/human/V)
@@ -100,6 +99,13 @@ GLOBAL_VAR_INIT(vurdalak_consumed_slots, 0)
 
 	playsound(T, 'sound/foley/breaksound.ogg', 100, TRUE)
 	playsound(T, 'sound/vo/mobs/vurdalak/vurdalak_spawn_near.ogg', 90, TRUE)
+
+	var/area/spawn_area = get_area(T)
+	if(spawn_area)
+		for(var/mob/living/L in GLOB.player_list)
+			if(get_area(L) == spawn_area)
+				L.playsound_local(get_turf(L), 'sound/vo/mobs/vurdalak/vurdalak_spawn_far.ogg', 100, FALSE)
+
 	visible_message(span_warning("[V] с ревом выбирается из [src] на поверхность!"))
 	qdel(src)
 
@@ -156,36 +162,36 @@ GLOBAL_VAR_INIT(vurdalak_consumed_slots, 0)
 
 	return null
 
-
 /proc/get_random_vurdalak_swamp_turf()
-	var/list/turf/valid_swamp_turfs = list()
+	var/list/area/valid_bog_areas = list()
 	for(var/area/rogue/outdoors/A in GLOB.areas)
-		if(!A.outdoors)
-			continue
-		if(!istype(A, /area/rogue/outdoors/bog) && !istype(A, /area/rogue/outdoors/bograt))
-			continue
-		for(var/turf/open/T in A)
-			if(T.density)
-				continue
+		if(istype(A, /area/rogue/outdoors/bog) || istype(A, /area/rogue/outdoors/bograt))
+			valid_bog_areas += A
 
-			var/open_neighbors = 0
-			for(var/dir in GLOB.cardinals)
-				var/turf/NT = get_step(T, dir)
-				if(NT && !NT.density && istype(NT, /turf/open))
-					open_neighbors++
-			if(open_neighbors < 2)
-				continue
+	if(!length(valid_bog_areas))
+		return null
 
-			var/blocked = FALSE
-			for(var/atom/movable/AM in T)
-				if(AM.density)
-					blocked = TRUE
-					break
-			if(!blocked)
-				valid_swamp_turfs += T
+	var/area/target_area = pick(valid_bog_areas)
 
-	if(length(valid_swamp_turfs))
-		return pick(valid_swamp_turfs)
+	var/list/turf/open/candidates = list()
+	for(var/turf/open/T in target_area)
+		if(!T.density)
+			candidates += T
+			if(length(candidates) >= 50)
+				break
+
+	while(length(candidates))
+		var/turf/open/T = pick(candidates)
+		candidates -= T
+
+		var/blocked = FALSE
+		for(var/atom/movable/AM in T)
+			if(AM.density)
+				blocked = TRUE
+				break
+		if(!blocked)
+			return T
+
 	return null
 
 

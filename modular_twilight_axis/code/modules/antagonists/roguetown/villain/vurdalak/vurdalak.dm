@@ -46,6 +46,10 @@
 	vurdalak_ascended = TRUE
 	vurdalak_is_big = TRUE
 
+	if(dna?.species)
+		dna.species.custom_base_icon = "vurdalak_big"
+	update_body_parts(TRUE)
+
 	if(skin_armor)
 		skin_armor.icon_state = "vurdalak_big"
 		skin_armor.max_integrity = round(skin_armor.max_integrity * 1.5)
@@ -84,12 +88,13 @@
 
 /mob/living/carbon/human/get_standard_pixel_x_offset()
 	if(dna?.species?.id == "vurdalak")
-		return -8
+		return vurdalak_is_big ? -10 : -8
 	return ..()
+
 
 /mob/living/carbon/human/get_standard_pixel_y_offset(lying_level = 0)
 	if(dna?.species?.id == "vurdalak")
-		return -4
+		return vurdalak_is_big ? 0 : -4
 	return ..()
 
 /mob/living/carbon/human/species/vurdalak/updatehealth()
@@ -141,7 +146,8 @@
 		TRAIT_GRABIMMUNE,
 		TRAIT_STRONGBITE,
 		TRAIT_LYCANRESILENCE,
-		TRAIT_CHUNKYFINGERS,
+		TRAIT_GNARLYDIGITS,
+		TRAIT_BOGWALKER,
 		TRAIT_BLOODLOSS_IMMUNE,
 	)
 	inherent_biotypes = MOB_HUMANOID
@@ -179,12 +185,18 @@
 	H.icon = 'modular_twilight_axis/icons/roguetown/mob/monster/vurdalak.dmi'
 	H.base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB)
 
-	H.base_pixel_x = -8
-	H.pixel_x = -8
-	H.base_pixel_y = -8
-	H.pixel_y = -8
-
 	var/is_big = H.vurdalak_is_big
+
+	if(is_big)
+		H.base_pixel_x = -10
+		H.pixel_x = -10
+		H.base_pixel_y = 0
+		H.pixel_y = 0
+	else
+		H.base_pixel_x = -8
+		H.pixel_x = -8
+		H.base_pixel_y = -4
+		H.pixel_y = -4
 
 	var/target_state
 	if(H.stat == DEAD || H.IsKnockdown() || H.IsParalyzed())
@@ -347,7 +359,7 @@
 	name = "Vurdalak"
 	roundend_category = "Vurdalaks"
 	antagpanel_category = "Vurdalak"
-	job_rank = ROLE_WEREWOLF
+	job_rank = ROLE_VURDALAK
 	storyteller_antag_flags = STORYTELLER_ANTAG_VILLAIN
 	rogue_enabled = TRUE
 	has_tempo = FALSE
@@ -357,13 +369,20 @@
 	var/mob/living/carbon/human/H = owner.current
 	if(istype(H))
 		owner.special_role = name
+		H.set_patron(/datum/patron/divine/undivided)
 
-		H.STASTR = 10
-		H.STAPER = 8
+		H.faction |= "undead"
+		H.faction |= "zombie"
+		H.faction |= "skeleton"
+		H.faction |= "dundead"
+		H.faction |= "lich"
+
+		H.STASTR = 7
+		H.STAPER = 5
 		H.STAINT = 3
-		H.STAWIL = 13
-		H.STACON = 10
-		H.STASPD = 9
+		H.STAWIL = 9
+		H.STACON = 7
+		H.STASPD = 6
 		H.STALUC = 10
 
 		if(istype(H.dna?.species, /datum/species/dullahan))
@@ -386,6 +405,7 @@
 		H.adjust_skillrank_up_to(/datum/skill/misc/athletics, SKILL_LEVEL_EXPERT, TRUE)
 		H.adjust_skillrank_up_to(/datum/skill/misc/swimming, SKILL_LEVEL_EXPERT, TRUE)
 		H.adjust_skillrank_up_to(/datum/skill/misc/climbing, SKILL_LEVEL_EXPERT, TRUE)
+		add_verb(H, /mob/living/carbon/human/verb/vurdalak_inspect_pelt)
 
 		var/list/spells_to_give = list(
 			/datum/action/cooldown/spell/vurdalak_claws,
@@ -415,7 +435,7 @@
 
 	H.playsound_local(get_turf(H), 'sound/vo/mobs/vurdalak/vurdalak_spawn_near.ogg', 100, FALSE)
 
-	to_chat(H, {"<div style='border: 2px solid #551a1a; background-color: #1a0808; color: #d1b8b8; padding: 8px; margin: 4px 0; font-size: 12px; line-height: 1.3;'><div style='color: #df1919; font-weight: bold; font-size: 14px; text-align: center; margin: 0 0 4px 0;'>ВЫ — БОЛОТНЫЙ ВУРДАЛАК</div><div style='font-style: italic; margin: 0 0 6px 0;'>Черные топи Террорбога исторгли вас обратно в мир живых. Вы — вечно голодный мертвец, движимый жаждой плоти и люкса. Для вас нет союзников кроме таких же вурдалаков.</div><hr style='border: 0; border-top: 1px solid #551a1a; margin: 4px 0;'><div style='color: #ff6666; font-weight: bold; margin: 4px 0 2px 0;'>ОСОБЕННОСТИ И СЛАБОСТИ:</div><div style='margin: 0 0 2px 0;'>• <b>Дневной свет сжигает:</b> Прячьтесь в тени, домах и пещерах. Солнце лишает сил и обжигает вас.</div><div style='margin: 0 0 2px 0;'>• <b>Сила болот:</b> В родных топях и пещерах вы получаете +3 ко всем характеристикам и регенерацию в тени.</div><div style='margin: 0 0 2px 0;'>• <b>Пожирание Люкса:</b> Пейте Люкс из трупов (<i>Devour Lux</i>). Поглотив 3 души, вы <b>Возвыситесь</b> до великого вурдалака.</div><div style='margin: 0 0 2px 0;'>• <b>Охота и засада:</b> Чувствуйте биение сердец (<i>Seek Brain</i>) и закапывайтесь в землю (<i>Ambush</i>) для внезапного удара.</div><div style='margin: 0 0 2px 0;'>• <b>Размножение:</b> Заливайте Люкс в ямы грязи (<i>Animate Corpse</i>), чтобы вырастить нового сородича для призрака.</div><hr style='border: 0; border-top: 1px solid #551a1a; margin: 4px 0;'><div style='text-align: center; color: #ff4444; font-weight: bold; margin: 4px 0 0 0;'>Рвите их на куски. Не оставляйте никого в живых.</div></div>"})
+	to_chat(H, {"<div style='border: 2px solid #551a1a; background-color: #1a0808; color: #d1b8b8; padding: 8px; margin: 4px 0; font-size: 12px; line-height: 1.3;'><div style='color: #df1919; font-weight: bold; font-size: 14px; text-align: center; margin: 0 0 4px 0;'>ВЫ — БОЛОТНЫЙ ВУРДАЛАК</div><div style='font-style: italic; margin: 0 0 6px 0;'>Проклятые топи болот ужаса исторгли вас обратно в мир живых. Вы — вечно голодный мертвец, движимый жаждой плоти и жизненной силы. Для вас нет союзников кроме таких же вурдалаков.</div><hr style='border: 0; border-top: 1px solid #551a1a; margin: 4px 0;'><div style='color: #ff6666; font-weight: bold; margin: 4px 0 2px 0;'>ОСОБЕННОСТИ И СЛАБОСТИ:</div><div style='margin: 0 0 2px 0;'>• <b>Дневной свет опаляет:</b> Прячьтесь в тени, домах и пещерах. Солнце лишает сил и обжигает вас.</div><div style='margin: 0 0 2px 0;'>• <b>Неутолимый голод:</b>Вы способны пожирать органы с земли (СКМ с интентом BITE) получая регенерацию. А так же при укусе у вас есть шанс восстановить здоровье.</div><div style='margin: 0 0 2px 0;'>• <b>Пожирание Люкса:</b> Терзайте Люкс из трупов (<i>Devour Lux</i>). Пожрав 3 люкса, вы Возвыситесь до великого вурдалака.</div><div style='margin: 0 0 2px 0;'>• <b>Охота и засада:</b> Ищите живых (Seek Brain) и закапывайтесь в землю (Ambush) для внезапного удара.</div><div style='margin: 0 0 2px 0;'>• <b>Размножение:</b> Закапывайте Люкс в ямы грязи (Animate Corpse), чтобы болота породили нового вурдалака для жаждущего крови призрака.</div><hr style='border: 0; border-top: 1px solid #551a1a; margin: 4px 0;'><div style='text-align: center; color: #ff4444; font-weight: bold; margin: 4px 0 0 0;'>Проклятый неутолимым голодом, вечно скитайся в поисках живых..</div></div>"})
 
 /datum/antagonist/vurdalak/on_removal()
 	if(owner)
@@ -485,9 +505,9 @@
 
 	H.visible_message(span_userdanger("Вурдалак с тяжелым стоном валится замертво!"))
 
-	H.forceMove(null)
+	H.moveToNullspace()
 	H.alpha = 0
-	QDEL_IN(H, 1)
+	qdel(H)
 
 
 /obj/item/vurdalak_head
@@ -626,6 +646,24 @@
 		qdel(src)
 		return TRUE
 	return ..()
+
+/mob/living/carbon/human/verb/vurdalak_inspect_pelt()
+	set name = "Inspect Pelt"
+	set category = "RoleUnique"
+	set desc = "Проверить целостность своей шкуры."
+
+	if(dna?.species?.id != "vurdalak" || !skin_armor)
+		return
+
+	var/obj/item/clothing/suit/roguetown/armor/regenerating/skin/vurdalak_skin/S = skin_armor
+	if(istype(S))
+		var/pct = round((S.obj_integrity / S.max_integrity) * 100)
+		var/msg = "Она держится на честном слове!"
+		if(pct >= 90) msg = "Она в идеальном состоянии."
+		else if(pct >= 50) msg = "Она немного потрепана."
+		else if(pct >= 25) msg = "Она сильно повреждена!"
+
+		to_chat(src, span_notice("<b>Состояние шкуры:</b> [S.obj_integrity] / [S.max_integrity] HP ([pct]%). [msg]"))
 
 /datum/language/vurdalak
 	name = "Vurdalak"
