@@ -3666,6 +3666,8 @@
 #include "modular_twilight_axis\code\modules\clothing\rogueclothes\gloves\plate.dm"
 #include "modular_twilight_axis\code\game\objects\items\rogueweapons\melee\special.dm"
 #include "modular_twilight_axis\code\modules\erp_panels\genitals.dm"
+#include "modular_twilight_axis\code\modules\events\antagonists\solo\sandman\domain.dm"
+#include "modular_twilight_axis\code\modules\events\antagonists\solo\sandman\sandman.dm"
 #include "modular_twilight_axis\code\modules\library\lib_items.dm"
 #include "code\modules\surgery\surgeries\amputation.dm"
 #include "code\modules\surgery\surgeries\bloodletting.dm"

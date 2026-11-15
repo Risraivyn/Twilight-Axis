@@ -24,6 +24,7 @@
 		/datum/action/cooldown/spell/fire_curtain,
 		/datum/action/cooldown/spell/projectile/smoke_burst,
 		/datum/action/cooldown/spell/create_campfire,
+		/datum/action/cooldown/spell/shadow_domain,
 	)
 	choice_spells = list(
 		/datum/action/cooldown/spell/projectile/spitfire,

@@ -1321,6 +1321,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		list("type" = /datum/antagonist/zizocultist, "group" = "major", "priority" = 64), // TA EDIT
 		list("type" = /datum/antagonist/renegade, "group" = "major", "priority" = 65), // TA EDIT
 		list("type" = /datum/antagonist/prebel/head, "group" = "minor", "priority" = 70),
+		list("type" = /datum/antagonist/sandman, "group" = "major", "priority" = 65),
 		list("type" = /datum/antagonist/prebel, "group" = "minor", "priority" = 71),
 		list("type" = /datum/antagonist/aspirant, "group" = "minor", "priority" = 72),
 		list("type" = /datum/antagonist/assassin, "group" = "minor", "priority" = 73),

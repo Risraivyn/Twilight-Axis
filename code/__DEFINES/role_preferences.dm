@@ -18,6 +18,7 @@
 #define ROLE_ASPIRANT			"Aspirant"
 #define ROLE_LICH				"Lich"
 #define ROLE_DREAMWALKER		"Dreamwalker"
+#define ROLE_SANDMAN			"Sandman"
 #define ROLE_GNOLL				"Gnoll"
 #define ROLE_HAG				"Hag"
 #define ROLE_ASCENDANT			"Ascendant"
@@ -72,6 +73,7 @@ GLOBAL_LIST_INIT(special_roles_rogue, list(
 	ROLE_ASPIRANT = /datum/antagonist/aspirant,
 	ROLE_WEREWOLF = /datum/antagonist/werewolf,
 	ROLE_NBEAST = /datum/antagonist/vampire/lord,
+	ROLE_SANDMAN = /datum/antagonist/sandman,
 	ROLE_VAMPIRE = /datum/antagonist/vampire,
 	ROLE_LICH = /datum/antagonist/lich,
 	ROLE_DREAMWALKER = /datum/antagonist/dreamwalker,
